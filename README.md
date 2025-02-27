@@ -1,0 +1,2 @@
+# bang
+szakdolgozat bang
