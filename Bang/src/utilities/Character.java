@@ -15,6 +15,10 @@ public class Character {
         return health;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void useAbility(Player player) {
         // Unique character ability logic
     }

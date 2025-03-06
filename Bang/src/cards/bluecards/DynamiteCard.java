@@ -1,21 +1,18 @@
 package cards.bluecards;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.SingleTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class DynamiteCard extends Card {
+public class DynamiteCard extends SingleTargetCard {
     public DynamiteCard(String suit, int value) {
         super("Dynamite", suit, value, CardType.DYNAMITE);
     }
 
     @Override
-    public void use() {
-
+    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.addDynamite(this);
+        return true;
     }
-
-    public void use(Player player, Player target) {
-        // Implementation of dynamite
-    }
-
 }

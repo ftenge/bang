@@ -2,19 +2,22 @@ package cards.browncards;
 
 import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.SingleTargetCard;
+import gameinstance.GameInstance;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class WellsFargoCard extends Card {
+public class WellsFargoCard extends SingleTargetCard {
     public WellsFargoCard(String suit, int value) {
         super("Wells Fargo", suit, value, CardType.WELLS_FARGO);
     }
 
     @Override
-    public void use() {
-
+    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        for(int i = 0; i < 3; i++){
+            baseModel.drawCard();
+        }
+        return true;
     }
 
-    public void use(Player player) {
-        // Implementation of wells Fargo
-    }
 }

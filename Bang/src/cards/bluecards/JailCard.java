@@ -1,24 +1,30 @@
 package cards.bluecards;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.DualTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
+import utilities.RoleType;
 
-public class JailCard extends Card {
-    private int round;
+public class JailCard extends DualTargetCard {
+    private int round = 1;
 
     public JailCard(String suit, int value) {
         super("Jail", suit, value, CardType.JAIL);
-        this.round = 1;
     }
 
     @Override
-    public void use() {
-
+    public boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic) {
+        if(!target.inJail() && target.getRole().getType() != RoleType.SHERIFF){
+            this.round = 1;
+            target.addJail(this);
+            return true;
+        }
+        return false;
     }
 
-    public void use(Player player, Player target) {
-        // Implementation of jail
-    }
 
+    public int getRound(){
+        return round;
+    }
 }

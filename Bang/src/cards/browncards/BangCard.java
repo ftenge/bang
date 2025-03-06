@@ -1,21 +1,23 @@
 package cards.browncards;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.DualTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class BangCard extends Card {
+public class BangCard extends DualTargetCard {
     public BangCard(String suit, int value) {
         super("Bang!", suit, value, CardType.BANG);
     }
 
     @Override
-    public void use() {
-
-    }
-
-    public void use(Player player, Player target) {
-        // Implementation of attack
+    public boolean use(BaseModel player, BaseModel target, GameLogic gameLogic) {
+        if(!player.getBangedThisRound() || player.getRapid()) {
+            player.setBangedThisRound(true);
+            target.bangAction(player, gameLogic);
+            return true;
+        }
+        return false;
     }
 
 }

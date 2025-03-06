@@ -8,15 +8,15 @@ import java.util.*;
 
 public class Deck {
     private Stack<Card> cards;
-    private List<Card> discardPile;
+    private Stack<Card> discardPile;
 
     public Deck() {
         this.cards = new Stack<>();
-        this.discardPile = new ArrayList<>();
-
+        this.discardPile = new Stack<>();
+        initializeDeck();
     }
 
-    private void generateCard(){
+    private void initializeDeck(){
         List<String> suits = new ArrayList<>();
         suits.add("Hearts");
         suits.add("Diamonds");
@@ -59,8 +59,9 @@ public class Deck {
     private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits) {
         try {
             for (int i = 0; i < count; i++) {
-                discardPile.add(cardType.getDeclaredConstructor(String.class, int.class).newInstance(suits.get(suitValue.get(0) % 4), (suitValue.get(0) % 13) + 2));
-                suitValue.remove(0);
+                discardPile.add(cardType.getDeclaredConstructor(String.class, int.class).newInstance(suits.get(suitValue.getFirst() % 4), (suitValue.getFirst() % 13) + 2));
+                suitValue.removeFirst();
+                //System.out.println(discardPile.get(79 - suitValue.size()).toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,9 +74,23 @@ public class Deck {
         return cards.pop();
     }
 
+    public void discard(Card card) {
+        discardPile.add(card);
+    }
+
     public void reshuffleDiscards() {
+        Card card = discardPile.pop();
         Collections.shuffle(discardPile);
         cards.addAll(discardPile);
         discardPile.clear();
+        discardPile.add(card);
+    }
+
+    public void putFirst(Card card){
+        cards.add(card);
+    }
+
+    public Card getLastDiscard(){
+        return discardPile.pop();
     }
 }

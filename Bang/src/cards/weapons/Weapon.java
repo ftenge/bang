@@ -1,10 +1,11 @@
 package cards.weapons;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.SingleTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class Weapon extends Card {
+public class Weapon extends SingleTargetCard {
     protected int range;
     protected boolean rapid;
 
@@ -22,7 +23,9 @@ public class Weapon extends Card {
     }
 
     @Override
-    public void use() {
-        System.out.println(name + " used, range: " + range);
+    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.setWeapon(this);
+        return true;
     }
+
 }

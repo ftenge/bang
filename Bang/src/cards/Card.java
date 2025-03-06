@@ -1,6 +1,9 @@
 package cards;
 
 
+import players.Player;
+import utilities.BaseModel;
+
 public abstract class Card {
     protected String name;
     protected String suit;
@@ -13,6 +16,19 @@ public abstract class Card {
         this.value = value;
         this.type = type;
     }
+    public String getName(){
+        return this.name;
+    }
 
-    public abstract void use();
+    public String toString(){
+        return (this.name + " " + this.suit + " " + this.value + " " + this.type);
+    }
+
+    public String getSuit(){
+        return this.suit;
+    }
+
+    public int getValue(){
+        return  this.value;
+    }
 }

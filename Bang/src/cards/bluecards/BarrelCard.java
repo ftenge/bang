@@ -1,21 +1,22 @@
 package cards.bluecards;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.SingleTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class BarrelCard extends Card {
+public class BarrelCard extends SingleTargetCard {
     public BarrelCard(String suit, int value) {
         super("Barrel", suit, value, CardType.BARREL);
     }
 
     @Override
-    public void use() {
-
-    }
-
-    public void use(Player player) {
-        // Implementation of barrel
+    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        if(!baseModel.hasBarrel()) {
+            baseModel.addBarrel(this);
+            return true;
+        }
+        return false;
     }
 
 }

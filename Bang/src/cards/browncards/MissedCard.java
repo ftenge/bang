@@ -1,21 +1,18 @@
 package cards.browncards;
 
-import cards.Card;
 import cards.CardType;
-import players.Player;
+import cards.SingleTargetCard;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-public class MissedCard extends Card {
+public class MissedCard extends SingleTargetCard {
     public MissedCard(String suit, int value) {
         super("Missed", suit, value, CardType.MISSED);
     }
 
     @Override
-    public void use() {
-
-    }
-
-    public void use(Player player, Player target) {
+    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         // Implementation of missed
+        return true;
     }
-
 }

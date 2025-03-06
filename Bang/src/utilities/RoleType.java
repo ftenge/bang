@@ -1,5 +1,5 @@
 package utilities;
 
 public enum RoleType {
-    SHERIFF, DEPUTY, BANDIT, RENEGATE;
+    SHERIFF, DEPUTY, OUTLAW, RENEGADE;
 }
