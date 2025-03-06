@@ -29,7 +29,7 @@ public class JourDonnais extends BaseModel {
         while(true){
             Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Missed! card or pass!");
             if(card instanceof MissedCard missedCard){
-                missedAction(missedCard, gameLogic);
+                missedAction(missedCard, source, gameLogic);
                 System.out.println("Volt nem talált lap!");
                 return;
             }

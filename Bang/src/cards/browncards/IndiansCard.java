@@ -16,6 +16,7 @@ public class IndiansCard  extends SingleTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         List<BaseModel> players = baseModel.getGameInstance().getPlayers();
         for(BaseModel player : players){
             if(player != baseModel){

@@ -53,13 +53,13 @@ public class Deck {
         generateCardSuitValue(ScopeCard.class, 1, suitValue, suits);
         generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits);
 
-        reshuffleDiscards();
+        Collections.shuffle(cards);
     }
 
     private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits) {
         try {
             for (int i = 0; i < count; i++) {
-                discardPile.add(cardType.getDeclaredConstructor(String.class, int.class).newInstance(suits.get(suitValue.getFirst() % 4), (suitValue.getFirst() % 13) + 2));
+                cards.add(cardType.getDeclaredConstructor(String.class, int.class).newInstance(suits.get(suitValue.getFirst() % 4), (suitValue.getFirst() % 13) + 2));
                 suitValue.removeFirst();
                 //System.out.println(discardPile.get(79 - suitValue.size()).toString());
             }
@@ -84,6 +84,17 @@ public class Deck {
         cards.addAll(discardPile);
         discardPile.clear();
         discardPile.add(card);
+    }
+
+    public boolean isDiscardPileEmpty(){
+        return discardPile.isEmpty();
+    }
+
+    public String seeLastDiscardedCard(){
+        if(discardPile.isEmpty()){
+            return "Discard pile is empty!";
+        }
+        return discardPile.lastElement().toString();
     }
 
     public void putFirst(Card card){

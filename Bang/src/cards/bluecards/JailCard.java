@@ -16,6 +16,7 @@ public class JailCard extends DualTargetCard {
     @Override
     public boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic) {
         if(!target.inJail() && target.getRole().getType() != RoleType.SHERIFF){
+            baseModel.removeCardFromHand(this);
             this.round = 1;
             target.addJail(this);
             return true;

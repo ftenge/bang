@@ -14,6 +14,7 @@ public class WellsFargoCard extends SingleTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         for(int i = 0; i < 3; i++){
             baseModel.drawCard();
         }

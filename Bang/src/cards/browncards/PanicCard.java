@@ -14,6 +14,7 @@ public class PanicCard extends DualTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         baseModel.panicAction(target, gameLogic);
         return true;
     }

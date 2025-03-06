@@ -14,6 +14,7 @@ public class SaloonCard extends SingleTargetCard {
 
     @Override
      public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         for(BaseModel player : gameLogic.getPlayers()){
             player.saloonAction(gameLogic);
         }

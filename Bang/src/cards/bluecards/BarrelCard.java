@@ -13,6 +13,7 @@ public class BarrelCard extends SingleTargetCard {
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         if(!baseModel.hasBarrel()) {
+            baseModel.removeCardFromHand(this);
             baseModel.addBarrel(this);
             return true;
         }

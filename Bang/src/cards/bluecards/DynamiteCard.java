@@ -12,6 +12,7 @@ public class DynamiteCard extends SingleTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCardFromHand(this);
         baseModel.addDynamite(this);
         return true;
     }

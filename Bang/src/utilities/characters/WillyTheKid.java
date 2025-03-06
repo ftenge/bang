@@ -11,7 +11,7 @@ public class WillyTheKid extends BaseModel {
         this.rapid = true;
     }
 
-    // báűrhányszor lőhet banggel
+    // bárhányszor lőhet banggel
     //done
 
     @Override

@@ -26,6 +26,7 @@ public class GameLogic {
     public void startGame() {
         gameInstance.initializePlayers(2);
         System.out.println("Game started!");
+        System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
         for (BaseModel player : getPlayers()) {
             player.gameStartDraw();
@@ -95,12 +96,18 @@ public class GameLogic {
         return (index == -1) ? 0 : index;
     }
 
+    public int chooseTarget(List<BaseModel> baseModels, String name, String title) {
+        int index = ui.selectTargetFromList(baseModels, name, title);
+
+        return (index == -1) ? 0 : index;
+    }
+
     public int chooseOption(String name, String title, String option1, String option2){
         return ui.showTwoOptionDialog(name, title, option1, option2);
     }
 
-    public List<Card> selectTwoCards(List<Card> threeCards){
-        return ui.selectTwoCardsFromThree(threeCards);
+    public List<Card> selectTwoCards(List<Card> cards, String title, String instruction){
+        return ui.selectTwoCardsFromThree(cards, title, instruction);
     }
 
 
@@ -111,6 +118,12 @@ public class GameLogic {
 
     public BaseModel getCurrentPlayer() {
         return getPlayers().get(currentPlayerIndex);
+    }
+
+    public void aPlayerRemoved(){
+        if(currentPlayerIndex == getPlayers().size()){
+            currentPlayerIndex--;
+        }
     }
 
     public List<BaseModel> getPlayers(){

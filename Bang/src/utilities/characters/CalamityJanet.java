@@ -8,6 +8,9 @@ import utilities.BaseModel;
 import utilities.Character;
 import utilities.Role;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CalamityJanet extends BaseModel {
     public CalamityJanet(Role role) {
         super(new Character("Calamity Janet", 4), role);
@@ -27,17 +30,60 @@ public class CalamityJanet extends BaseModel {
         while(true){
             Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Bang!/Missed! card or pass!");
             if(card instanceof MissedCard missedCard){
-                missedAction(missedCard, gameLogic);
+                handCards.remove(missedCard);
+                discardCard(missedCard);
                 System.out.println("Volt nem talált lap!");
                 return;
             }else if(card instanceof BangCard bangCard){
                 handCards.remove(bangCard);
-                discardCard(card);
+                discardCard(bangCard);
                 System.out.println("Volt nem talált lap!");
                 return;
             }
             if(card == null){
                 break;
+            }
+        }
+        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        receiveDamage(1, source, gameLogic);
+        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+    }
+
+    @Override
+    public void slabTheKillerBangangAction(BaseModel source, GameLogic gameLogic){
+        if(hasBarrel()){
+            if(barrelAction(gameLogic)){
+                System.out.println("A hordó levédte!");
+                return;
+            }
+        }
+        while(true){
+            boolean bothAreMissed = true;
+            List<Card> cards = new ArrayList<>();
+            cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed/Bang! cards to dodge Bang!");
+            cards.removeLast();
+            if(cards == null){
+                break;
+            }
+            for(Card card : cards){
+                if(!(card instanceof MissedCard) && !(card instanceof BangCard)){
+                    bothAreMissed = false;
+                    break;
+                }
+            }
+            if(bothAreMissed) {
+                for (Card card : cards) {
+                    if (card instanceof MissedCard missedCard) {
+                        handCards.remove(missedCard);
+                        discardCard(missedCard);
+                        System.out.println("Volt nem talált lap!");
+                    }if (card instanceof BangCard bangCard) {
+                        handCards.remove(bangCard);
+                        discardCard(bangCard);
+                        System.out.println("Volt nem talált lap!");
+                    }
+                }
+                return;
             }
         }
         System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());

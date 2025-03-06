@@ -16,6 +16,7 @@ public class ScopeCard extends SingleTargetCard {
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         if(!baseModel.hasScope()) {
+            baseModel.removeCardFromHand(this);
             baseModel.addScope(this);
             return true;
         }

@@ -15,6 +15,7 @@ public class MustangCard extends SingleTargetCard {
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         if(!baseModel.hasMustang()) {
+            baseModel.removeCardFromHand(this);
             baseModel.addMustang(this);
             return true;
         }

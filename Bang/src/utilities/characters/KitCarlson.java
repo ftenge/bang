@@ -15,6 +15,7 @@ public class KitCarlson extends BaseModel {
     }
     //húzáskor 3 lapból választhat 2-t, a maradékot visszateszi
 
+    //done
 
     @Override
     public void roundStartDraw(GameLogic gameLogic){
@@ -23,11 +24,18 @@ public class KitCarlson extends BaseModel {
         cards.add(gameInstance.getDeck().draw());
         cards.add(gameInstance.getDeck().draw());
 
-        cards = gameLogic.selectTwoCards(cards);
+        List<Card> chosenCards = new ArrayList<>();
+        chosenCards = gameLogic.selectTwoCards(cards, name, "Choose 2 cards and put back the rest!");
+        if(chosenCards == null){
+            handCards.add(cards.get(0));
+            handCards.add(cards.get(1));
+            gameInstance.getDeck().putFirst(cards.getLast());
+            return;
+        }
+        handCards.add(chosenCards.get(0));
+        handCards.add(chosenCards.get(1));
+        gameInstance.getDeck().putFirst(chosenCards.getLast());
 
-        handCards.add(cards.get(0));
-        handCards.add(cards.get(1));
 
-        gameInstance.getDeck().putFirst(cards.getLast());
     }
 }

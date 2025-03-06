@@ -9,4 +9,6 @@ public class SlabTheKiller extends BaseModel {
         super(new Character("Slab The Killer", 4), role);
     }
     //2 nem találtal lehet levédeni a bangjeit;
+
+    //done, BangCard.use és BaseModel.slabTheKillerBangAction
 }

@@ -29,7 +29,7 @@ public class GameInstance {
     }
 
     public void initializePlayers(int numberOfPlayers) {
-        List<Class<? extends BaseModel>> allCharacterClasses = getAllCharacterClasses(); // 16 karakter osztály
+        List<Class<? extends BaseModel>> allCharacterClasses = getAllCharacterClasses(numberOfPlayers); // 16 karakter osztály
         Collections.shuffle(allCharacterClasses); // Véletlenszerű sorrend
 
         List<Role> roles = getRolesForGame(numberOfPlayers); // 7 szerep
@@ -54,34 +54,34 @@ public class GameInstance {
         reorderSheriffFirst(sheriffIndex);
     }
 
-    private List<Class<? extends BaseModel>> getAllCharacterClasses() {
+    private List<Class<? extends BaseModel>> getAllCharacterClasses(int numberOfPlayers) {
         List<Class<? extends BaseModel>> characterClasses = new ArrayList<>();
-        characterClasses.add(BartCassidy.class);
-        characterClasses.add(BlackJack.class);
-        characterClasses.add(CalamityJanet.class);
         characterClasses.add(ElGringo.class);
-        characterClasses.add(JesseJones.class);
-        characterClasses.add(JourDonnais.class);
+        characterClasses.add(WillyTheKid.class);
+        characterClasses.add(CalamityJanet.class);
+        characterClasses.add(SlabTheKiller.class);
         characterClasses.add(KitCarlson.class);
-        characterClasses.add(LuckyDuke.class);
-        characterClasses.add(PaulRegret.class);
+        characterClasses.add(JesseJones.class);
         characterClasses.add(PedroRamirez.class);
         characterClasses.add(RoseDoolan.class);
-        characterClasses.add(SlabTheKiller.class);
-        characterClasses.add(SidKetchum.class);
         characterClasses.add(SuzyLafayette.class);
         characterClasses.add(VultureSam.class);
-        characterClasses.add(WillyTheKid.class);
-        return characterClasses;
+        characterClasses.add(BartCassidy.class);
+        characterClasses.add(BlackJack.class);
+        characterClasses.add(JourDonnais.class);
+        characterClasses.add(LuckyDuke.class);
+        characterClasses.add(PaulRegret.class);
+        characterClasses.add(SidKetchum.class);
+        return characterClasses.subList(0, numberOfPlayers);
     }
 
     private List<Role> getRolesForGame(int numberOfPlayers) {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(RoleType.SHERIFF));
+        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.OUTLAW));
         roles.add(new Role(RoleType.RENEGADE));
         roles.add(new Role(RoleType.OUTLAW));
-        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.OUTLAW));
         roles.add(new Role(RoleType.DEPUTY));
 

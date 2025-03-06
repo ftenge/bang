@@ -13,6 +13,7 @@ public class StagecoachCard extends SingleTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         for(int i = 0; i < 2; i++){
             baseModel.drawCard();
         }

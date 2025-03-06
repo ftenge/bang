@@ -17,6 +17,7 @@ public class GeneralStore extends SingleTargetCard {
 
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
+        baseModel.removeCard(this);
         List<BaseModel> players = baseModel.getGameInstance().getPlayers();
         List<Card> cards = new ArrayList<>();
         for(int i = 0; i < players.size(); i++){

@@ -23,6 +23,7 @@ public class BangGameUI extends Application {
     private GameInstance gameInstance;
     private GameLogic gameLogic;
     private Label gameStateLabel;
+    private Label lastDiscarded;
     private VBox playersInfoBox;
     private VBox currentPlayerInfoBox;
     private Map<BaseModel, ListView<String>> playerHandsMap;
@@ -42,6 +43,7 @@ public class BangGameUI extends Application {
         gameLogic = new GameLogic(this);
 
         gameStateLabel = new Label();
+        lastDiscarded = new Label();
         playersInfoBox = new VBox(10);
         currentPlayerInfoBox = new VBox(10);
         playerHandsMap = new HashMap<>();
@@ -61,6 +63,7 @@ public class BangGameUI extends Application {
         root.setCenter(playersInfoBox);
         root.setRight(currentPlayerInfoBox);
         root.setBottom(new VBox(10, targetPlayerSelector, playCardButton, discardCardButton,nextTurnButton));
+        root.setTop(lastDiscarded);
 
         Scene scene = new Scene(root, 800, 600);
 
@@ -78,6 +81,7 @@ public class BangGameUI extends Application {
 
         BaseModel currentPlayer = gameLogic.getCurrentPlayer();
         gameStateLabel.setText("Current Player: " + currentPlayer.getName());
+        lastDiscarded.setText(gameInstance.getDeck().seeLastDiscardedCard());
 
         Label currentPlayerLabel = new Label("🔹 Current Player Info 🔹");
 
@@ -216,6 +220,53 @@ public class BangGameUI extends Application {
         return (selectedCard.get() != null) ? selectedCard.get() : -1;
     }
 
+    public int selectTargetFromList(List<BaseModel> baseModels, String name, String title) {
+        AtomicReference<Integer> selectedTarget = new AtomicReference<>(null);
+
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setTitle(name);
+
+        Label label = new Label(title);
+
+        ListView<String> cardListView = new ListView<>();
+        for(BaseModel baseModel : baseModels){
+            cardListView.getItems().add(baseModel.getName());
+        }
+
+        //cardListView.getItems().addAll(cards);
+
+        Button okButton = new Button("OK");
+        okButton.setDisable(true); // Kezdetben inaktív
+
+        Button passButton = new Button("Pass");
+
+        // Figyeljük, hogy van-e kiválasztott kártya
+        cardListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            okButton.setDisable(newSelection == null);
+        });
+
+        // OK gomb: választás esetén visszatérünk a kártyával
+        okButton.setOnAction(e -> {
+            selectedTarget.set(cardListView.getSelectionModel().getSelectedIndex());
+            dialogStage.close();
+        });
+
+        // Pass gomb: null-lal tér vissza (kihagyás)
+        passButton.setOnAction(e -> {
+            selectedTarget.set(null);
+            dialogStage.close();
+        });
+
+        VBox vbox = new VBox(10, label, cardListView, okButton, passButton);
+        vbox.setPrefWidth(300);
+        Scene scene = new Scene(vbox);
+        dialogStage.setScene(scene);
+        dialogStage.showAndWait();
+
+        return (selectedTarget.get() != null) ? selectedTarget.get() : -1;
+    }
+
     public int showTwoOptionDialog(String title, String message, String option1, String option2) {
         AtomicReference<Integer> selectedOption = new AtomicReference<>(null);
 
@@ -247,48 +298,59 @@ public class BangGameUI extends Application {
         return selectedOption.get();
     }
 
-    public List<Card> selectTwoCardsFromThree(List<Card> threeCards) {
-        if (threeCards.size() != 3) {
-            throw new IllegalArgumentException("This method requires exactly 3 cards!");
-        }
-
+    public List<Card> selectTwoCardsFromThree(List<Card> ogCards, String title, String instruction) {
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle("Select Two Cards");
+        popupStage.setTitle(title);
 
-        Label instructionLabel = new Label("Select exactly 2 cards:");
+        Label instructionLabel = new Label(instruction);
 
         ListView<Card> listView = new ListView<>();
-        ObservableList<Card> observableCards = FXCollections.observableArrayList(threeCards);
+        ObservableList<Card> observableCards = FXCollections.observableArrayList(ogCards);
         listView.setItems(observableCards);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         Button confirmButton = new Button("OK");
         confirmButton.setDisable(true); // Kezdetben letiltva
 
+        Button passButton = new Button("Pass"); // Pass gomb
+
         // 🔹 Figyeljük a kiválasztott elemek listájának változását
         listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Card>) change -> {
             confirmButton.setDisable(listView.getSelectionModel().getSelectedItems().size() != 2);
         });
 
+        // 🔹 "OK" gomb működése
         confirmButton.setOnAction(e -> popupStage.close());
 
-        VBox layout = new VBox(10, instructionLabel, listView, confirmButton);
+        // 🔹 "Pass" gomb működése (bezárja az ablakot és null-t ad vissza)
+        passButton.setOnAction(e -> {
+            listView.getSelectionModel().clearSelection(); // Kiválasztás törlése
+            popupStage.close();
+        });
+
+        VBox layout = new VBox(10, instructionLabel, listView, confirmButton, passButton);
         Scene scene = new Scene(layout, 300, 300);
         popupStage.setScene(scene);
         popupStage.showAndWait();
 
-        List<Card> cards = new ArrayList<>(listView.getSelectionModel().getSelectedItems());
+        // 🔹 Ha a "Pass" gombot nyomták meg, null-t adunk vissza
+        if (listView.getSelectionModel().getSelectedItems().isEmpty()) {
+            return null;
+        }
 
-        for(Card card : threeCards){
-            if(!cards.contains(card)){
-                cards.add(card);
+        List<Card> selectedCards = new ArrayList<>(listView.getSelectionModel().getSelectedItems());
+
+        // 🔹 Ha valamiért nem pontosan 2 kártya lett kiválasztva, kitöltjük egy harmadikkal (de ez nem kellene megtörténjen)
+        for (Card card : ogCards) {
+            if (!selectedCards.contains(card)) {
+                selectedCards.add(card);
                 break;
             }
         }
 
-        // 🔹 Visszaadjuk a kiválasztott kártyákat
-        return cards;
+        return selectedCards;
     }
+
 
 }

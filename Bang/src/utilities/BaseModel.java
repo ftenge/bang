@@ -107,21 +107,11 @@ public class BaseModel {
     }
 
     public void playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
-        if(card.use(this, gameLogic)){
-            handCards.remove(card);
-            if(!tableCards.contains(card)) {
-                discardCard(card);
-            }
-        }
+        card.use(this, gameLogic);
     }
 
     public void playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
-        if(card.use(this, target, gameLogic)){
-            handCards.remove(card);
-            if(!tableCards.contains(card)) {
-                discardCard(card);
-            }
-        }
+        card.use(this, target, gameLogic);
     }
 
     public void discardCard(Card card) {
@@ -131,6 +121,10 @@ public class BaseModel {
 
     public void removeCard(Card card){
         discardCard(card);
+        handCards.remove(card);
+    }
+
+    public void removeCardFromHand(Card card){
         handCards.remove(card);
     }
 
@@ -159,7 +153,7 @@ public class BaseModel {
         while(true){
             Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Missed! card or pass!");
             if(card instanceof MissedCard missedCard){
-                missedAction(missedCard, gameLogic);
+                missedAction(missedCard, source,  gameLogic);
                 System.out.println("Volt nem talált lap!");
                 return;
             }
@@ -172,8 +166,44 @@ public class BaseModel {
         System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
-    public void missedAction(MissedCard missedCard, GameLogic gameLogic){
-        playSingleTargetCard(missedCard, gameLogic);
+    public void slabTheKillerBangangAction(BaseModel source, GameLogic gameLogic){
+        if(hasBarrel()){
+            if(barrelAction(gameLogic)){
+                System.out.println("A hordó levédte!");
+                return;
+            }
+        }
+        while(true){
+            boolean bothAreMissed = true;
+            List<Card> cards = new ArrayList<>();
+            cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed cards to dodge Bang!");
+            cards.removeLast();
+            if(cards == null){
+                break;
+            }
+            for(Card card : cards){
+                if(!(card instanceof MissedCard)){
+                   bothAreMissed = false;
+                   break;
+                }
+            }
+            if(bothAreMissed) {
+                for (Card card : cards) {
+                    if (card instanceof MissedCard missedCard) {
+                        missedAction(missedCard, source, gameLogic);
+                        System.out.println("Volt nem talált lap!");
+                    }
+                }
+                return;
+            }
+        }
+        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        receiveDamage(1, source, gameLogic);
+        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+    }
+
+    public void missedAction(MissedCard missedCard, BaseModel target, GameLogic gameLogic){
+        playDualTargetCard(missedCard, target, gameLogic);
     }
 
     public boolean beerAction(){
@@ -245,7 +275,7 @@ public class BaseModel {
             cards.add(new HandCard(cardName, "",i));
         }
         cards.addAll(target.tableCards);
-        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to discard.");
+        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to discard from " + target.getName());
         if(index < target.getHandCards().size()){
             discardCard(target.getHandCards().get(index));
             target.getHandCards().remove(index);
@@ -272,7 +302,7 @@ public class BaseModel {
             cards.add(new HandCard(cardName, "",i));
         }
         cards.addAll(target.tableCards);
-        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal.");
+        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
         if(index < target.getHandCards().size()){
             handCards.add(target.getHandCards().get(index));
             target.getHandCards().remove(index);
@@ -372,12 +402,14 @@ public class BaseModel {
                 source.sheriffKilledDeputy();
             }
             gameInstance.removePlayer(this);
+            gameLogic.aPlayerRemoved();
             for(BaseModel baseModel : gameInstance.getPlayers()){
                 if(baseModel instanceof VultureSam vultureSam){
                     vultureSam.collectCard(handCards);
                     return;
                 }
             }
+            discardCardsUponDeath();
         }
     }
 
@@ -510,7 +542,7 @@ public class BaseModel {
         }
         tempVision.set(thisPlayerindex, 0);
 
-        System.out.println(tempVision.toString());
+        //System.out.println(tempVision.toString());
         //vision.set(3, 0);
         for(int i = 1; i < players.size(); i++){
             int bigger = (i + thisPlayerindex) % players.size();
@@ -524,7 +556,7 @@ public class BaseModel {
                 //System.out.println("Smaller added:" + vision.toString());
             }
         }
-        System.out.println(tempVision.toString());
+        //System.out.println(tempVision.toString());
         vision.clear();
         vision.addAll(tempVision);
     }
@@ -564,8 +596,26 @@ public class BaseModel {
     }
 
     public void sheriffKilledDeputy(){
-        for(Card card : handCards){
+        List<Card> handCardsCopy = new ArrayList<>(handCards);
+        List<Card> tableCardsCopy = new ArrayList<>(tableCards);
+
+        for (Card card : handCardsCopy) {
             removeCard(card);
+        }
+        for (Card card : tableCardsCopy) {
+            removeTableCards(card);
+        }
+    }
+
+    public void discardCardsUponDeath(){
+        List<Card> handCardsCopy = new ArrayList<>(handCards);
+        List<Card> tableCardsCopy = new ArrayList<>(tableCards);
+
+        for (Card card : handCardsCopy) {
+            removeCard(card);
+        }
+        for (Card card : tableCardsCopy) {
+            removeTableCards(card);
         }
     }
 
