@@ -9,6 +9,7 @@ public class WinchesterWeapon extends Weapon {
         super("Winchester",suit, value, 5, false, CardType.WINCHESTER);
     }
 
+    //5 egység lőtávú fegyver
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic){
         baseModel.setWeapon(this);

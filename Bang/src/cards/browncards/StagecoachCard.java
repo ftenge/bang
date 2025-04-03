@@ -11,6 +11,7 @@ public class StagecoachCard extends SingleTargetCard {
         super("Stagecoach", suit, value, CardType.STAGECOACH);
     }
 
+    //eldobjuk a kártyát és az origin húz 2 lapot
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         baseModel.removeCard(this);

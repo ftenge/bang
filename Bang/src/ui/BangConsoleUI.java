@@ -1,4 +1,5 @@
-package ui;
+//konzolos ui tesztre
+/*package ui;
 
 import cards.Card;
 import cards.DualTargetCard;
@@ -109,4 +110,4 @@ public class BangConsoleUI {
         BangConsoleUI ui = new BangConsoleUI();
         ui.startGame();
     }
-}
+}*/

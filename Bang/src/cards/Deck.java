@@ -10,11 +10,15 @@ public class Deck {
     private Stack<Card> cards;
     private Stack<Card> discardPile;
 
+    //létrehozza a húzó és a dobópakli, és létrehozza a kártyákat
     public Deck() {
         this.cards = new Stack<>();
         this.discardPile = new Stack<>();
         initializeDeck();
     }
+
+    //létrehozzuk a paklit úgy, hogy minden kártya kapjon egy random színt és számot.
+    //minden körben újakat kapnak, minden szín/érték kombó legalább egyszer benne van a pakliban
 
     private void initializeDeck(){
         List<String> suits = new ArrayList<>();
@@ -56,6 +60,8 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
+    //létrehozzuk a különböző kártyaosztályokat a getDeclaredConstructorral, a suitValue első értéke alapján meghatározzuk
+    //a kártya színét és értékét, majd kivesszük
     private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits) {
         try {
             for (int i = 0; i < count; i++) {
@@ -68,16 +74,20 @@ public class Deck {
         }
     }
 
-
+    //húzunk egy kártyát, ha üres a pakli újrakeverjük, majd visszaadjuk a legfelső elemet
     public Card draw() {
         if (cards.isEmpty()) reshuffleDiscards();
         return cards.pop();
     }
 
+    //az eldobott kártya a dobópakli tetejére kerül
     public void discard(Card card) {
         discardPile.add(card);
     }
 
+    //a legutolsó eldobott lap kivételével összekeverjük az eldobott lapokat
+    //és hozzáadjuk a sima paklihoz, a legutolsó eldobott lapot otthagyjuk,
+    //mert néhány karakter tud interaktálni a dobópakli tetején lévő lappal
     public void reshuffleDiscards() {
         Card card = discardPile.pop();
         Collections.shuffle(discardPile);
@@ -86,10 +96,12 @@ public class Deck {
         discardPile.add(card);
     }
 
+    //megnézi, hogy üres-e a dobópakli
     public boolean isDiscardPileEmpty(){
         return discardPile.isEmpty();
     }
 
+    //megadja a dobópkali tetején lévő kártya nevét, ha van
     public String seeLastDiscardedCard(){
         if(discardPile.isEmpty()){
             return "Discard pile is empty!";
@@ -97,10 +109,12 @@ public class Deck {
         return discardPile.lastElement().toString();
     }
 
-    public void putFirst(Card card){
+    //visszatesznek a pakliba egy lapot
+    public void putBack(Card card){
         cards.add(card);
     }
 
+    //visszaadja az utolsó eldobott lapot, a dobópakliból
     public Card getLastDiscard(){
         return discardPile.pop();
     }

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+//ez az osztály az összes játékososztály alapja
+
 public class BaseModel {
     protected String name;
     protected int health;
@@ -71,7 +73,8 @@ public class BaseModel {
                 "Used Bang: " + bangedThisRound + "\n" +
                 "Visibility: " + visibility + "\n" +
                 "FieldView: " + fieldView + "\n" +
-                "Weapon: " + weapon + "\n");
+                "Weapon: " + weapon + "\n" +
+                "Role: " + role.getType() + "\n");
     }
 
     public void drawCard() {
@@ -422,9 +425,10 @@ public class BaseModel {
             discardCard(getWeapon());
             removeWeapon();
         }
+        handCards.remove(weapon);
         this.weapon = weapon;
         this.rapid = weapon.isRapid();
-        tableCards.add(this.weapon);
+        tableCards.add(weapon);
     }
 
     public Weapon getWeapon(){
@@ -436,6 +440,8 @@ public class BaseModel {
         this.weapon = null;
         this.rapid = false;
     }
+
+    public boolean hasWeapon() {return this.weapon != null; }
 
     public void addBarrel(BarrelCard barrel){
         tableCards.add(barrel);

@@ -1,6 +1,7 @@
 package utilities;
 
-import players.Player;
+
+//különböző személyiségek oszálya
 
 public class Character {
     private String name;
@@ -17,9 +18,5 @@ public class Character {
 
     public String getName() {
         return name;
-    }
-
-    public void useAbility(Player player) {
-        // Unique character ability logic
     }
 }

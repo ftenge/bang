@@ -29,12 +29,12 @@ public class KitCarlson extends BaseModel {
         if(chosenCards == null){
             handCards.add(cards.get(0));
             handCards.add(cards.get(1));
-            gameInstance.getDeck().putFirst(cards.getLast());
+            gameInstance.getDeck().putBack(cards.getLast());
             return;
         }
         handCards.add(chosenCards.get(0));
         handCards.add(chosenCards.get(1));
-        gameInstance.getDeck().putFirst(chosenCards.getLast());
+        gameInstance.getDeck().putBack(chosenCards.getLast());
 
 
     }

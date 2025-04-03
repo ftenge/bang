@@ -9,6 +9,7 @@ public class RemingtonWeapon extends Weapon {
         super("Remington",suit, value, 3, false, CardType.REMINGTON);
     }
 
+    //3 egység lőtávú fegyver
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic){
         baseModel.setWeapon(this);

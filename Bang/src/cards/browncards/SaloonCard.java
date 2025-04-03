@@ -4,7 +4,6 @@ import cards.Card;
 import cards.CardType;
 import cards.SingleTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 public class SaloonCard extends SingleTargetCard {
@@ -12,9 +11,10 @@ public class SaloonCard extends SingleTargetCard {
         super("Saloon", suit, value, CardType.SALOON);
     }
 
+    //eldobjuk a kártyát és minden játékosnak meghívjuk a saloonAction függvényét
     @Override
-     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
-        baseModel.removeCard(this);
+     public boolean use(BaseModel origin, GameLogic gameLogic) {
+        origin.removeCard(this);
         for(BaseModel player : gameLogic.getPlayers()){
             player.saloonAction(gameLogic);
         }

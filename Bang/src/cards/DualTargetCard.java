@@ -10,10 +10,15 @@ public abstract class DualTargetCard extends Card {
     protected int value;
     protected CardType type;
 
+    //öröklődik a Card ősosztályból
     public DualTargetCard(String name, String suit, int value, CardType type) {
         super(name, suit, value, type);
     }
 
+    //use, ami kéri a GameLogicot, hogy tudjon az éppen aktuális játékkal interaktálni,
+    // egy baseModel, aki kijátszotta a lapot
+    // és egy target, akit megcélzünk a lappal
+    //igazat ad vissza, ha sikeresen ki tudtuk játszani a lapot
     public abstract boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic);
 
 }

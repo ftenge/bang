@@ -5,7 +5,6 @@ import cards.CardType;
 import cards.DualTargetCard;
 import cards.SingleTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 public class BeerCard extends SingleTargetCard {
@@ -13,8 +12,9 @@ public class BeerCard extends SingleTargetCard {
         super("Beer", suit, value, CardType.BEER);
     }
 
+    //meghívjuk az origin beerAction-jét és annak a visszatérési értékével térünk vissza
     @Override
-    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
-        return baseModel.beerAction();
+    public boolean use(BaseModel origin, GameLogic gameLogic) {
+        return origin.beerAction();
     }
 }

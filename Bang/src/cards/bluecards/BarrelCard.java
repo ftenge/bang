@@ -10,6 +10,9 @@ public class BarrelCard extends SingleTargetCard {
         super("Barrel", suit, value, CardType.BARREL);
     }
 
+    //ha nincs a kijátszó játékoson kijátszott hordó lap,
+    //akkor kiveszi a kezéből és kijátssza és igazat ad vissza,
+    //máskülönben hamisat
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         if(!baseModel.hasBarrel()) {

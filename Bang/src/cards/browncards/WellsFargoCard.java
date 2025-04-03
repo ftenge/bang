@@ -12,6 +12,7 @@ public class WellsFargoCard extends SingleTargetCard {
         super("Wells Fargo", suit, value, CardType.WELLS_FARGO);
     }
 
+    //eldobjuk a kártyát és az origin húz 2 lapot
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         baseModel.removeCard(this);

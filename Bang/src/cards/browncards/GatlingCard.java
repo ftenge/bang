@@ -4,7 +4,6 @@ import cards.Card;
 import cards.CardType;
 import cards.SingleTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 import java.util.List;
@@ -14,13 +13,15 @@ public class GatlingCard extends SingleTargetCard {
         super("Gatling", suit, value, CardType.GATLING);
     }
 
+    //eldobjuk a kártyát, lekérjük a még élő játékosokat
+    //minden játékosnak, aki nem origin, meghívjuk a gatlingAction függvényét
     @Override
-    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
-        baseModel.removeCard(this);
-        List<BaseModel> players = baseModel.getGameInstance().getPlayers();
+    public boolean use(BaseModel origin, GameLogic gameLogic) {
+        origin.removeCard(this);
+        List<BaseModel> players = origin.getGameInstance().getPlayers();
         for(BaseModel player : players){
-            if(player != baseModel) {
-                player.gatlingAction(baseModel, gameLogic);
+            if(player != origin) {
+                player.gatlingAction(origin, gameLogic);
             }
         }
         return true;

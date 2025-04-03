@@ -4,7 +4,6 @@ import cards.Card;
 import cards.CardType;
 import cards.SingleTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 public class MustangCard extends SingleTargetCard {
@@ -12,6 +11,8 @@ public class MustangCard extends SingleTargetCard {
         super("Mustang", suit, value, CardType.MUSTANG);
     }
 
+    //ha még nincs előtte musztáng lap, akkor a baseModel kezéből,
+    // hozzáadja a baseModelhez, igazat ad vissza ha sikerül
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         if(!baseModel.hasMustang()) {

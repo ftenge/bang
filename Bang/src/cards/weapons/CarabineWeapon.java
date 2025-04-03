@@ -9,6 +9,7 @@ public class CarabineWeapon extends Weapon {
         super("Carabine",suit, value, 4, false, CardType.CARABINE);
     }
 
+    //4 egység lőtávú fegyver
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic){
         baseModel.setWeapon(this);

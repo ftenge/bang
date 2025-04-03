@@ -10,6 +10,7 @@ public class DynamiteCard extends SingleTargetCard {
         super("Dynamite", suit, value, CardType.DYNAMITE);
     }
 
+    //kiveszi a kezéből a dinamit kártyát és lerakja maga elé
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         baseModel.removeCardFromHand(this);

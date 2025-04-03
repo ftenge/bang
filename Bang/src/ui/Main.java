@@ -1,4 +1,5 @@
-package ui;
+//TODO innen indítani a futást
+/*package ui;
 
 import ui.BangConsoleUI;
 
@@ -8,4 +9,4 @@ public class Main {
         BangConsoleUI gameUI = new BangConsoleUI();
         gameUI.startGame();
     }
-}
+}*/

@@ -33,10 +33,12 @@ public class BangGameUI extends Application {
     private Button discardCardButton;
     private ComboBox<BaseModel> targetPlayerSelector;
 
+    //innen futtatjuk a programot egyelőre
     public static void main(String[] args) {
         launch(args);
     }
 
+    //létrehozza a ui-hoz szükséges dolgokat, elindítja a játékot és frissíti a ui-t
     @Override
     public void start(Stage primaryStage) {
         gameInstance = GameInstance.getInstance();
@@ -75,6 +77,9 @@ public class BangGameUI extends Application {
         updateUI();
     }
 
+    //frissíti a ui-t:
+    //kiírja a körön lévő játékost, a legutolsó eldobott lapot
+    //minden játékost kiír a kezükben lévő lapokkal együtt
     private void updateUI() {
         playersInfoBox.getChildren().clear();
         currentPlayerInfoBox.getChildren().clear();
@@ -117,6 +122,9 @@ public class BangGameUI extends Application {
         }
     }
 
+    //ha kiválasztottunk egy kártyát, megnézi, hogy választottunk-e mellé targetet, ha kell a kártyánk kijátszásához
+    //ha nem akkor az aktuálist játékost állítjuk be célpontnak, hogy ne kelljen targetet választani
+    //frissítjük a ui-t
     private void playSelectedCard() {
         BaseModel currentPlayer = gameLogic.getCurrentPlayer();
         int selectedIndex = handCardsListView.getSelectionModel().getSelectedIndex();
@@ -142,6 +150,7 @@ public class BangGameUI extends Application {
         updateUI();
     }
 
+    //a kiválasztott kártyára meghívjuk a gameLogic discardCardActionjét
     private void discardSelectedCard(){
         BaseModel currentPlayer = gameLogic.getCurrentPlayer();
         int selectedIndex = handCardsListView.getSelectionModel().getSelectedIndex();
@@ -158,13 +167,14 @@ public class BangGameUI extends Application {
     }
 
 
-
+    //a playCardButtont nullázzuk és meghívjuk az endTurn függvényt és frissítjük a ui-t
     private void nextTurn() {
         playCardButton.setDisable(false);
         gameLogic.endTurn();
         updateUI();
     }
 
+    //hiba esetén kiírjuk a hibát
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -194,7 +204,7 @@ public class BangGameUI extends Application {
 
         Button passButton = new Button("Pass");
 
-        // Figyeljük, hogy van-e kiválasztott kártya
+        // figyeljük, hogy van-e kiválasztott kártya
         cardListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             okButton.setDisable(newSelection == null);
         });

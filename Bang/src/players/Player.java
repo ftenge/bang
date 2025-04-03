@@ -1,4 +1,5 @@
-package players;
+//első verziója a játékosnak
+/*package players;
 
 import cards.Card;
 import cards.Deck;
@@ -130,4 +131,4 @@ public class Player {
         return this.health > 0;
     }
 
-}
+}*/

@@ -21,6 +21,7 @@ public class GameInstance {
         //initializePlayers();
     }
 
+    //ha nincs még gameInstance akkor létrehozza, ha van akkor azt adja vissza
     public static GameInstance getInstance() {
         if (instance == null) {
             instance = new GameInstance();
@@ -28,6 +29,9 @@ public class GameInstance {
         return instance;
     }
 
+    //megkapja az összes karaktert és szerepet, majd összekeveri őket.
+    //a játékos szám alapján hoz létre karaktereket random szereppel
+    //majd úgy módosítja a listát, hogy a sheriffel kezdődjön
     public void initializePlayers(int numberOfPlayers) {
         List<Class<? extends BaseModel>> allCharacterClasses = getAllCharacterClasses(numberOfPlayers); // 16 karakter osztály
         Collections.shuffle(allCharacterClasses); // Véletlenszerű sorrend
@@ -54,27 +58,29 @@ public class GameInstance {
         reorderSheriffFirst(sheriffIndex);
     }
 
+    //létrehoz egy listát az összes characterClassal
     private List<Class<? extends BaseModel>> getAllCharacterClasses(int numberOfPlayers) {
         List<Class<? extends BaseModel>> characterClasses = new ArrayList<>();
-        characterClasses.add(ElGringo.class);
         characterClasses.add(WillyTheKid.class);
         characterClasses.add(CalamityJanet.class);
-        characterClasses.add(SlabTheKiller.class);
+        characterClasses.add(RoseDoolan.class);
         characterClasses.add(KitCarlson.class);
+        characterClasses.add(ElGringo.class);
+        characterClasses.add(PaulRegret.class);
+        characterClasses.add(SlabTheKiller.class);
         characterClasses.add(JesseJones.class);
         characterClasses.add(PedroRamirez.class);
-        characterClasses.add(RoseDoolan.class);
         characterClasses.add(SuzyLafayette.class);
         characterClasses.add(VultureSam.class);
         characterClasses.add(BartCassidy.class);
         characterClasses.add(BlackJack.class);
         characterClasses.add(JourDonnais.class);
         characterClasses.add(LuckyDuke.class);
-        characterClasses.add(PaulRegret.class);
         characterClasses.add(SidKetchum.class);
         return characterClasses.subList(0, numberOfPlayers);
     }
 
+    //létrehoz egy listát az összes szereppel
     private List<Role> getRolesForGame(int numberOfPlayers) {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(RoleType.SHERIFF));
@@ -88,6 +94,7 @@ public class GameInstance {
         return roles.subList(0,numberOfPlayers);
     }
 
+    //ha nem a sheriff az első, akkor azt a részlistát beszúrja a lista végére
     private void reorderSheriffFirst(int sheriffIndex) {
 
         // Ha van Sheriff és nem az első, akkor átrendezés
@@ -103,14 +110,17 @@ public class GameInstance {
         }
     }
 
+    //visszaadja a játékosokat
     public List<BaseModel> getPlayers() {
         return players;
     }
 
+    //visszaadja a paklit
     public Deck getDeck() {
         return deck;
     }
 
+    //eltávolítja a megadott játékost a játékos listából
     public void removePlayer(BaseModel baseModel){
         players.remove(baseModel);
     }

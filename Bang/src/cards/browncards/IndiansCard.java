@@ -4,7 +4,6 @@ import cards.Card;
 import cards.CardType;
 import cards.SingleTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 import java.util.List;
@@ -14,6 +13,8 @@ public class IndiansCard  extends SingleTargetCard {
         super("Indians", suit, value, CardType.INDIANS);
     }
 
+    //eldobjuk a kártyát, lekérjük a még élő játékosokat
+    //minden játékosnak, aki nem origin, meghívjuk az indiansAction függvényét
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
         baseModel.removeCard(this);

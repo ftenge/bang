@@ -9,6 +9,7 @@ public class VolcanicWeapon extends Weapon {
         super("Volcanic",suit, value, 1, true, CardType.VOLCANIC);
     }
 
+    //1 egység lőtávú fegyver, az egyetlen gyorstüzelő
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic){
         baseModel.setWeapon(this);

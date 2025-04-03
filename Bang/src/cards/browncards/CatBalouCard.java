@@ -4,7 +4,6 @@ import cards.Card;
 import cards.CardType;
 import cards.DualTargetCard;
 import gamelogic.GameLogic;
-import players.Player;
 import utilities.BaseModel;
 
 public class CatBalouCard extends DualTargetCard {
@@ -12,11 +11,11 @@ public class CatBalouCard extends DualTargetCard {
         super("Cat Balou", suit, value, CardType.CAT_BALOU);
     }
 
+    //eldobjuk a kártyát és az origin eldobat egy kártyát a target kezéből
     @Override
-    public boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic) {
-        baseModel.removeCard(this);
-        // Implementation of catbalou
-        baseModel.catBalouAction(target, gameLogic);
+    public boolean use(BaseModel origin, BaseModel target, GameLogic gameLogic) {
+        origin.removeCard(this);
+        origin.catBalouAction(target, gameLogic);
         return true;
     }
 }

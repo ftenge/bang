@@ -12,13 +12,18 @@ public class MissedCard extends DualTargetCard {
         super("Missed", suit, value, CardType.MISSED);
     }
 
+    //eldobjuk a kártyát
+    //ha az origin CalamityJanet, akkor itt a Missed kártyája Bang!-ként funkcionál:
+    //ha még nem lőtt vagy van gyorstüzelője akkor:
+    //beállítjuk, hogy lőtt ebben a körben és meghívjuk a target bangAction-jét
+    //igazzal térünk vissza
     @Override
-    public boolean use(BaseModel baseModel, BaseModel target, GameLogic gameLogic) {
-        baseModel.removeCard(this);
-        if(baseModel instanceof CalamityJanet){
-            if(!baseModel.getBangedThisRound() || baseModel.getRapid()) {
-                baseModel.setBangedThisRound(true);
-                target.bangAction(baseModel, gameLogic);
+    public boolean use(BaseModel origin, BaseModel target, GameLogic gameLogic) {
+        origin.removeCard(this);
+        if(origin instanceof CalamityJanet){
+            if(!origin.getBangedThisRound() || origin.getRapid()) {
+                origin.setBangedThisRound(true);
+                target.bangAction(origin, gameLogic);
             }
         }
         // Implementation of missed

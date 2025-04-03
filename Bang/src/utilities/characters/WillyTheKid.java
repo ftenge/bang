@@ -21,6 +21,7 @@ public class WillyTheKid extends BaseModel {
             removeWeapon();
         }
         this.weapon = weapon;
+        handCards.remove(weapon);
         tableCards.add(this.weapon);
     }
 

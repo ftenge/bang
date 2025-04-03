@@ -9,6 +9,7 @@ public class SchofieldWeapon extends Weapon {
         super("Schofield",suit, value, 2, false, CardType.SCHOFIELD);
     }
 
+    //2 egység lőtávú fegyver
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic){
         baseModel.setWeapon(this);
