@@ -1,12 +1,11 @@
 //TODO innen indítani a futást
-/*package ui;
+package ui;
 
-import ui.BangConsoleUI;
 
+import utilities.BaseModel;
 
 public class Main {
     public static void main(String[] args) {
-        BangConsoleUI gameUI = new BangConsoleUI();
-        gameUI.startGame();
+        BangGameUI gameUI = new BangGameUI();
     }
-}*/
+}

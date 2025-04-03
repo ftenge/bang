@@ -24,7 +24,7 @@ public class PedroRamirez extends BaseModel {
 
             int decision = gameLogic.chooseOption(name, "Choose to draw normally or draw the first card from the discard pile!", "Draw normally", card.toString());
 
-            if(decision == 2){
+            if(decision == 1){
                 handCards.add(card);
                 drawCard();
                 return;

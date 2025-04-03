@@ -29,7 +29,7 @@ public class GameLogic {
     //minden játékos megejti a játék megkezdése előtti húzást, majd jön az első kör
     public void startGame() {
         gameInstance.initializePlayers(2);
-        System.out.println("Game started!");
+        logUIMessage("Game started!");
         System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
         for (BaseModel player : getPlayers()) {
@@ -43,7 +43,7 @@ public class GameLogic {
     //ha börtönben van, akkor arra húz, ha kiszabadul, akkor jöhet a köre
     public void nextTurn() {
         BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
-        System.out.println("It's " + currentPlayer.getName() + "'s turn!");
+        logUIMessage("It's " + currentPlayer.getName() + "'s turn!");
 
         if (!currentPlayer.isAlive()) {
             endTurn();
@@ -143,15 +143,15 @@ public class GameLogic {
         }
         if(!isSheriffAlive){
             if(areAnyOutLawsAlive){
-                System.out.println("Outlaws have won!");
+                ui.logMessage("Outlaws have won!");
                 return true;
             }
-            System.out.println("The Renegade has won!");
+            ui.logMessage("The Renegade has won!");
             return true;
         }
         else{
             if(!areAnyOutLawsAlive && !isRenegadeAlive){
-                System.out.println("Sheriff has won!");
+                ui.logMessage("Sheriff has won!");
                 return true;
             }
         }
@@ -174,5 +174,9 @@ public class GameLogic {
     //visszaadja a még játékban lévő játékosokat
     public List<BaseModel> getPlayers(){
         return gameInstance.getPlayers();
+    }
+
+    public void logUIMessage(String string){
+        ui.logMessage(string);
     }
 }

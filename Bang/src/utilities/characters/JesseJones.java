@@ -35,7 +35,7 @@ public class JesseJones extends BaseModel {
         }
 
         int decision = gameLogic.chooseOption(name, "Do you want to draw the first card from someone?", "Draw normally", "Panic from someone");
-        if(decision != 2){
+        if(decision == 0){
             for(int i = 0; i < 2; i++){
                 drawCard();
             }

@@ -62,14 +62,14 @@ public class GameInstance {
     private List<Class<? extends BaseModel>> getAllCharacterClasses(int numberOfPlayers) {
         List<Class<? extends BaseModel>> characterClasses = new ArrayList<>();
         characterClasses.add(WillyTheKid.class);
+        characterClasses.add(PedroRamirez.class);
+        characterClasses.add(JesseJones.class);
         characterClasses.add(CalamityJanet.class);
         characterClasses.add(RoseDoolan.class);
         characterClasses.add(KitCarlson.class);
         characterClasses.add(ElGringo.class);
         characterClasses.add(PaulRegret.class);
         characterClasses.add(SlabTheKiller.class);
-        characterClasses.add(JesseJones.class);
-        characterClasses.add(PedroRamirez.class);
         characterClasses.add(SuzyLafayette.class);
         characterClasses.add(VultureSam.class);
         characterClasses.add(BartCassidy.class);

@@ -1,366 +1,236 @@
 package ui;
 
-import gameinstance.GameInstance;
-import gamelogic.GameLogic;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import utilities.BaseModel;
 import cards.Card;
 import cards.DualTargetCard;
+import gameinstance.GameInstance;
+import gamelogic.GameLogic;
+import utilities.BaseModel;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.ArrayList;
 
-public class BangGameUI extends Application {
+public class BangGameUI extends JFrame {
     private GameInstance gameInstance;
     private GameLogic gameLogic;
-    private Label gameStateLabel;
-    private Label lastDiscarded;
-    private VBox playersInfoBox;
-    private VBox currentPlayerInfoBox;
-    private Map<BaseModel, ListView<String>> playerHandsMap;
-    private Button nextTurnButton;
-    private ListView<String> handCardsListView;
-    private Button playCardButton;
-    private Button discardCardButton;
-    private ComboBox<BaseModel> targetPlayerSelector;
+    private JPanel playerPanel, tablePanel, opponentsPanel, logPanel;
+    private JTextArea logTextArea;
+    private JLabel discardPileLabel;
+    private JButton playCardButton, discardCardButton, nextTurnButton;
+    private JComboBox<BaseModel> targetPlayerSelector;
 
-    //innen futtatjuk a programot egyelőre
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public BangGameUI() {
+        this.gameLogic = new GameLogic(this);
+        this.gameInstance = GameInstance.getInstance();
+        setTitle("Bang! Game");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setLayout(new BorderLayout());
 
-    //létrehozza a ui-hoz szükséges dolgokat, elindítja a játékot és frissíti a ui-t
-    @Override
-    public void start(Stage primaryStage) {
-        gameInstance = GameInstance.getInstance();
-        gameLogic = new GameLogic(this);
+        // 🔹 Fő játékpanel (alul: játékos, középen: asztal, fent: ellenfelek)
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-        gameStateLabel = new Label();
-        lastDiscarded = new Label();
-        playersInfoBox = new VBox(10);
-        currentPlayerInfoBox = new VBox(10);
-        playerHandsMap = new HashMap<>();
+        playerPanel = new JPanel();
+        tablePanel = new JPanel();
+        opponentsPanel = new JPanel();
+        logPanel = new JPanel(new BorderLayout());
 
-        // Kártyahasználat gomb és célpontválasztás
-        playCardButton = new Button("Play Selected Card");
-        playCardButton.setOnAction(e -> playSelectedCard());
-        targetPlayerSelector = new ComboBox<>();
+        mainPanel.add(playerPanel, BorderLayout.SOUTH);
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(opponentsPanel, BorderLayout.NORTH);
 
-        nextTurnButton = new Button("Next Turn");
-        nextTurnButton.setOnAction(e -> nextTurn());
+        // 🔹 Log panel létrehozása (jobb oldal)
+        logTextArea = new JTextArea(15, 20);
+        logTextArea.setEditable(false);
+        JScrollPane logScrollPane = new JScrollPane(logTextArea);
+        logPanel.add(logScrollPane, BorderLayout.CENTER);
 
-        discardCardButton = new Button("Discard Selected Card");
-        discardCardButton.setOnAction(e -> discardSelectedCard());
+        discardPileLabel = new JLabel("Discard Pile: ");
+        logPanel.add(discardPileLabel, BorderLayout.NORTH);
 
-        BorderPane root = new BorderPane();
-        root.setCenter(playersInfoBox);
-        root.setRight(currentPlayerInfoBox);
-        root.setBottom(new VBox(10, targetPlayerSelector, playCardButton, discardCardButton,nextTurnButton));
-        root.setTop(lastDiscarded);
+        // 🔹 Gombok és célpontválasztó hozzáadása
+        JPanel controlPanel = new JPanel(new GridLayout(2, 2));
 
-        Scene scene = new Scene(root, 800, 600);
+        playCardButton = new JButton("Play Selected Card");
+        playCardButton.addActionListener(e -> playSelectedCard());
 
-        primaryStage.setTitle("Bang! Game UI");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        discardCardButton = new JButton("Discard Selected Card");
+        discardCardButton.addActionListener(e -> discardSelectedCard());
 
+        nextTurnButton = new JButton("Next Turn");
+        nextTurnButton.addActionListener(e -> nextTurn());
+
+        targetPlayerSelector = new JComboBox<>();
+
+        controlPanel.add(playCardButton);
+        controlPanel.add(discardCardButton);
+        controlPanel.add(nextTurnButton);
+        controlPanel.add(targetPlayerSelector);
+
+        logPanel.add(controlPanel, BorderLayout.SOUTH);
+
+        add(mainPanel, BorderLayout.CENTER);
+        add(logPanel, BorderLayout.EAST);
+
+        setVisible(true);
         gameLogic.startGame();
         updateUI();
     }
 
-    //frissíti a ui-t:
-    //kiírja a körön lévő játékost, a legutolsó eldobott lapot
-    //minden játékost kiír a kezükben lévő lapokkal együtt
-    private void updateUI() {
-        playersInfoBox.getChildren().clear();
-        currentPlayerInfoBox.getChildren().clear();
-
-        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
-        gameStateLabel.setText("Current Player: " + currentPlayer.getName());
-        lastDiscarded.setText(gameInstance.getDeck().seeLastDiscardedCard());
-
-        Label currentPlayerLabel = new Label("🔹 Current Player Info 🔹");
-
-
-        targetPlayerSelector.getItems().clear();
-        targetPlayerSelector.getItems().addAll(gameInstance.getPlayers());
-        targetPlayerSelector.setValue(null); // Nincs előre kiválasztott célpont
-
-        for (BaseModel player : gameInstance.getPlayers()) {
-            Label playerLabel = new Label(player.getName());
-            playersInfoBox.getChildren().add(playerLabel);
-            Label playerStats = new Label(player.datas());
-            currentPlayerInfoBox.getChildren().add(playerStats);
-
-            ListView<String> handCardsView = new ListView<>();
-            ObservableList<String> handCards = FXCollections.observableArrayList();
-            for (Card card : player.getHandCards()) {
-                handCards.add(card.toString());
-            }
-            handCardsView.setItems(handCards);
-
-            //selectCardFromList(player.getHandCards(), "asd");
-
-            handCardsView.setDisable(!player.equals(currentPlayer));
-            playerHandsMap.put(player, handCardsView);
-
-            playersInfoBox.getChildren().add(handCardsView);
-
-            // Ha az aktuális játékosnál vagyunk, frissítsük a kézben lévő kártyák listáját
-            if (player.equals(currentPlayer)) {
-                handCardsListView = handCardsView;
-            }
-        }
-    }
-
-    //ha kiválasztottunk egy kártyát, megnézi, hogy választottunk-e mellé targetet, ha kell a kártyánk kijátszásához
-    //ha nem akkor az aktuálist játékost állítjuk be célpontnak, hogy ne kelljen targetet választani
-    //frissítjük a ui-t
-    private void playSelectedCard() {
-        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
-        int selectedIndex = handCardsListView.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            showAlert("No card selected", "Please select a card to play.");
-            return;
-        }
-
-        Card selectedCard = currentPlayer.getHandCards().get(selectedIndex);
-
-        // 🔹 Ha a kártyának célpont kell, azt kiválasztjuk
-        if (selectedCard instanceof DualTargetCard) {
-            BaseModel target = targetPlayerSelector.getValue();
-            if (target == null || target.equals(currentPlayer)) {
-                showAlert("Invalid Target", "Please select a valid target.");
-                return;
-            }
-            gameLogic.cardAction(selectedCard, currentPlayer, target);
+    private JButton createCardButton(Card card, boolean isFaceUp) {
+        JButton button;
+        if (isFaceUp) {
+            button = new JButton(card.getName());
+            button.setBackground(Color.WHITE);
+            button.setForeground(Color.BLACK);
         } else {
-            gameLogic.cardAction(selectedCard, currentPlayer, currentPlayer);
+            button = new JButton("Hidden");
+            button.setBackground(Color.BLACK);
+            button.setForeground(Color.WHITE);
         }
-        updateUI();
-    }
-
-    //a kiválasztott kártyára meghívjuk a gameLogic discardCardActionjét
-    private void discardSelectedCard(){
-        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
-        int selectedIndex = handCardsListView.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            return;
-        }
-
-        playCardButton.setDisable(true);
-        Card selectedCard = currentPlayer.getHandCards().get(selectedIndex);
-
-        gameLogic.discardCardAction(selectedCard, currentPlayer);
-        updateUI();
-    }
-
-
-    //a playCardButtont nullázzuk és meghívjuk az endTurn függvényt és frissítjük a ui-t
-    private void nextTurn() {
-        playCardButton.setDisable(false);
-        gameLogic.endTurn();
-        updateUI();
-    }
-
-    //hiba esetén kiírjuk a hibát
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        return button;
     }
 
     public int selectCardFromList(List<Card> cards, String name, String title) {
-        AtomicReference<Integer> selectedCard = new AtomicReference<>(null);
-
-        Stage dialogStage = new Stage();
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
-        dialogStage.setTitle(name);
-
-        Label label = new Label(title);
-
-        ListView<String> cardListView = new ListView<>();
-        for(Card card : cards){
-            cardListView.getItems().add(card.getName());
-        }
-
-        //cardListView.getItems().addAll(cards);
-
-        Button okButton = new Button("OK");
-        okButton.setDisable(true); // Kezdetben inaktív
-
-        Button passButton = new Button("Pass");
-
-        // figyeljük, hogy van-e kiválasztott kártya
-        cardListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            okButton.setDisable(newSelection == null);
-        });
-
-        // OK gomb: választás esetén visszatérünk a kártyával
-        okButton.setOnAction(e -> {
-            selectedCard.set(cardListView.getSelectionModel().getSelectedIndex());
-            dialogStage.close();
-        });
-
-        // Pass gomb: null-lal tér vissza (kihagyás)
-        passButton.setOnAction(e -> {
-            selectedCard.set(null);
-            dialogStage.close();
-        });
-
-        VBox vbox = new VBox(10, label, cardListView, okButton, passButton);
-        vbox.setPrefWidth(300);
-        Scene scene = new Scene(vbox);
-        dialogStage.setScene(scene);
-        dialogStage.showAndWait();
-
-        return (selectedCard.get() != null) ? selectedCard.get() : -1;
+        String[] cardNames = cards.stream().map(Card::getName).toArray(String[]::new);
+        return JOptionPane.showOptionDialog(this, name, title, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, cardNames, cardNames[0]);
     }
 
     public int selectTargetFromList(List<BaseModel> baseModels, String name, String title) {
-        AtomicReference<Integer> selectedTarget = new AtomicReference<>(null);
-
-        Stage dialogStage = new Stage();
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
-        dialogStage.setTitle(name);
-
-        Label label = new Label(title);
-
-        ListView<String> cardListView = new ListView<>();
-        for(BaseModel baseModel : baseModels){
-            cardListView.getItems().add(baseModel.getName());
-        }
-
-        //cardListView.getItems().addAll(cards);
-
-        Button okButton = new Button("OK");
-        okButton.setDisable(true); // Kezdetben inaktív
-
-        Button passButton = new Button("Pass");
-
-        // Figyeljük, hogy van-e kiválasztott kártya
-        cardListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            okButton.setDisable(newSelection == null);
-        });
-
-        // OK gomb: választás esetén visszatérünk a kártyával
-        okButton.setOnAction(e -> {
-            selectedTarget.set(cardListView.getSelectionModel().getSelectedIndex());
-            dialogStage.close();
-        });
-
-        // Pass gomb: null-lal tér vissza (kihagyás)
-        passButton.setOnAction(e -> {
-            selectedTarget.set(null);
-            dialogStage.close();
-        });
-
-        VBox vbox = new VBox(10, label, cardListView, okButton, passButton);
-        vbox.setPrefWidth(300);
-        Scene scene = new Scene(vbox);
-        dialogStage.setScene(scene);
-        dialogStage.showAndWait();
-
-        return (selectedTarget.get() != null) ? selectedTarget.get() : -1;
+        String[] targetNames = baseModels.stream().map(BaseModel::getName).toArray(String[]::new);
+        int answer = JOptionPane.showOptionDialog(this, name, title, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, targetNames, targetNames[0]);
+        logMessage("A választás: " + answer);
+        return answer;
     }
 
     public int showTwoOptionDialog(String title, String message, String option1, String option2) {
-        AtomicReference<Integer> selectedOption = new AtomicReference<>(null);
-
-        Stage dialogStage = new Stage();
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
-        dialogStage.setTitle(title);
-
-        Label label = new Label(message);
-
-        Button button1 = new Button(option1);
-        Button button2 = new Button(option2);
-
-        button1.setOnAction(e -> {
-            selectedOption.set(1);
-            dialogStage.close();
-        });
-
-        button2.setOnAction(e -> {
-            selectedOption.set(2);
-            dialogStage.close();
-        });
-
-        VBox vbox = new VBox(10, label, button1, button2);
-        vbox.setPrefWidth(300);
-        Scene scene = new Scene(vbox);
-        dialogStage.setScene(scene);
-        dialogStage.showAndWait();
-
-        return selectedOption.get();
+        String[] options = {option1, option2};
+        int answer = JOptionPane.showOptionDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        logMessage("A választás: " + answer);
+        return answer;
     }
 
     public List<Card> selectTwoCardsFromThree(List<Card> ogCards, String title, String instruction) {
-        Stage popupStage = new Stage();
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle(title);
+        List<Card> selectedCards = new ArrayList<>();
+        JCheckBox[] checkBoxes = new JCheckBox[3];
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1));
+        panel.add(new JLabel(instruction));
 
-        Label instructionLabel = new Label(instruction);
-
-        ListView<Card> listView = new ListView<>();
-        ObservableList<Card> observableCards = FXCollections.observableArrayList(ogCards);
-        listView.setItems(observableCards);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        Button confirmButton = new Button("OK");
-        confirmButton.setDisable(true); // Kezdetben letiltva
-
-        Button passButton = new Button("Pass"); // Pass gomb
-
-        // 🔹 Figyeljük a kiválasztott elemek listájának változását
-        listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Card>) change -> {
-            confirmButton.setDisable(listView.getSelectionModel().getSelectedItems().size() != 2);
-        });
-
-        // 🔹 "OK" gomb működése
-        confirmButton.setOnAction(e -> popupStage.close());
-
-        // 🔹 "Pass" gomb működése (bezárja az ablakot és null-t ad vissza)
-        passButton.setOnAction(e -> {
-            listView.getSelectionModel().clearSelection(); // Kiválasztás törlése
-            popupStage.close();
-        });
-
-        VBox layout = new VBox(10, instructionLabel, listView, confirmButton, passButton);
-        Scene scene = new Scene(layout, 300, 300);
-        popupStage.setScene(scene);
-        popupStage.showAndWait();
-
-        // 🔹 Ha a "Pass" gombot nyomták meg, null-t adunk vissza
-        if (listView.getSelectionModel().getSelectedItems().isEmpty()) {
-            return null;
+        for (int i = 0; i < 3; i++) {
+            checkBoxes[i] = new JCheckBox(ogCards.get(i).getName());
+            panel.add(checkBoxes[i]);
         }
 
-        List<Card> selectedCards = new ArrayList<>(listView.getSelectionModel().getSelectedItems());
-
-        // 🔹 Ha valamiért nem pontosan 2 kártya lett kiválasztva, kitöltjük egy harmadikkal (de ez nem kellene megtörténjen)
-        for (Card card : ogCards) {
-            if (!selectedCards.contains(card)) {
-                selectedCards.add(card);
-                break;
+        while (selectedCards.size() != 2) {
+            int result = JOptionPane.showConfirmDialog(this, panel, title, JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                selectedCards.clear();
+                for (int i = 0; i < 3; i++) {
+                    if (checkBoxes[i].isSelected()) {
+                        selectedCards.add(ogCards.get(i));
+                    }
+                }
+            } else {
+                return null;
             }
         }
-
         return selectedCards;
     }
 
+    public void updateUI() {
+        playerPanel.removeAll();
+        tablePanel.removeAll();
+        opponentsPanel.removeAll();
+        targetPlayerSelector.removeAllItems();
+
+        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
+
+        for (Card card : currentPlayer.getHandCards()) {
+            JButton cardButton = createCardButton(card, true);
+            cardButton.addActionListener(e -> playerPanel.putClientProperty("selectedCard", card));
+            playerPanel.add(cardButton);
+        }
+
+        for (Card card : currentPlayer.getTableCards()) {
+            JButton cardButton = createCardButton(card, true);
+            tablePanel.add(cardButton);
+        }
+
+        for (BaseModel player : gameLogic.getPlayers()) {
+            if (!player.equals(currentPlayer)) {
+                JPanel singleOpponentPanel = new JPanel();
+                singleOpponentPanel.setBorder(BorderFactory.createTitledBorder(player.getName() + " (HP: " + player.getHealth() + ")"));
+
+                for (int i = 0; i < player.getHandCards().size(); i++) {
+                    JButton hiddenCardButton = createCardButton(null, false);
+                    singleOpponentPanel.add(hiddenCardButton);
+                }
+
+                for (Card card : player.getTableCards()) {
+                    JButton cardButton = createCardButton(card, true);
+                    singleOpponentPanel.add(cardButton);
+                }
+
+                opponentsPanel.add(singleOpponentPanel);
+                targetPlayerSelector.addItem(player);
+            }
+        }
+        discardPileLabel.setText("Discard Pile: " + gameInstance.getDeck().seeLastDiscardedCard());
+
+        playerPanel.revalidate();
+        playerPanel.repaint();
+        tablePanel.revalidate();
+        tablePanel.repaint();
+        opponentsPanel.revalidate();
+        opponentsPanel.repaint();
+
+    }
+
+    private void playSelectedCard() {
+        Card selectedCard = (Card) playerPanel.getClientProperty("selectedCard");
+        if (selectedCard == null) {
+            logMessage("⚠ No card selected!");
+            return;
+        }
+
+        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
+        BaseModel target = (BaseModel) targetPlayerSelector.getSelectedItem();
+        gameLogic.cardAction(selectedCard, currentPlayer, target);
+
+        logMessage("🃏 Played card: " + selectedCard.getName());
+        updateUI();
+    }
+
+    private void discardSelectedCard() {
+        Card selectedCard = (Card) playerPanel.getClientProperty("selectedCard");
+        if (selectedCard == null) {
+            logMessage("⚠ No card selected!");
+            return;
+        }
+
+        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
+        gameLogic.discardCardAction(selectedCard, currentPlayer);
+
+
+        logMessage("🗑️ Discarded card: " + selectedCard.getName());
+        updateUI();
+    }
+
+    // 🔹 Következő kör
+    private void nextTurn() {
+        gameLogic.endTurn();
+        logMessage("🔄 Next turn started!");
+        updateUI();
+    }
+
+    // 🔹 Naplózás (logolás)
+    public void logMessage(String message) {
+        logTextArea.append(message + "\n");
+        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+    }
 
 }
