@@ -8,8 +8,8 @@ import utilities.RoleType;
 
 public class JailCard extends DualTargetCard {
 
-    public JailCard(String suit, int value) {
-        super("Jail", suit, value, CardType.JAIL);
+    public JailCard(String suit, int value, String imagePath) {
+        super("Jail", suit, value, CardType.JAIL, imagePath);
     }
 
     //ha még nincs előtte börtön kártya és nem a sheriff,

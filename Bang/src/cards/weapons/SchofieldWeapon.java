@@ -5,8 +5,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class SchofieldWeapon extends Weapon {
-    public SchofieldWeapon(String suit, int value) {
-        super("Schofield",suit, value, 2, false, CardType.SCHOFIELD);
+    public SchofieldWeapon(String suit, int value, String imagePath) {
+        super("Schofield",suit, value, 2, imagePath,false, CardType.SCHOFIELD);
     }
 
     //2 egység lőtávú fegyver

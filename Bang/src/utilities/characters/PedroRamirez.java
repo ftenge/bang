@@ -20,17 +20,14 @@ public class PedroRamirez extends BaseModel {
     @Override
     public void roundStartDraw(GameLogic gameLogic){
         if(!gameInstance.getDeck().isDiscardPileEmpty()){
-            Card card = gameInstance.getDeck().getLastDiscard();
 
-            int decision = gameLogic.chooseOption(name, "Choose to draw normally or draw the first card from the discard pile!", "Draw normally", card.toString());
-
+            int decision = gameLogic.chooseOption(name, "Choose to draw normally or draw the first card from the discard pile!", "Draw normally", gameInstance.getDeck().lastDiscardedName());
             if(decision == 1){
+                Card card = gameInstance.getDeck().getLastDiscard();
                 handCards.add(card);
                 drawCard();
                 return;
             }
-            gameInstance.getDeck().discard(card);
-            return;
         }
         for(int i = 0; i < 2; i++){
             drawCard();

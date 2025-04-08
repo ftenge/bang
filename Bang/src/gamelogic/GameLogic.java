@@ -4,11 +4,14 @@ import cards.Card;
 import cards.DualTargetCard;
 import cards.SingleTargetCard;
 import cards.bluecards.DynamiteCard;
+import cards.browncards.MissedCard;
 import gameinstance.GameInstance;
 import ui.BangGameUI;
 import utilities.BaseModel;
 import utilities.RoleType;
+import utilities.characters.CalamityJanet;
 
+import java.awt.font.GlyphMetrics;
 import java.util.List;
 
 public class GameLogic {
@@ -27,14 +30,15 @@ public class GameLogic {
 
     //elkezdődik a játék valamennyi játékossal
     //minden játékos megejti a játék megkezdése előtti húzást, majd jön az első kör
-    public void startGame() {
-        gameInstance.initializePlayers(2);
+    public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles) {
+        gameInstance.initializePlayers(numberOfPlayers, characterNames, roles);   //custom indítás
         logUIMessage("Game started!");
         System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
         for (BaseModel player : getPlayers()) {
             player.gameStartDraw();
         }
+        ui.updateUI();
         nextTurn();
     }
 
@@ -65,7 +69,7 @@ public class GameLogic {
             }
         }
         currentPlayer.roundStart(this);
-
+        ui.updateUI();
 
 
 
@@ -74,6 +78,8 @@ public class GameLogic {
 
     //lép egyet, hogy ki az aktuális játékos majd, megkezdődik annak a köre
     public void endTurn() {
+        BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
+        currentPlayer.endTurnDiscard(this);
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayers().size();
         nextTurn();
     }
@@ -84,7 +90,9 @@ public class GameLogic {
             baseModel.playSingleTargetCard(singleTargetCard, this);
         } else if (selectedCard instanceof DualTargetCard dualTargetCard) {
             if (target != null) {
-                baseModel.playDualTargetCard(dualTargetCard, target, this);
+                if((baseModel instanceof CalamityJanet) || !(selectedCard instanceof MissedCard)){
+                    baseModel.playDualTargetCard(dualTargetCard, target, this);
+                }
             }
         }
     }
@@ -178,5 +186,9 @@ public class GameLogic {
 
     public void logUIMessage(String string){
         ui.logMessage(string);
+    }
+
+    public GameInstance getGameInstance(){
+        return GameInstance.getInstance();
     }
 }

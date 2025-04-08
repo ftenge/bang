@@ -7,8 +7,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class ScopeCard extends SingleTargetCard {
-    public ScopeCard(String suit, int value) {
-        super("Scope", suit, value, CardType.SCOPE);
+    public ScopeCard(String suit, int value, String imagePath) {
+        super("Scope", suit, value, CardType.SCOPE, imagePath);
     }
 
 

@@ -8,14 +8,16 @@ public abstract class Card {
     protected String suit;
     protected int value;
     protected CardType type;
+    protected String imagePath;
 
     //abstract kártya osztály, minden kártyának van neve, színe, értéke és típusa
 
-    public Card(String name, String suit, int value, CardType type) {
+    public Card(String name, String suit, int value, CardType type, String imagePath) {
         this.name = name;
         this.suit = suit;
         this.value = value;
         this.type = type;
+        this.imagePath = imagePath;
     }
 
     //visszaadja a kártya nevét
@@ -37,4 +39,7 @@ public abstract class Card {
     public int getValue(){
         return  this.value;
     }
+
+    //visszaadja a kártya imagePathját
+    public String getImagePath(){ return this.imagePath;}
 }

@@ -4,6 +4,7 @@ import cards.bluecards.*;
 import cards.browncards.*;
 import cards.weapons.*;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class Deck {
@@ -34,44 +35,46 @@ public class Deck {
         }
         Collections.shuffle(suitValue);
 
-        generateCardSuitValue(BangCard.class, 25, suitValue, suits);
-        generateCardSuitValue(MissedCard.class, 12, suitValue, suits);
-        generateCardSuitValue(BeerCard.class, 6, suitValue, suits);
-        generateCardSuitValue(PanicCard.class, 4, suitValue, suits);
-        generateCardSuitValue(CatBalouCard.class, 4, suitValue, suits);
-        generateCardSuitValue(DuelCard.class, 3, suitValue, suits);
-        generateCardSuitValue(StagecoachCard.class, 2, suitValue, suits);
-        generateCardSuitValue(GeneralStore.class, 2, suitValue, suits);
-        generateCardSuitValue(IndiansCard.class, 2, suitValue, suits);
-        generateCardSuitValue(WellsFargoCard.class, 1, suitValue, suits);
-        generateCardSuitValue(GatlingCard.class, 1, suitValue, suits);
-        generateCardSuitValue(SaloonCard.class, 1, suitValue, suits);
-        generateCardSuitValue(SchofieldWeapon.class, 3, suitValue, suits);
-        generateCardSuitValue(VolcanicWeapon.class, 2, suitValue, suits);
-        generateCardSuitValue(RemingtonWeapon.class, 1, suitValue, suits);
-        generateCardSuitValue(CarabineWeapon.class, 1, suitValue, suits);
-        generateCardSuitValue(WinchesterWeapon.class, 1, suitValue, suits);
-        generateCardSuitValue(JailCard.class, 3, suitValue, suits);
-        generateCardSuitValue(BarrelCard.class, 2, suitValue, suits);
-        generateCardSuitValue(MustangCard.class, 2, suitValue, suits);
-        generateCardSuitValue(ScopeCard.class, 1, suitValue, suits);
-        generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits);
+        generateCardSuitValue(BangCard.class, 25, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(MissedCard.class, 12, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(BeerCard.class, 6, suitValue, suits, "src/assets/cards/beer.png");
+        generateCardSuitValue(PanicCard.class, 4, suitValue, suits, "src/assets/cards/panic.png");
+        generateCardSuitValue(CatBalouCard.class, 4, suitValue, suits, "src/assets/cards/catbalou.png");
+        generateCardSuitValue(DuelCard.class, 3, suitValue, suits, "src/assets/cards/duel.png");
+        generateCardSuitValue(StagecoachCard.class, 2, suitValue, suits, "src/assets/cards/stagecoach.png");
+        generateCardSuitValue(GeneralStore.class, 2, suitValue, suits, "src/assets/cards/generalstore.png");
+        generateCardSuitValue(IndiansCard.class, 2, suitValue, suits, "src/assets/cards/indians.png");
+        generateCardSuitValue(WellsFargoCard.class, 1, suitValue, suits, "src/assets/cards/wellsfargo.png");
+        generateCardSuitValue(GatlingCard.class, 1, suitValue, suits, "src/assets/cards/gatling.png");
+        generateCardSuitValue(SaloonCard.class, 1, suitValue, suits, "src/assets/cards/saloon.png");
+        generateCardSuitValue(SchofieldWeapon.class, 3, suitValue, suits, "src/assets/cards/schofield.png");
+        generateCardSuitValue(VolcanicWeapon.class, 2, suitValue, suits, "src/assets/cards/volcanic.png");
+        generateCardSuitValue(RemingtonWeapon.class, 1, suitValue, suits, "src/assets/cards/remington.png");
+        generateCardSuitValue(CarabineWeapon.class, 1, suitValue, suits, "src/assets/cards/carabine.png");
+        generateCardSuitValue(WinchesterWeapon.class, 1, suitValue, suits, "src/assets/cards/winchester.png");
+        generateCardSuitValue(JailCard.class, 3, suitValue, suits, "src/assets/cards/jail.png");
+        generateCardSuitValue(BarrelCard.class, 2, suitValue, suits, "src/assets/cards/barrel.png");
+        generateCardSuitValue(MustangCard.class, 2, suitValue, suits, "src/assets/cards/mustang.png");
+        generateCardSuitValue(ScopeCard.class, 1, suitValue, suits, "src/assets/cards/scope.png");
+        generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits, "src/assets/cards/dynamite.png");
 
         Collections.shuffle(cards);
     }
 
     //létrehozzuk a különböző kártyaosztályokat a getDeclaredConstructorral, a suitValue első értéke alapján meghatározzuk
     //a kártya színét és értékét, majd kivesszük
-    private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits) {
+    private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits, String imagePath) {
         try {
             for (int i = 0; i < count; i++) {
-                cards.add(cardType.getDeclaredConstructor(String.class, int.class).newInstance(suits.get(suitValue.getFirst() % 4), (suitValue.getFirst() % 13) + 2));
+                cards.add(cardType.getConstructor(String.class, int.class, String.class).newInstance(suits.get(suitValue.getFirst() % 4), ((suitValue.getFirst() % 13) + 2), imagePath));
                 suitValue.removeFirst();
                 //System.out.println(discardPile.get(79 - suitValue.size()).toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     //húzunk egy kártyát, ha üres a pakli újrakeverjük, majd visszaadjuk a legfelső elemet
@@ -114,8 +117,17 @@ public class Deck {
         cards.add(card);
     }
 
-    //visszaadja az utolsó eldobott lapot, a dobópakliból
+    //visszaadja a dobópakli tetején lévő lapot
     public Card getLastDiscard(){
         return discardPile.pop();
+    }
+
+    //visszaadja a dobópakli tetején lévő lap nevét
+    public String lastDiscardedName(){
+        return discardPile.getLast().toString();
+    }
+
+    public Stack<Card> getDiscardPile(){
+        return discardPile;
     }
 }

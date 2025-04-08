@@ -5,14 +5,10 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public abstract class DualTargetCard extends Card {
-    protected String name;
-    protected String suit;
-    protected int value;
-    protected CardType type;
 
     //öröklődik a Card ősosztályból
-    public DualTargetCard(String name, String suit, int value, CardType type) {
-        super(name, suit, value, type);
+    public DualTargetCard(String name, String suit, int value, CardType type, String imagePath) {
+        super(name, suit, value, type, imagePath);
     }
 
     //use, ami kéri a GameLogicot, hogy tudjon az éppen aktuális játékkal interaktálni,

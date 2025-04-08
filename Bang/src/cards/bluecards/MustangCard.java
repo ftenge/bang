@@ -7,8 +7,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class MustangCard extends SingleTargetCard {
-    public MustangCard(String suit, int value) {
-        super("Mustang", suit, value, CardType.MUSTANG);
+    public MustangCard(String suit, int value, String imagePath) {
+        super("Mustang", suit, value, CardType.MUSTANG, imagePath);
     }
 
     //ha még nincs előtte musztáng lap, akkor a baseModel kezéből,

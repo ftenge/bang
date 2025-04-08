@@ -5,8 +5,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class CarabineWeapon extends Weapon {
-    public CarabineWeapon(String suit, int value) {
-        super("Carabine",suit, value, 4, false, CardType.CARABINE);
+    public CarabineWeapon(String suit, int value, String imagePath) {
+        super("Carabine",suit, value, 4, imagePath, false, CardType.CARABINE);
     }
 
     //4 egység lőtávú fegyver

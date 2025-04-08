@@ -6,8 +6,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class DynamiteCard extends SingleTargetCard {
-    public DynamiteCard(String suit, int value) {
-        super("Dynamite", suit, value, CardType.DYNAMITE);
+    public DynamiteCard(String suit, int value, String imagePath) {
+        super("Dynamite", suit, value, CardType.DYNAMITE, imagePath);
     }
 
     //kiveszi a kezéből a dinamit kártyát és lerakja maga elé

@@ -8,13 +8,17 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class BeerCard extends SingleTargetCard {
-    public BeerCard(String suit, int value) {
-        super("Beer", suit, value, CardType.BEER);
+    public BeerCard(String suit, int value, String imagePath) {
+        super("Beer", suit, value, CardType.BEER, imagePath);
     }
 
     //meghívjuk az origin beerAction-jét és annak a visszatérési értékével térünk vissza
     @Override
     public boolean use(BaseModel origin, GameLogic gameLogic) {
-        return origin.beerAction();
+        if(origin.getHealth() < origin.getMaxHP()){
+            origin.removeCard(this);
+            return origin.beerAction();
+        }
+        return false;
     }
 }

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneralStore extends SingleTargetCard {
-    public GeneralStore(String suit, int value) {
-        super("General Store", suit, value, CardType.GENERAL_STORE);
+    public GeneralStore(String suit, int value, String imagePath) {
+        super("General Store", suit, value, CardType.GENERAL_STORE, imagePath);
     }
 
     //eldobjuk a kártyát, lekérjük a még élő játékosokat,

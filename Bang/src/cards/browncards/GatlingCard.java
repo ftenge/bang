@@ -9,8 +9,8 @@ import utilities.BaseModel;
 import java.util.List;
 
 public class GatlingCard extends SingleTargetCard {
-    public GatlingCard(String suit, int value) {
-        super("Gatling", suit, value, CardType.GATLING);
+    public GatlingCard(String suit, int value, String imagePath) {
+        super("Gatling", suit, value, CardType.GATLING, imagePath);
     }
 
     //eldobjuk a kártyát, lekérjük a még élő játékosokat
