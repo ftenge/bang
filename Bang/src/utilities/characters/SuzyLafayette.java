@@ -15,7 +15,7 @@ public class SuzyLafayette extends BaseModel {
         super(new Character("Suzy Lafayette", 4), role);
     }
     //Ha nem marad egy lapja sem, akkor húzhat egyet a pakliból. if hands.empty() -> deck.draw()
-    //done
+    //TODO buggol a húzás üres kéznél
 
     public boolean isHandEmpty(){
         return handCards.isEmpty();
@@ -23,27 +23,19 @@ public class SuzyLafayette extends BaseModel {
 
     @Override
     public void playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
-        if(card.use(this, gameLogic)){
-            handCards.remove(card);
-            if(!tableCards.contains(card)) {
-                discardCard(card);
-            }
-            if(isHandEmpty()){
-                drawCard();
-            }
+        card.use(this, gameLogic);
+        if(isHandEmpty()){
+            gameLogic.logUIMessage("Üres a kéz!");
+            drawCard();
         }
     }
 
     @Override
     public void playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
-        if(card.use(this, target, gameLogic)){
-            handCards.remove(card);
-            if(!tableCards.contains(card)) {
-                discardCard(card);
-            }
-            if(isHandEmpty()){
-                drawCard();
-            }
+        card.use(this, target, gameLogic);
+        if(isHandEmpty()){
+            gameLogic.logUIMessage("Üres a kéz!");
+            drawCard();
         }
     }
 
@@ -52,6 +44,7 @@ public class SuzyLafayette extends BaseModel {
         discardCard(card);
         handCards.remove(card);
         if(isHandEmpty()){
+            System.out.println("Üres a kéz a removeCard után!");
             drawCard();
         }
     }

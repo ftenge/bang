@@ -8,8 +8,8 @@ import utilities.characters.CalamityJanet;
 import utilities.characters.SlabTheKiller;
 
 public class MissedCard extends DualTargetCard {
-    public MissedCard(String suit, int value) {
-        super("Missed", suit, value, CardType.MISSED);
+    public MissedCard(String suit, int value, String imagePath) {
+        super("Missed", suit, value, CardType.MISSED, imagePath);
     }
 
     //eldobjuk a kártyát
@@ -19,14 +19,18 @@ public class MissedCard extends DualTargetCard {
     //igazzal térünk vissza
     @Override
     public boolean use(BaseModel origin, BaseModel target, GameLogic gameLogic) {
-        origin.removeCard(this);
-        if(origin instanceof CalamityJanet){
-            if(!origin.getBangedThisRound() || origin.getRapid()) {
+        if (origin instanceof CalamityJanet) {
+            if (!origin.getBangedThisRound() || origin.getRapid()) {
                 origin.setBangedThisRound(true);
                 target.bangAction(origin, gameLogic);
+                origin.removeCard(this);
+                return true;
             }
         }
-        // Implementation of missed
-        return true;
+        if(!origin.equals(target)) {
+            origin.removeCard(this);
+            return true;
+        }
+        return false;
     }
 }

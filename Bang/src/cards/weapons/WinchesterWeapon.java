@@ -5,8 +5,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class WinchesterWeapon extends Weapon {
-    public WinchesterWeapon(String suit, int value) {
-        super("Winchester",suit, value, 5, false, CardType.WINCHESTER);
+    public WinchesterWeapon(String suit, int value, String imagePath) {
+        super("Winchester",suit, value, 5, imagePath,false, CardType.WINCHESTER);
     }
 
     //5 egység lőtávú fegyver

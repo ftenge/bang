@@ -7,8 +7,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class DuelCard extends DualTargetCard {
-    public DuelCard(String suit, int value) {
-        super("Duel", suit, value, CardType.DUEL);
+    public DuelCard(String suit, int value, String imagePath) {
+        super("Duel", suit, value, CardType.DUEL, imagePath);
     }
 
     //eldobjuk a kártyát és meghívjuk a target duelAction-jét, ahol a baseModel a paraméter

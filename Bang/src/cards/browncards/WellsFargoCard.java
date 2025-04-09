@@ -8,17 +8,17 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class WellsFargoCard extends SingleTargetCard {
-    public WellsFargoCard(String suit, int value) {
-        super("Wells Fargo", suit, value, CardType.WELLS_FARGO);
+    public WellsFargoCard(String suit, int value, String imagePath) {
+        super("Wells Fargo", suit, value, CardType.WELLS_FARGO, imagePath);
     }
 
     //eldobjuk a kártyát és az origin húz 2 lapot
     @Override
-    public boolean use(BaseModel baseModel, GameLogic gameLogic) {
-        baseModel.removeCard(this);
+    public boolean use(BaseModel origin, GameLogic gameLogic) {
         for(int i = 0; i < 3; i++){
-            baseModel.drawCard();
+            origin.drawCard();
         }
+        origin.removeCard(this);
         return true;
     }
 

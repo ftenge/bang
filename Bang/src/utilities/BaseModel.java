@@ -7,6 +7,7 @@ import cards.weapons.Weapon;
 import gameinstance.GameInstance;
 import gamelogic.GameLogic;
 import ui.BangGameUI;
+import utilities.characters.CalamityJanet;
 import utilities.characters.SuzyLafayette;
 import utilities.characters.VultureSam;
 
@@ -56,6 +57,7 @@ public class BaseModel {
     public String toString(){
         return name;
     }
+
 
     public String datas(){
         return ("Name: " + name + "\n" +
@@ -139,6 +141,13 @@ public class BaseModel {
         return tableCards;
     }
 
+    public void endTurnDiscard(GameLogic gameLogic){
+        while(handCards.size() > health){
+            Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\nHandsize: " + handCards.size() + "\nHealth: " + health,  name + "Discard card end turn.");
+            removeCard(card);
+        }
+    }
+
     public void bangAction(BaseModel source, GameLogic gameLogic){
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
@@ -146,13 +155,7 @@ public class BaseModel {
                 return;
             }
         }
-        /*for(Card card: getHandCards()){
-            if(card instanceof MissedCard missedCard){
-                missedAction(missedCard, this);
-                System.out.println("Volt nem talált lap!");
-                return;
-            }
-        }*/
+
         while(true){
             Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Missed! card or pass!");
             if(card instanceof MissedCard missedCard){
@@ -210,12 +213,11 @@ public class BaseModel {
     }
 
     public boolean beerAction(){
-        // 2 játékosnál nincs sörheal;
-        if(health < maxHP){
-            health++;
-            return true;
-        }
-        return false;
+        //TODO 2 játékosnál nincs sörheal;
+        System.out.println("HP BEVOR: " +health);
+        health++;
+        System.out.println("HP AFTER: " +health);
+        return true;
     }
 
     public void saloonAction(GameLogic gameLogic){
@@ -282,9 +284,9 @@ public class BaseModel {
         if(index < target.getHandCards().size()){
             discardCard(target.getHandCards().get(index));
             target.getHandCards().remove(index);
-            if(target instanceof SuzyLafayette suzyLafayette){
-                if(suzyLafayette.isHandEmpty()){
-                    suzyLafayette.drawCard();
+            if(target instanceof SuzyLafayette){
+                if(target.getHandCards().isEmpty()){
+                    target.drawCard();
                 }
             }
             return;
@@ -309,9 +311,9 @@ public class BaseModel {
         if(index < target.getHandCards().size()){
             handCards.add(target.getHandCards().get(index));
             target.getHandCards().remove(index);
-            if(target instanceof SuzyLafayette suzyLafayette){
-                if(suzyLafayette.isHandEmpty()){
-                    suzyLafayette.drawCard();
+            if(target instanceof SuzyLafayette){
+                if(target.getHandCards().isEmpty()){
+                    target.drawCard();
                 }
             }
             return;
@@ -383,7 +385,7 @@ public class BaseModel {
     }
 
     public void receiveDamage(int damage, BaseModel source, GameLogic gameLogic){
-        this.health = getHealth() - damage;
+        this.health = health - damage;
         if(health <= 0){
             while(true){
                 Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");

@@ -7,9 +7,10 @@ import utilities.BaseModel;
 import utilities.characters.SlabTheKiller;
 
 public class BangCard extends DualTargetCard {
-    public BangCard(String suit, int value) {
-        super("Bang!", suit, value, CardType.BANG);
+    public BangCard(String suit, int value, String imagePath) {
+        super("Bang!", suit, value, CardType.BANG, imagePath);
     }
+
 
     //a origin megtámadja Bang!-gel a targetet
     //ha az origin, nem lőtt még Bang!-gel vagy tud gyorstüzelni (fegyver vagy tulajdonság miatt)
@@ -25,12 +26,12 @@ public class BangCard extends DualTargetCard {
         if(origin.getVision().get(gameLogic.getPlayers().indexOf(target)) <= range) {
             if (!origin.getBangedThisRound() || origin.getRapid()) {
                 origin.setBangedThisRound(true);
-                origin.removeCard(this);
                 if (origin instanceof SlabTheKiller) {
                     target.slabTheKillerBangangAction(origin, gameLogic);
                     return true;
                 }
                 target.bangAction(origin, gameLogic);
+                origin.removeCard(this);
                 return true;
             }
         }

@@ -7,8 +7,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class SaloonCard extends SingleTargetCard {
-    public SaloonCard(String suit, int value) {
-        super("Saloon", suit, value, CardType.SALOON);
+    public SaloonCard(String suit, int value, String imagePath) {
+        super("Saloon", suit, value, CardType.SALOON, imagePath);
     }
 
     //eldobjuk a kártyát és minden játékosnak meghívjuk a saloonAction függvényét

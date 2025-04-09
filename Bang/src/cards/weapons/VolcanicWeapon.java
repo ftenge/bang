@@ -5,8 +5,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class VolcanicWeapon extends Weapon {
-    public VolcanicWeapon(String suit, int value) {
-        super("Volcanic",suit, value, 1, true, CardType.VOLCANIC);
+    public VolcanicWeapon(String suit, int value, String imagePath) {
+        super("Volcanic",suit, value, 1, imagePath,true, CardType.VOLCANIC);
     }
 
     //1 egység lőtávú fegyver, az egyetlen gyorstüzelő

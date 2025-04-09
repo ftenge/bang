@@ -6,8 +6,8 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 
 public class BarrelCard extends SingleTargetCard {
-    public BarrelCard(String suit, int value) {
-        super("Barrel", suit, value, CardType.BARREL);
+    public BarrelCard(String suit, int value, String imagePath) {
+        super("Barrel", suit, value, CardType.BARREL, imagePath);
     }
 
     //ha nincs a kijátszó játékoson kijátszott hordó lap,

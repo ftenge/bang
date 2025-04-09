@@ -23,7 +23,10 @@ public class LuckyDuke extends BaseModel {
         cards.add(gameInstance.getDeck().draw());
         cards.add(gameInstance.getDeck().draw());
 
-        int index = gameLogic.chooseOption(name, "Select an appropriate card!", cards.get(0).toString(), cards.get(1).toString()) - 1;
+        System.out.println(cards.get(0));
+        System.out.println(cards.get(1));
+
+        int index = gameLogic.chooseOption(name, "Select an appropriate card!", cards.get(0).toString(), cards.get(1).toString());
 
         discardCard(cards.get(0));
         discardCard(cards.get(1));

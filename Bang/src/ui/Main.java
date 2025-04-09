@@ -1,12 +1,15 @@
 //TODO innen indítani a futást
-/*package ui;
+package ui;
 
-import ui.BangConsoleUI;
 
+import cards.Deck;
+import utilities.BaseModel;
 
 public class Main {
     public static void main(String[] args) {
-        BangConsoleUI gameUI = new BangConsoleUI();
-        gameUI.startGame();
+        System.out.println("maainstart");
+        MainMenuUI MainMenuUI = new MainMenuUI();
+        //BangGameUI bangGameUI = new BangGameUI();
+        //Deck deck = new Deck();
     }
-}*/
+}
