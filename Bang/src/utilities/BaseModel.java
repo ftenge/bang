@@ -6,14 +6,10 @@ import cards.browncards.*;
 import cards.weapons.Weapon;
 import gameinstance.GameInstance;
 import gamelogic.GameLogic;
-import ui.BangGameUI;
-import utilities.characters.CalamityJanet;
 import utilities.characters.SuzyLafayette;
 import utilities.characters.VultureSam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 //ez az osztály az összes játékososztály alapja
@@ -315,7 +311,17 @@ public class BaseModel {
     public Card generalStoreAction(List<Card> cards, GameLogic gameLogic){
         Card card = null;
         if(isBot){
-
+            Map<CardType, Card> firstCardOfType = new HashMap<>();
+            for(Card gStoreCard : cards){
+                firstCardOfType.putIfAbsent(gStoreCard.getType(), gStoreCard);
+            }
+            for(CardType prefferedType : getPreferredOrder()){
+                card = firstCardOfType.get(prefferedType);
+                if(card != null){
+                    addHand(card);
+                    return card;
+                }
+            }
         }else {
             while (card == null) {
                 card = gameLogic.chooseCard(cards, name, "Choose a card!");
