@@ -40,6 +40,10 @@ public abstract class Card {
         return  this.value;
     }
 
+    public CardType getType(){
+        return this.type;
+    }
+
     //visszaadja a kártya imagePathját
     public String getImagePath(){ return this.imagePath;}
 }
