@@ -8,8 +8,8 @@ import utilities.Role;
 import java.util.List;
 
 public class VultureSam extends BaseModel {
-    public VultureSam(Role role) {
-        super(new Character("Vulture Sam", 4), role);
+    public VultureSam(Role role, boolean isBot) {
+        super(new Character("Vulture Sam", 4), role, isBot);
     }
     //megkapja a kiesett játékos lapjait.
     //done

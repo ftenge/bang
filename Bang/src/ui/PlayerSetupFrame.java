@@ -11,6 +11,7 @@ import java.util.List;
 
 public class PlayerSetupFrame extends JFrame {
     private int numberOfPlayers;
+    private List<JComboBox<String>> botSelector = new ArrayList<>();
     private List<JComboBox<String>> characterSelectors = new ArrayList<>();
     private List<JComboBox<String>> roleSelectors = new ArrayList<>();
     private GameInstance gameInstance;
@@ -32,12 +33,16 @@ public class PlayerSetupFrame extends JFrame {
 
             playerPanel.add(new JLabel("Játékos " + (i + 1)));
 
+            JComboBox<String> botBox = new JComboBox<>(getBotOptions());
             JComboBox<String> characterBox = new JComboBox<>(getCharacterOptions());
             JComboBox<String> roleBox = new JComboBox<>(getRoleOptions());
 
+            botSelector.add(botBox);
             characterSelectors.add(characterBox);
             roleSelectors.add(roleBox);
 
+            playerPanel.add(new JLabel("Bot:"));
+            playerPanel.add(botBox);
             playerPanel.add(new JLabel("Karakter:"));
             playerPanel.add(characterBox);
             playerPanel.add(new JLabel("Szerep:"));
@@ -48,10 +53,12 @@ public class PlayerSetupFrame extends JFrame {
 
         JButton startButton = new JButton("Játék indítása");
         startButton.addActionListener(e -> {
+            List<String> selectedBots = new ArrayList<>();
             List<String> selectedCharacters = new ArrayList<>();
             List<String> selectedRoles = new ArrayList<>();
 
             for (int i = 0; i < numberOfPlayers; i++) {
+                selectedBots.add((String) botSelector.get(i).getSelectedItem());
                 selectedCharacters.add((String) characterSelectors.get(i).getSelectedItem());
                 selectedRoles.add((String) roleSelectors.get(i).getSelectedItem());
             }
@@ -60,8 +67,9 @@ public class PlayerSetupFrame extends JFrame {
             BangGameUI gameUI = new BangGameUI();
             GameLogic gameLogic = gameUI.getGameLogic();
 
-            gameLogic.startGame(numberOfPlayers, selectedCharacters, selectedRoles);
+            gameLogic.startGame(numberOfPlayers, selectedCharacters, selectedRoles, selectedBots);
             gameUI.setVisible(true);
+            setVisible(false);
             dispose();
         });
 
@@ -70,6 +78,8 @@ public class PlayerSetupFrame extends JFrame {
 
         setVisible(true);
     }
+
+    private String[] getBotOptions(){return  new String[]{"True", "False"};}
 
     private String[] getCharacterOptions() {
         return gameInstance.getAllCharacterNames();

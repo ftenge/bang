@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalamityJanet extends BaseModel {
-    public CalamityJanet(Role role) {
-        super(new Character("Calamity Janet", 4), role);
+    public CalamityJanet(Role role, boolean isBot) {
+        super(new Character("Calamity Janet", 4), role, isBot);
     }
     //bang és missed használhatja egymás helyett
 

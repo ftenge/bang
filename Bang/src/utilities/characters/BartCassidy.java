@@ -8,8 +8,8 @@ import utilities.Character;
 import utilities.Role;
 
 public class BartCassidy extends BaseModel {
-    public BartCassidy(Role role) {
-        super(new Character("Bart Cassidi", 4), role);
+    public BartCassidy(Role role, boolean isBot) {
+        super(new Character("Bart Cassidi", 4), role, isBot);
     }
     //ahányszor eltalálják húz egyet
 

@@ -7,8 +7,8 @@ import utilities.Character;
 import utilities.Role;
 
 public class BlackJack extends BaseModel {
-    public BlackJack(Role role) {
-        super(new Character("Black Jack", 4), role);
+    public BlackJack(Role role, boolean isBot) {
+        super(new Character("Black Jack", 4), role, isBot);
     }
     //amikor sorra kerül és lapot
     //húz, fel kell mutatnia a második húzott lapot – ha kőr

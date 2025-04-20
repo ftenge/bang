@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PedroRamirez extends BaseModel {
-    public PedroRamirez(Role role) {
-        super(new Character("Pedro Ramirez", 4), role);
+    public PedroRamirez(Role role, boolean isBot) {
+        super(new Character("Pedro Ramirez", 4), role, isBot);
     }
     // Az első lapot a dobott lapok közül is választhatja.
 

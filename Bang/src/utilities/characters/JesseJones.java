@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JesseJones extends BaseModel {
-    public JesseJones(Role role) {
-        super(new Character("Jesse Jones", 4), role);
+    public JesseJones(Role role, boolean isBot) {
+        super(new Character("Jesse Jones", 4), role, isBot);
     }
     //az első lapot húzhatja bárki kezéből
 

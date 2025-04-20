@@ -60,7 +60,7 @@ public class GameInstance {
         reorderSheriffFirst(sheriffIndex);
     }*/
 
-    public void initializePlayers(int count, List<String> characterNames, List<String> roleNames) {
+    public void initializePlayers(int count, List<String> characterNames, List<String> roleNames, List<String> bots) {
         players.clear();
         List<Role> roles = getRolesForGame(count);
         ArrayList<String> allCharacterNames = new ArrayList( Arrays.asList(getAllCharacterNames()));
@@ -100,10 +100,15 @@ public class GameInstance {
                 allCharacterNames.removeLast();
             }
             Class<? extends BaseModel> characterClass = getCharacterFromCharacterName(characterName);
+            System.out.println(characterClass);
 
             BaseModel player = null;
             try {
-                player = characterClass.getDeclaredConstructor(Role.class).newInstance(role);
+                if(bots.get(i).equals("True")){
+                    player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, true);
+                }else{
+                    player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, false);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

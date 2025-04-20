@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KitCarlson extends BaseModel {
-    public KitCarlson(Role role) {
-        super(new Character("Kit Carlson", 4), role);
+    public KitCarlson(Role role, boolean isBot) {
+        super(new Character("Kit Carlson", 4), role, isBot);
     }
     //húzáskor 3 lapból választhat 2-t, a maradékot visszateszi
 

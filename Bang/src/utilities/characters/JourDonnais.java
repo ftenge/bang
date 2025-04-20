@@ -8,8 +8,8 @@ import utilities.Character;
 import utilities.Role;
 
 public class JourDonnais extends BaseModel {
-    public JourDonnais(Role role) {
-        super(new Character("Jour Donnais", 4), role);
+    public JourDonnais(Role role, boolean isBot) {
+        super(new Character("Jour Donnais", 4), role, isBot);
     }
     //beépített hordó
     //done

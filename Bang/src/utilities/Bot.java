@@ -74,6 +74,8 @@ public class Bot {
             }
             cardsYetToPlay = setYetToPlay(bot);
         }
+
+        gameLogic.endTurn();
     }
 
     private static void autoEquip(BaseModel bot, GameLogic gameLogic) {
@@ -221,8 +223,12 @@ public class Bot {
         List<BaseModel> players = bot.getGameInstance().getInstance().getPlayers();
         int thisPlayerIndex = players.indexOf(bot);
         List<BaseModel> possibleTargets = new ArrayList<>();
+        int weaponRange = 1;
+        if(bot.hasWeapon()){
+            weaponRange = bot.getWeapon().getRange();
+        }
         for(int i = 0; i < players.size(); i++){
-            if(bot.getVision().get(i) <= (bot.getWeapon().getRange() + bot.getFieldView()) && thisPlayerIndex != i){
+            if(bot.getVision().get(i) <= (weaponRange + bot.getFieldView()) && thisPlayerIndex != i){
                 possibleTargets.add(players.get(i));
             }
         }

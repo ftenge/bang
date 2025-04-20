@@ -8,6 +8,7 @@ import cards.browncards.MissedCard;
 import gameinstance.GameInstance;
 import ui.BangGameUI;
 import utilities.BaseModel;
+import utilities.Bot;
 import utilities.RoleType;
 import utilities.characters.CalamityJanet;
 
@@ -30,8 +31,8 @@ public class GameLogic {
 
     //elkezdődik a játék valamennyi játékossal
     //minden játékos megejti a játék megkezdése előtti húzást, majd jön az első kör
-    public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles) {
-        gameInstance.initializePlayers(numberOfPlayers, characterNames, roles);   //custom indítás
+    public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles, List<String> bots) {
+        gameInstance.initializePlayers(numberOfPlayers, characterNames, roles, bots);   //custom indítás
         logUIMessage("Game started!");
         System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
@@ -68,8 +69,12 @@ public class GameLogic {
                 return;
             }
         }
-        currentPlayer.roundStart(this);
-        ui.updateUI();
+        if(currentPlayer.getIsBot()){
+            Bot.takeTurn(currentPlayer, this);
+        }else{
+            currentPlayer.roundStart(this);
+            ui.updateUI();
+        }
 
 
 

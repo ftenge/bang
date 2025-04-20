@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LuckyDuke extends BaseModel {
-    public LuckyDuke(Role role) {
-        super(new Character("Lucky Duke", 4), role);
+    public LuckyDuke(Role role, boolean isBot) {
+        super(new Character("Lucky Duke", 4), role, isBot);
     }
     //minden húzáskor 2 lap közül választhat
 

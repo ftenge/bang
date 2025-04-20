@@ -6,8 +6,8 @@ import utilities.Character;
 import utilities.Role;
 
 public class WillyTheKid extends BaseModel {
-    public WillyTheKid(Role role) {
-        super(new Character("Willy The Kid", 4), role);
+    public WillyTheKid(Role role, boolean isBot) {
+        super(new Character("Willy The Kid", 4), role, isBot);
         this.rapid = true;
     }
 

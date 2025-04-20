@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ElGringo extends BaseModel {
-    public ElGringo(Role role) {
-        super(new Character("El Gringo", 3), role);
+    public ElGringo(Role role, boolean isBot) {
+        super(new Character("El Gringo", 3), role, isBot);
     }
     //húz egy lapot attól aki eltalálja, universal pánik, nem pánik, kézből húz
     //done
