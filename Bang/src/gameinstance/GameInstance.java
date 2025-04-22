@@ -16,10 +16,12 @@ public class GameInstance {
     private static GameInstance instance;
     private List<BaseModel> players;
     private Deck deck;
+    private int currentPlayerIndex;
 
     private GameInstance() {
         this.players = new ArrayList<>();
         this.deck = new Deck();
+        this.currentPlayerIndex = 0;
         //initializePlayers();
     }
 
@@ -67,7 +69,7 @@ public class GameInstance {
         System.out.println("RoleNamesA: " + roleNames);
         int sheriffIndex = 0;
 
-        ArrayList<String> allCharacterNames = new ArrayList( Arrays.asList(getAllCharacterNames()));
+        ArrayList<String> allCharacterNames = new ArrayList<>( Arrays.asList(getAllCharacterNames()));
 
         for (int i = 0; i < count; i++) {
             String characterName = characterNames.get(i);
@@ -258,5 +260,13 @@ public class GameInstance {
     //eltávolítja a megadott játékost a játékos listából
     public void removePlayer(BaseModel baseModel){
         players.remove(baseModel);
+    }
+
+    public void setCurrentPlayerIndex(int newIndex){
+        this.currentPlayerIndex = newIndex;
+    }
+
+    public int getCurrentPlayerIndex(){
+        return this.currentPlayerIndex;
     }
 }

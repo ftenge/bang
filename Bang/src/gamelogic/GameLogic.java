@@ -18,7 +18,6 @@ import java.util.List;
 
 public class GameLogic {
     private GameInstance gameInstance;
-    private List<BaseModel> players;
     private BangGameUI ui;
     private int currentPlayerIndex;
 
@@ -26,7 +25,6 @@ public class GameLogic {
     public GameLogic(BangGameUI ui) {
         this.ui = ui;
         this.gameInstance = GameInstance.getInstance();
-        this.players = gameInstance.getPlayers();
         this.currentPlayerIndex = 0;
     }
 
@@ -87,6 +85,7 @@ public class GameLogic {
         BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
         currentPlayer.endTurnDiscard(this);
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayers().size();
+        gameInstance.setCurrentPlayerIndex(currentPlayerIndex);
         nextTurn();
     }
 
@@ -144,7 +143,7 @@ public class GameLogic {
         boolean isSheriffAlive = false;
         boolean areAnyOutLawsAlive = false;
         boolean isRenegadeAlive = false;
-        for(BaseModel player : players){
+        for(BaseModel player : getPlayers()){
             if(player.getRole().getType() == RoleType.SHERIFF){
                 isSheriffAlive = true;
             }
@@ -190,6 +189,7 @@ public class GameLogic {
             if(getPlayers().get(i) == baseModel){
                 if(currentPlayerIndex >= i){
                     currentPlayerIndex--;
+                    gameInstance.setCurrentPlayerIndex(currentPlayerIndex);
                 }
             }
         }
