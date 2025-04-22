@@ -65,6 +65,7 @@ public class GameInstance {
         System.out.println("RoleNamesB: " + roleNames);
         List<Role> roles = getRolesForGame(count, roleNames);
         System.out.println("RoleNamesA: " + roleNames);
+        int sheriffIndex = 0;
 
         ArrayList<String> allCharacterNames = new ArrayList( Arrays.asList(getAllCharacterNames()));
 
@@ -79,6 +80,9 @@ public class GameInstance {
                 roles = getRandomRole(roles);
                 role = roles.getLast();
                 roles.removeLast();
+                if(role.getType() == RoleType.SHERIFF){
+                    sheriffIndex = count;
+                }
             }else {
                 role = switch (roleName) {
                     case "Sheriff" -> new Role(RoleType.SHERIFF);
@@ -87,6 +91,9 @@ public class GameInstance {
                     case "Renegade" -> new Role(RoleType.RENEGADE);
                     default -> role;
                 };
+                if(roleName.equals("Sheriff")){
+                    sheriffIndex = count;
+                }
             }
             System.out.println(role.getType());
 
@@ -111,6 +118,7 @@ public class GameInstance {
             }
             players.add(player);
         }
+        reorderSheriffFirst(sheriffIndex);
     }
 
     public List<Role> getRandomRole(List<Role> remainingRoles){

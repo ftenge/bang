@@ -184,10 +184,14 @@ public class GameLogic {
     }
 
     //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
-    public void aPlayerRemoved(){
+    public void aPlayerRemoved(BaseModel baseModel){
         System.out.println("A player removed");
-        if(currentPlayerIndex == getPlayers().size()){
-            currentPlayerIndex--;
+        for(int i = 0; i < getPlayers().size(); i++){
+            if(getPlayers().get(i) == baseModel){
+                if(currentPlayerIndex >= i){
+                    currentPlayerIndex--;
+                }
+            }
         }
         String gameOverMessage = getGameOver();
         System.out.println("GameOver? " + gameOverMessage);

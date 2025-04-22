@@ -486,8 +486,8 @@ public class BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.role.getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
+            gameLogic.aPlayerRemoved(this);
             gameInstance.removePlayer(this);
-            gameLogic.aPlayerRemoved();
             for(BaseModel baseModel : gameInstance.getPlayers()){
                 if(baseModel instanceof VultureSam vultureSam){
                     vultureSam.collectCard(handCards);
