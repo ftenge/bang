@@ -18,6 +18,8 @@ public class BangGameUI extends JFrame {
     private JPanel playerPanel, tablePanel, opponentsPanel, logPanel;
     private JTextArea logTextArea;
     private JLabel discardPileLabel;
+    private JLabel hpLabel;
+    private JPanel infoPanel;
     private JButton playCardButton, discardCardButton, nextTurnButton;
     private JComboBox<BaseModel> targetPlayerSelector;
 
@@ -53,7 +55,13 @@ public class BangGameUI extends JFrame {
         logPanel.add(logScrollPane, BorderLayout.CENTER);
 
         discardPileLabel = new JLabel("Discard Pile: ");
-        logPanel.add(discardPileLabel, BorderLayout.NORTH);
+        hpLabel = new JLabel("Your HP: ");
+
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.add(discardPileLabel, BorderLayout.NORTH);
+        infoPanel.add(hpLabel, BorderLayout.SOUTH);
+
+        logPanel.add(infoPanel, BorderLayout.NORTH);
 
         JPanel controlPanel = new JPanel(new GridLayout(2, 2));
 
@@ -126,14 +134,13 @@ public class BangGameUI extends JFrame {
                 JPanel singleOpponentPanel = new JPanel();
                 singleOpponentPanel.setBorder(BorderFactory.createTitledBorder(player.getName() + " (HP: " + player.getHealth() + "/" + player.getMaxHP() + ")"));
 
-                for (int i = 0; i < player.getHandCards().size(); i++) {
-                    JButton hiddenCard = createCardButton(null, false);
-                    singleOpponentPanel.add(hiddenCard);
-                }
+                singleOpponentPanel.add(new HiddenCardLabel(player.getHandCards().size()));
+
 
                 for (Card card : player.getTableCards()) {
                     JButton cardButton = createCardButton(card, true);
                     singleOpponentPanel.add(cardButton);
+
                 }
 
                 opponentsPanel.add(singleOpponentPanel);
@@ -142,6 +149,7 @@ public class BangGameUI extends JFrame {
         }
 
         discardPileLabel.setText("Discard Pile: " + gameInstance.getDeck().seeLastDiscardedCard());
+        hpLabel.setText("Your HP: " + currentPlayer.getHealth() + "/" + currentPlayer.getMaxHP());
 
         revalidate();
         repaint();

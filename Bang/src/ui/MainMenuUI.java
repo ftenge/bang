@@ -15,7 +15,6 @@ public class MainMenuUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         JButton newGameButton = new JButton("Új játék");
-        JButton loadGameButton = new JButton("Játék betöltése");
         JButton exitButton = new JButton("Kilépés");
 
         newGameButton.addActionListener(e -> {
@@ -23,15 +22,10 @@ public class MainMenuUI extends JFrame {
             dispose();
         });
 
-        loadGameButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "A játék betöltése jelenleg nem elérhető.");
-        });
-
         exitButton.addActionListener(e -> System.exit(0));
 
         panel.add(new JLabel("Bang! - Társasjáték", SwingConstants.CENTER));
         panel.add(newGameButton);
-        panel.add(loadGameButton);
         panel.add(exitButton);
 
         add(panel);

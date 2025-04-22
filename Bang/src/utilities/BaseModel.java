@@ -285,6 +285,7 @@ public class BaseModel {
             for(Card card : this.getHandCards()){
                 if(card instanceof BangCard bangCard){
                     removeCard(bangCard);
+                    target.duelAction(this, gameLogic);
                     return;
                 }
             }
@@ -435,6 +436,7 @@ public class BaseModel {
         DynamiteCard dynamiteCard = dynamite;
         removeDynamite();
         if(card.getSuit().equals("Spades") && card.getValue() >= 2 && card.getValue() <= 9){
+            System.out.println("Berobbant a dinamit");
             receiveDamage(3, source, gameLogic);
             discardCard(dynamiteCard);
             return null;
@@ -452,30 +454,31 @@ public class BaseModel {
 
     public void receiveDamage(int damage, BaseModel source, GameLogic gameLogic){
         this.health = health - damage;
-        if(health <= 0 && gameLogic.getPlayers().size() > 2){
-            if(this.isBot){
-                for (Card card : getHandCards()) {
-                    if (card instanceof BeerCard beerCard) {
-                        playSingleTargetCard(beerCard, gameLogic);
+        if(health <= 0){
+            if(gameLogic.getPlayers().size() > 2) {
+                if (this.isBot) {
+                    for (Card card : getHandCards()) {
+                        if (card instanceof BeerCard beerCard) {
+                            playSingleTargetCard(beerCard, gameLogic);
+                        }
+                        if (health > 0) {
+                            System.out.println("Visszahoztad magad az életbe!");
+                            return;
+                        }
                     }
-                    if (health > 0) {
-                        System.out.println("Visszahoztad magad az életbe!");
-                        return;
-                    }
-                }
-            }
-            else {
-                while (true) {
-                    Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
-                    if (card instanceof BeerCard beerCard) {
-                        playSingleTargetCard(beerCard, gameLogic);
-                    }
-                    if (health > 0) {
-                        System.out.println("Visszahoztad magad az életbe!");
-                        return;
-                    }
-                    if (card == null) {
-                        break;
+                } else {
+                    while (true) {
+                        Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
+                        if (card instanceof BeerCard beerCard) {
+                            playSingleTargetCard(beerCard, gameLogic);
+                        }
+                        if (health > 0) {
+                            System.out.println("Visszahoztad magad az életbe!");
+                            return;
+                        }
+                        if (card == null) {
+                            break;
+                        }
                     }
                 }
             }
