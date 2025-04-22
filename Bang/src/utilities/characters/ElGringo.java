@@ -10,6 +10,7 @@ import utilities.Role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ElGringo extends BaseModel {
     public ElGringo(Role role, boolean isBot) {
@@ -40,14 +41,18 @@ public class ElGringo extends BaseModel {
     }
 
     public void drawFromSomeonesHand(BaseModel target, GameLogic gameLogic){
-        List<Card> cards = new ArrayList<>();
-        for(int i = 0; i < target.getHandCards().size(); i++){
-            String cardName = "Hand card " + (i + 1);
-            cards.add(new HandCard(cardName, "",i));
+        int index = 0;
+        if(isBot){
+            index = new Random().nextInt(target.getHandCards().size());
+        }else {
+            List<Card> cards = new ArrayList<>();
+            for (int i = 0; i < target.getHandCards().size(); i++) {
+                String cardName = "Hand card " + (i + 1);
+                cards.add(new HandCard(cardName, "", i));
+            }
+
+            index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
         }
-
-        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
-
         handCards.add(target.getHandCards().get(index));
         target.getHandCards().remove(index);
         if(target instanceof SuzyLafayette suzyLafayette){

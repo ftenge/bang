@@ -62,7 +62,10 @@ public class GameInstance {
 
     public void initializePlayers(int count, List<String> characterNames, List<String> roleNames, List<String> bots) {
         players.clear();
-        List<Role> roles = getRolesForGame(count);
+        System.out.println("RoleNamesB: " + roleNames);
+        List<Role> roles = getRolesForGame(count, roleNames);
+        System.out.println("RoleNamesA: " + roleNames);
+
         ArrayList<String> allCharacterNames = new ArrayList( Arrays.asList(getAllCharacterNames()));
 
         for (int i = 0; i < count; i++) {
@@ -96,11 +99,12 @@ public class GameInstance {
 
             if (characterName.equals("Random")) {
                 allCharacterNames = getRandomCharacter(allCharacterNames);
+                System.out.println(allCharacterNames);
                 characterName = allCharacterNames.getLast();
                 allCharacterNames.removeLast();
             }
             Class<? extends BaseModel> characterClass = getCharacterFromCharacterName(characterName);
-            System.out.println(characterClass);
+            System.out.println("Felismerőszöveg: " + characterClass);
 
             BaseModel player = null;
             try {
@@ -138,6 +142,7 @@ public class GameInstance {
                 return character;
             }
         }
+        System.out.println("Itt a hiba, charactername: " + characterName);
         return BaseModel.class;
     }
 
@@ -177,26 +182,50 @@ public class GameInstance {
 
     public String[] getAllCharacterNames(){
         List<Class<? extends BaseModel>> characters = getAllCharacterClasses();
-        String[] characterNames = new String[characters.size() + 1];
-        characterNames[0] = "Random";
+        String[] characterNames = new String[characters.size()];
+        //characterNames[0] = "Random";
         for(int i = 0; i < characters.size(); i++){
-            characterNames[i + 1] = characters.get(i).getName().substring(21);
+            characterNames[i] = characters.get(i).getName().substring(21);
         }
         return characterNames;
     }
 
     //létrehoz egy listát az összes szereppel
-    private List<Role> getRolesForGame(int numberOfPlayers) {
+    private List<Role> getRolesForGame(int numberOfPlayers, List<String> roleNames) {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(RoleType.SHERIFF));
         roles.add(new Role(RoleType.OUTLAW));
-        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.RENEGADE));
         roles.add(new Role(RoleType.OUTLAW));
+        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.OUTLAW));
         roles.add(new Role(RoleType.DEPUTY));
 
-        return roles;
+        roles = roles.subList(0, numberOfPlayers);
+        List<Role> returnRoles = new ArrayList<>();
+        List<String> tempRoleNames = new ArrayList<>(roleNames);
+        for(Role role : roles){
+            if(role.getType() == RoleType.SHERIFF && tempRoleNames.contains("Sheriff")){
+                tempRoleNames.remove("Sheriff");
+                continue;
+            }
+            if(role.getType() == RoleType.DEPUTY && tempRoleNames.contains("Deputy")){
+                tempRoleNames.remove("Deputy");
+                continue;
+            }
+            if(role.getType() == RoleType.OUTLAW && tempRoleNames.contains("Outlaw")){
+                tempRoleNames.remove("Outlaw");
+                continue;
+            }
+            if(role.getType() == RoleType.RENEGADE && tempRoleNames.contains("Renegade")){
+                tempRoleNames.remove("Renegade");
+                continue;
+            }
+            returnRoles.add(role);
+        }
+
+
+        return returnRoles;
     }
 
     //ha nem a sheriff az első, akkor azt a részlistát beszúrja a lista végére

@@ -209,7 +209,6 @@ public class BaseModel {
                 boolean bothAreMissed = true;
                 List<Card> cards = new ArrayList<>();
                 cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed cards to dodge Bang!");
-                cards.removeLast();
                 if (cards.isEmpty()) {
                     break;
                 }
@@ -334,7 +333,7 @@ public class BaseModel {
     public void catBalouAction(BaseModel target, GameLogic gameLogic){
         int index = 0;
         if(isBot){
-            index = new Random().nextInt(getHandCards().size());
+            index = new Random().nextInt(target.getHandCards().size());
         }else {
             List<Card> cards = new ArrayList<>();
             for (int i = 0; i < target.getHandCards().size(); i++) {
@@ -366,7 +365,7 @@ public class BaseModel {
     public void panicAction(BaseModel target, GameLogic gameLogic){
         int index = 0;
         if(isBot){
-            index = new Random().nextInt(getHandCards().size());
+            index = new Random().nextInt(target.getHandCards().size() + target.getTableCards().size());
         }else {
             List<Card> cards = new ArrayList<>();
             for (int i = 0; i < target.getHandCards().size(); i++) {

@@ -1,9 +1,7 @@
 package utilities;
 
 import cards.*;
-import cards.bluecards.BarrelCard;
-import cards.bluecards.MustangCard;
-import cards.bluecards.ScopeCard;
+import cards.bluecards.*;
 import cards.browncards.BangCard;
 import cards.browncards.BeerCard;
 import cards.browncards.MissedCard;
@@ -59,52 +57,69 @@ public class Bot {
         if (!bot.isAlive()) return;
 
         // 1. Húzás
+        gameLogic.logUIMessage("Bot round start draw");
         bot.roundStart(gameLogic);
 
         // 2. Automatikus felszerelés
+        gameLogic.logUIMessage("Bot auto equip");
         autoEquip(bot, gameLogic);
 
         // 3. Hasznosítható akciók sorrendje
+        gameLogic.logUIMessage("Bot get cards to play");
         List<Card> cardsYetToPlay = setYetToPlay(bot);
 
 
-        while(!cardsYetToPlay.isEmpty()){
-            for(Card card : cardsYetToPlay){
-                useThisCard(card, bot, gameLogic);
-            }
-            cardsYetToPlay = setYetToPlay(bot);
+//        while(!cardsYetToPlay.isEmpty()){
+        for(Card card : cardsYetToPlay){
+            gameLogic.logUIMessage("Playing card: " + card);
+            useThisCard(card, bot, gameLogic);
+            gameLogic.UIUpdateUI();
         }
-
+//            gameLogic.logUIMessage("Setting cards to play");
+//            cardsYetToPlay = setYetToPlay(bot);
+//        }
+        gameLogic.logUIMessage("Bot finished turn");
         gameLogic.endTurn();
     }
 
     private static void autoEquip(BaseModel bot, GameLogic gameLogic) {
         List<Card> hand = new ArrayList<>(bot.getHandCards());
         for (Card card : hand) {
-            if (card instanceof BarrelCard && bot.hasBarrel()) {
+            if (card instanceof BarrelCard && !bot.hasBarrel()) {
+                gameLogic.logUIMessage("Playing this blue card: " + card);
                 bot.playSingleTargetCard((BarrelCard) card, gameLogic);
-            } else if (card instanceof MustangCard && bot.hasMustang()) {
+            } else if (card instanceof MustangCard && !bot.hasMustang()) {
+                gameLogic.logUIMessage("Playing this blue card: " + card);
                 bot.playSingleTargetCard((MustangCard) card, gameLogic);
-            } else if (card instanceof ScopeCard && bot.hasScope()) {
+            } else if (card instanceof ScopeCard && !bot.hasScope()) {
+                gameLogic.logUIMessage("Playing this blue card: " + card);
                 bot.playSingleTargetCard((ScopeCard) card, gameLogic);
             } else if (card instanceof Weapon weapon) {
                 if (bot.getWeapon() == null || weapon.getRange() > bot.getWeapon().getRange()) {
+                    gameLogic.logUIMessage("Playing this weapon: " + card);
                     bot.playSingleTargetCard((Weapon) card, gameLogic);
                 }
+            } else if (card instanceof DynamiteCard && !bot.hasDynamite()){
+                gameLogic.logUIMessage("Playing this blue card: " + card);
+                bot.playSingleTargetCard((DynamiteCard) card, gameLogic);
             }
         }
     }
 
     private static List<Card> setYetToPlay(BaseModel bot){
+        List<Card> hand = new ArrayList<>(bot.getHandCards());
         List<Card> cardsYetToPlay = new ArrayList<>();
         boolean alreadyHasBang = false;
         int beerInPocket = 0;
-        for(Card card : bot.getHandCards()){
-            if(card instanceof BarrelCard || card instanceof MustangCard || card instanceof Weapon ||  card instanceof ScopeCard){
+        for(Card card : hand){
+            if(card instanceof BarrelCard || card instanceof MustangCard || card instanceof Weapon ||  card instanceof ScopeCard  || card instanceof DynamiteCard){
+                System.out.println("Skipping this card: " + card);
                 continue;
             }
             if(card instanceof BeerCard || card instanceof SaloonCard){
+                System.out.println("Check to add beer or saloon");
                 if((bot.getMaxHP() - bot.getHealth()) > beerInPocket){
+                    System.out.println("Added beer or saloon");
                     beerInPocket++;
                     cardsYetToPlay.add(card);
                 }
@@ -112,8 +127,25 @@ public class Bot {
             }
             if(card instanceof BangCard){
                 if(bot.getRapid() || !alreadyHasBang){
-                    cardsYetToPlay.add(card);
-                    alreadyHasBang = true;
+                    List<BaseModel> players = bot.getGameInstance().getInstance().getPlayers();
+                    int thisPlayerIndex = players.indexOf(bot);
+                    List<BaseModel> possibleTargets = new ArrayList<>();
+                    int weaponRange = 1;
+                    if(bot.hasWeapon()){
+                        weaponRange = bot.getWeapon().getRange();
+                    }
+                    for(int i = 0; i < players.size(); i++){
+                        if(bot.getVision().get(i) <= (weaponRange + bot.getFieldView()) && thisPlayerIndex != i){
+                            possibleTargets.add(players.get(i));
+                        }
+                    }
+                    if(!possibleTargets.isEmpty()) {
+                        cardsYetToPlay.add(card);
+                        alreadyHasBang = true;
+                        System.out.println("Added bang");
+                    }else{
+                        continue;
+                    }
                 }
                 continue;
             }
@@ -126,6 +158,7 @@ public class Bot {
                 }
                 continue;
             }
+            System.out.println("Added this card to play: " + card);
             cardsYetToPlay.add(card);
         }
         return cardsYetToPlay;
@@ -156,8 +189,6 @@ public class Bot {
             case CardType.BANG: useBang(card, bot, gameLogic);
                 break;
             case CardType.JAIL: useJail(card, bot, gameLogic);
-                break;
-            case CardType.DYNAMITE: useDynamite(card, bot, gameLogic);
                 break;
         }
     }
@@ -198,15 +229,19 @@ public class Bot {
                 }
             }
         }
-        if(bot.getWeapon().getRange() < 5){
+        int weaponrange = bot.hasWeapon() ? bot.getWeapon().getRange() : 1;
+        if(weaponrange < 5){
             for(BaseModel target : possibleTargets){
-                if(target.getWeapon().getRange() > bot.getWeapon().getRange()){
-                    bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
-                    return;
+                if(target.hasWeapon()){
+                    if(target.getWeapon().getRange() > weaponrange){
+                        bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
+                        return;
+                    }
                 }
             }
         }
         BaseModel randomTarget = possibleTargets.get(new Random().nextInt(possibleTargets.size()));
+        gameLogic.logUIMessage("Playing panic on this target: " + randomTarget.getName());
         bot.playDualTargetCard((DualTargetCard) card, randomTarget, gameLogic);
     }
 
@@ -215,7 +250,8 @@ public class Bot {
         BaseModel target;
         do{
             target = players.get(new Random().nextInt(players.size()));
-        }while (bot != target);
+            System.out.println("Catbalou target: " + target.getName());
+        }while (bot == target);
         bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
     }
 
@@ -232,35 +268,45 @@ public class Bot {
                 possibleTargets.add(players.get(i));
             }
         }
-        BaseModel randomTarget = possibleTargets.get(new Random().nextInt(possibleTargets.size()));
-        bot.playDualTargetCard((DualTargetCard) card, randomTarget, gameLogic);
+        if(!possibleTargets.isEmpty()) {
+            BaseModel randomTarget = possibleTargets.get(new Random().nextInt(possibleTargets.size()));
+            gameLogic.logUIMessage("Playing bang: " + card + " target: " + randomTarget.getName());
+            bot.playDualTargetCard((DualTargetCard) card, randomTarget, gameLogic);
+        }
     }
 
     private static void useGatling(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing gatling: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useIndians(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing indians: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useBeer(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing beer: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useGeneralStore(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing generalstore: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useStagecoach(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing stagecoach: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useWellsFargo(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing wellsfargo: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     private static void useSaloon(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing saloon: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
@@ -269,7 +315,8 @@ public class Bot {
         BaseModel target;
         do{
             target = players.get(new Random().nextInt(players.size()));
-        }while (bot != target);
+        }while (bot == target);
+        gameLogic.logUIMessage("Playing duel: " + card + " target: " + target);
         bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
     }
 
@@ -278,28 +325,34 @@ public class Bot {
         BaseModel target;
         do{
             target = players.get(new Random().nextInt(players.size()));
-        }while (bot != target);
+        }while (bot == target);
+        gameLogic.logUIMessage("Playing jail: " + card + " target: " + target.getName());
         bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
     }
 
     private static void useDynamite(Card card, BaseModel bot, GameLogic gameLogic) {
+        gameLogic.logUIMessage("Playing dynamite: " + card);
         bot.playSingleTargetCard((SingleTargetCard) card, gameLogic);
     }
 
     public Card discardExcessCards(BaseModel bot, GameLogic gameLogic) {
         for(Card card : bot.getHandCards()){
             if(card.getType() == CardType.BARREL && bot.hasBarrel()){
+                gameLogic.logUIMessage("Discrding: " + card);
                 return card;
             }
             if(card.getType() == CardType.MUSTANG && bot.hasMustang()){
+                gameLogic.logUIMessage("Discrding: " + card);
                 return card;
             }
             if(bot.getWeapon() != null && card instanceof Weapon weapon){
                 if(weapon.getRange() <= bot.getWeapon().getRange()){
+                    gameLogic.logUIMessage("Discrding: " + card);
                     return card;
                 }
             }
         }
+        gameLogic.logUIMessage("Discrding: " + bot.getHandCards().getFirst());
         return bot.getHandCards().getFirst();
     }
 }

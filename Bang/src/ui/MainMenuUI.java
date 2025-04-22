@@ -19,7 +19,7 @@ public class MainMenuUI extends JFrame {
         JButton exitButton = new JButton("Kilépés");
 
         newGameButton.addActionListener(e -> {
-            new NewGameSettingsUI(this).setVisible(true);
+            new NewGameSettingsUI().setVisible(true);
             dispose();
         });
 

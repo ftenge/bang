@@ -13,7 +13,7 @@ public class DynamiteCard extends SingleTargetCard {
     //kiveszi a kezéből a dinamit kártyát és lerakja maga elé
     @Override
     public boolean use(BaseModel baseModel, GameLogic gameLogic) {
-        if(baseModel.hasDynamite()){
+        if(!baseModel.hasDynamite()){
             baseModel.removeCardFromHand(this);
             baseModel.addDynamite(this);
             return true;

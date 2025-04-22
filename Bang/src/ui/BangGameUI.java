@@ -112,7 +112,7 @@ public class BangGameUI extends JFrame {
         targetPlayerSelector.removeAllItems();
         playerCardLabels.clear();
 
-        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
+        BaseModel currentPlayer = gameLogic.getHumanPlayer();
 
         for (Card card : currentPlayer.getHandCards()) {
             CardLabel label = createCardLabel(card, true, playerCardLabels);
@@ -297,7 +297,7 @@ public class BangGameUI extends JFrame {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
 
-        return selected.size() == 2 ? selected : null;
+        return selected;
     }
 
 

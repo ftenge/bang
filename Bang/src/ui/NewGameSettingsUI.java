@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class NewGameSettingsUI extends JFrame {
 
-    public NewGameSettingsUI(MainMenuUI mainMenu) {
+    public NewGameSettingsUI() {
         setTitle("Játék beállítások");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
@@ -15,7 +15,7 @@ public class NewGameSettingsUI extends JFrame {
         setLayout(new BorderLayout());
 
         // ComboBox játékosszám kiválasztásához
-        Integer[] playerOptions = {2, 3, 4};
+        Integer[] playerOptions = {2, 3, 4, 5, 6, 7};
         JComboBox<Integer> playerNumberComboBox = new JComboBox<>(playerOptions);
 
         JButton startButton = new JButton("Start Game");

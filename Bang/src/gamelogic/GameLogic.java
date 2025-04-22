@@ -7,6 +7,7 @@ import cards.bluecards.DynamiteCard;
 import cards.browncards.MissedCard;
 import gameinstance.GameInstance;
 import ui.BangGameUI;
+import ui.GameOverDialog;
 import utilities.BaseModel;
 import utilities.Bot;
 import utilities.RoleType;
@@ -139,7 +140,7 @@ public class GameLogic {
     }
 
     //megnézi, hogy nyert-e valaki
-    public boolean isGameOver() {
+    public String getGameOver() {
         boolean isSheriffAlive = false;
         boolean areAnyOutLawsAlive = false;
         boolean isRenegadeAlive = false;
@@ -156,19 +157,16 @@ public class GameLogic {
         }
         if(!isSheriffAlive){
             if(areAnyOutLawsAlive){
-                ui.logMessage("Outlaws have won!");
-                return true;
+                return "Outlaws have won!";
             }
-            ui.logMessage("The Renegade has won!");
-            return true;
+            return "The Renegade has won!";
         }
         else{
             if(!areAnyOutLawsAlive && !isRenegadeAlive){
-                ui.logMessage("Sheriff has won!");
-                return true;
+                return "Sheriff has won!";
             }
         }
-        return false;
+        return "";
     }
 
     //visszaadja a jelenlegi játékost
@@ -176,12 +174,27 @@ public class GameLogic {
         return getPlayers().get(currentPlayerIndex);
     }
 
+    public BaseModel getHumanPlayer(){
+        for(BaseModel player : getPlayers()){
+            if(!player.getIsBot()){
+                return player;
+            }
+        }
+        return null;
+    }
+
     //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
     public void aPlayerRemoved(){
+        System.out.println("A playerremoved");
         if(currentPlayerIndex == getPlayers().size()){
             currentPlayerIndex--;
         }
-        isGameOver();
+        String gameOverMessage = getGameOver();
+        System.out.println("GameOver? " + gameOverMessage);
+        if(!gameOverMessage.isEmpty()) {
+            GameOverDialog dialog = new GameOverDialog(ui, gameOverMessage);
+            dialog.setVisible(true);
+        }
     }
 
     //visszaadja a még játékban lévő játékosokat
@@ -195,5 +208,9 @@ public class GameLogic {
 
     public GameInstance getGameInstance(){
         return GameInstance.getInstance();
+    }
+
+    public void UIUpdateUI(){
+        ui.updateUI();
     }
 }
