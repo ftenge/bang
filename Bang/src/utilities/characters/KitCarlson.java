@@ -68,6 +68,12 @@ public class KitCarlson extends BaseModel {
                 handCards.add(cards.get(1));
                 gameInstance.getDeck().putBack(cards.getLast());
                 return;
+            }else if(chosenCards.size() < 2){
+                if(chosenCards.getFirst().equals(cards.getFirst())){
+                    chosenCards.add(cards.get(1));
+                }else{
+                    chosenCards.add(cards.getFirst());
+                }
             }
         }else {
 
