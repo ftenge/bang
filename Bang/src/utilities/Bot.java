@@ -118,10 +118,12 @@ public class Bot {
             }
             if(card instanceof BeerCard || card instanceof SaloonCard){
                 System.out.println("Check to add beer or saloon");
-                if((bot.getMaxHP() - bot.getHealth()) > beerInPocket){
-                    System.out.println("Added beer or saloon");
-                    beerInPocket++;
-                    cardsYetToPlay.add(card);
+                if(bot.getGameInstance().getPlayers().size() > 2) {
+                    if ((bot.getMaxHP() - bot.getHealth()) > beerInPocket) {
+                        System.out.println("Added beer or saloon");
+                        beerInPocket++;
+                        cardsYetToPlay.add(card);
+                    }
                 }
                 continue;
             }

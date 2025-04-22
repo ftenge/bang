@@ -64,9 +64,7 @@ public class GameInstance {
 
     public void initializePlayers(int count, List<String> characterNames, List<String> roleNames, List<String> bots) {
         players.clear();
-        System.out.println("RoleNamesB: " + roleNames);
         List<Role> roles = getRolesForGame(count, roleNames);
-        System.out.println("RoleNamesA: " + roleNames);
         int sheriffIndex = 0;
 
         ArrayList<String> allCharacterNames = new ArrayList<>( Arrays.asList(getAllCharacterNames()));
@@ -101,7 +99,6 @@ public class GameInstance {
 
             if (characterName.equals("Random")) {
                 allCharacterNames = getRandomCharacter(allCharacterNames);
-                System.out.println(allCharacterNames);
                 characterName = allCharacterNames.getLast();
                 allCharacterNames.removeLast();
             }

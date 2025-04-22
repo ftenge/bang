@@ -239,7 +239,6 @@ public class BaseModel {
     }
 
     public boolean beerAction(){
-        //TODO 2 játékosnál nincs sörheal;
         System.out.println("HP BEVOR: " +health);
         health++;
         System.out.println("HP AFTER: " +health);
@@ -453,7 +452,7 @@ public class BaseModel {
 
     public void receiveDamage(int damage, BaseModel source, GameLogic gameLogic){
         this.health = health - damage;
-        if(health <= 0){
+        if(health <= 0 && gameLogic.getPlayers().size() > 2){
             if(this.isBot){
                 for (Card card : getHandCards()) {
                     if (card instanceof BeerCard beerCard) {
@@ -486,15 +485,15 @@ public class BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.role.getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
-            gameLogic.aPlayerRemoved(this);
-            gameInstance.removePlayer(this);
             for(BaseModel baseModel : gameInstance.getPlayers()){
-                if(baseModel instanceof VultureSam vultureSam){
+                if(baseModel instanceof VultureSam vultureSam && baseModel.equals(this)){
                     vultureSam.collectCard(handCards);
+                    gameLogic.aPlayerRemoved(this);
                     return;
                 }
             }
             discardCardsUponDeath();
+            gameLogic.aPlayerRemoved(this);
         }
     }
 

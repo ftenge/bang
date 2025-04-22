@@ -153,6 +153,9 @@ public class GameLogic {
                 isRenegadeAlive = true;
             }
         }
+        System.out.println("isSheriffAlive " + isSheriffAlive);
+        System.out.println("areAnyOutLawsAlive " + areAnyOutLawsAlive);
+        System.out.println("isRenegadeAlive " + isRenegadeAlive);
         if(!isSheriffAlive){
             if(areAnyOutLawsAlive){
                 return "Outlaws have won!";
@@ -192,6 +195,7 @@ public class GameLogic {
                 }
             }
         }
+        gameInstance.removePlayer(baseModel);
         String gameOverMessage = getGameOver();
         System.out.println("GameOver? " + gameOverMessage);
         if(!gameOverMessage.isEmpty()) {
