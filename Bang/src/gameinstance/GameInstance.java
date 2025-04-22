@@ -16,10 +16,12 @@ public class GameInstance {
     private static GameInstance instance;
     private List<BaseModel> players;
     private Deck deck;
+    private int currentPlayerIndex;
 
     private GameInstance() {
         this.players = new ArrayList<>();
         this.deck = new Deck();
+        this.currentPlayerIndex = 0;
         //initializePlayers();
     }
 
@@ -60,10 +62,12 @@ public class GameInstance {
         reorderSheriffFirst(sheriffIndex);
     }*/
 
-    public void initializePlayers(int count, List<String> characterNames, List<String> roleNames) {
+    public void initializePlayers(int count, List<String> characterNames, List<String> roleNames, List<String> bots) {
         players.clear();
-        List<Role> roles = getRolesForGame(count);
-        ArrayList<String> allCharacterNames = new ArrayList( Arrays.asList(getAllCharacterNames()));
+        List<Role> roles = getRolesForGame(count, roleNames);
+        int sheriffIndex = 0;
+
+        ArrayList<String> allCharacterNames = new ArrayList<>( Arrays.asList(getAllCharacterNames()));
 
         for (int i = 0; i < count; i++) {
             String characterName = characterNames.get(i);
@@ -76,20 +80,19 @@ public class GameInstance {
                 roles = getRandomRole(roles);
                 role = roles.getLast();
                 roles.removeLast();
+                if(role.getType() == RoleType.SHERIFF){
+                    sheriffIndex = count;
+                }
             }else {
-                switch (roleName) {
-                    case "Sheriff":
-                        role = new Role(RoleType.SHERIFF);
-                        break;
-                    case "Outlaw":
-                        role = new Role(RoleType.OUTLAW);
-                        break;
-                    case "Deputy":
-                        role = new Role(RoleType.DEPUTY);
-                        break;
-                    case "Renegade":
-                        role = new Role(RoleType.RENEGADE);
-                        break;
+                role = switch (roleName) {
+                    case "Sheriff" -> new Role(RoleType.SHERIFF);
+                    case "Outlaw" -> new Role(RoleType.OUTLAW);
+                    case "Deputy" -> new Role(RoleType.DEPUTY);
+                    case "Renegade" -> new Role(RoleType.RENEGADE);
+                    default -> role;
+                };
+                if(roleName.equals("Sheriff")){
+                    sheriffIndex = count;
                 }
             }
             System.out.println(role.getType());
@@ -100,15 +103,21 @@ public class GameInstance {
                 allCharacterNames.removeLast();
             }
             Class<? extends BaseModel> characterClass = getCharacterFromCharacterName(characterName);
+            System.out.println("Felismerőszöveg: " + characterClass);
 
             BaseModel player = null;
             try {
-                player = characterClass.getDeclaredConstructor(Role.class).newInstance(role);
+                if(bots.get(i).equals("True")){
+                    player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, true);
+                }else{
+                    player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, false);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             players.add(player);
         }
+        reorderSheriffFirst(sheriffIndex);
     }
 
     public List<Role> getRandomRole(List<Role> remainingRoles){
@@ -133,6 +142,7 @@ public class GameInstance {
                 return character;
             }
         }
+        System.out.println("Itt a hiba, charactername: " + characterName);
         return BaseModel.class;
     }
 
@@ -172,26 +182,50 @@ public class GameInstance {
 
     public String[] getAllCharacterNames(){
         List<Class<? extends BaseModel>> characters = getAllCharacterClasses();
-        String[] characterNames = new String[characters.size() + 1];
-        characterNames[0] = "Random";
+        String[] characterNames = new String[characters.size()];
+        //characterNames[0] = "Random";
         for(int i = 0; i < characters.size(); i++){
-            characterNames[i + 1] = characters.get(i).getName().substring(21);
+            characterNames[i] = characters.get(i).getName().substring(21);
         }
         return characterNames;
     }
 
     //létrehoz egy listát az összes szereppel
-    private List<Role> getRolesForGame(int numberOfPlayers) {
+    private List<Role> getRolesForGame(int numberOfPlayers, List<String> roleNames) {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(RoleType.SHERIFF));
         roles.add(new Role(RoleType.OUTLAW));
-        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.RENEGADE));
         roles.add(new Role(RoleType.OUTLAW));
+        roles.add(new Role(RoleType.DEPUTY));
         roles.add(new Role(RoleType.OUTLAW));
         roles.add(new Role(RoleType.DEPUTY));
 
-        return roles;
+        roles = roles.subList(0, numberOfPlayers);
+        List<Role> returnRoles = new ArrayList<>();
+        List<String> tempRoleNames = new ArrayList<>(roleNames);
+        for(Role role : roles){
+            if(role.getType() == RoleType.SHERIFF && tempRoleNames.contains("Sheriff")){
+                tempRoleNames.remove("Sheriff");
+                continue;
+            }
+            if(role.getType() == RoleType.DEPUTY && tempRoleNames.contains("Deputy")){
+                tempRoleNames.remove("Deputy");
+                continue;
+            }
+            if(role.getType() == RoleType.OUTLAW && tempRoleNames.contains("Outlaw")){
+                tempRoleNames.remove("Outlaw");
+                continue;
+            }
+            if(role.getType() == RoleType.RENEGADE && tempRoleNames.contains("Renegade")){
+                tempRoleNames.remove("Renegade");
+                continue;
+            }
+            returnRoles.add(role);
+        }
+
+
+        return returnRoles;
     }
 
     //ha nem a sheriff az első, akkor azt a részlistát beszúrja a lista végére
@@ -223,5 +257,13 @@ public class GameInstance {
     //eltávolítja a megadott játékost a játékos listából
     public void removePlayer(BaseModel baseModel){
         players.remove(baseModel);
+    }
+
+    public void setCurrentPlayerIndex(int newIndex){
+        this.currentPlayerIndex = newIndex;
+    }
+
+    public int getCurrentPlayerIndex(){
+        return this.currentPlayerIndex;
     }
 }

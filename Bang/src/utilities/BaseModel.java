@@ -6,13 +6,10 @@ import cards.browncards.*;
 import cards.weapons.Weapon;
 import gameinstance.GameInstance;
 import gamelogic.GameLogic;
-import ui.BangGameUI;
-import utilities.characters.CalamityJanet;
 import utilities.characters.SuzyLafayette;
 import utilities.characters.VultureSam;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 //ez az osztály az összes játékososztály alapja
@@ -37,8 +34,9 @@ public class BaseModel {
     protected Character character;
     protected GameInstance gameInstance;
     protected List<Integer> vision;
+    protected boolean isBot;
 
-    public BaseModel(Character character, Role role) {
+    public BaseModel(Character character, Role role, boolean isBot) {
         this.gameInstance = GameInstance.getInstance();
         this.name = character.getName();
         this.character = character;
@@ -51,6 +49,7 @@ public class BaseModel {
             this.health += 1;
         }
         this.maxHP = this.health;
+        this.isBot = isBot;
     }
 
     @Override
@@ -143,8 +142,13 @@ public class BaseModel {
 
     public void endTurnDiscard(GameLogic gameLogic){
         while(handCards.size() > health){
-            Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\nHandsize: " + handCards.size() + "\nHealth: " + health,  name + "Discard card end turn.");
-            removeCard(card);
+            if(this.isBot){
+                Card card = new Bot().discardExcessCards(this, gameLogic);
+                removeCard(card);
+            }else {
+                Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\nHandsize: " + handCards.size() + "\nHealth: " + health, name + "Discard card end turn.");
+                removeCard(card);
+            }
         }
     }
 
@@ -155,16 +159,24 @@ public class BaseModel {
                 return;
             }
         }
-
-        while(true){
-            Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Missed! card or pass!");
-            if(card instanceof MissedCard missedCard){
-                missedAction(missedCard, source,  gameLogic);
-                System.out.println("Volt nem talált lap!");
-                return;
+        if(isBot){
+            for(Card card : this.getHandCards()){
+                if(card instanceof MissedCard missedCard){
+                    missedAction(missedCard, source, gameLogic);
+                    return;
+                }
             }
-            if(card == null){
-                break;
+        }else {
+            while (true) {
+                Card card = gameLogic.chooseCard(getHandCards(), getName(), "Choose a Missed! card or pass!");
+                if (card instanceof MissedCard missedCard) {
+                    missedAction(missedCard, source, gameLogic);
+                    System.out.println("Volt nem talált lap!");
+                    return;
+                }
+                if (card == null) {
+                    break;
+                }
             }
         }
         System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
@@ -179,28 +191,42 @@ public class BaseModel {
                 return;
             }
         }
-        while(true){
-            boolean bothAreMissed = true;
-            List<Card> cards = new ArrayList<>();
-            cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed cards to dodge Bang!");
-            cards.removeLast();
-            if(cards == null){
-                break;
-            }
-            for(Card card : cards){
-                if(!(card instanceof MissedCard)){
-                   bothAreMissed = false;
-                   break;
+        if(isBot){
+            List<MissedCard> missedCards = new ArrayList<>();
+            for(Card card : this.getHandCards()){
+                if(card instanceof MissedCard missedCard){
+                    missedCards.add(missedCard);
                 }
             }
-            if(bothAreMissed) {
+            if(missedCards.size() >= 2){
+                missedAction(missedCards.get(0), source, gameLogic);
+                missedAction(missedCards.get(1), source, gameLogic);
+                System.out.println("Volt nem talált lap!");
+                return;
+            }
+        }else {
+            while (true) {
+                boolean bothAreMissed = true;
+                List<Card> cards = new ArrayList<>();
+                cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed cards to dodge Bang!");
+                if (cards.isEmpty()) {
+                    break;
+                }
                 for (Card card : cards) {
-                    if (card instanceof MissedCard missedCard) {
-                        missedAction(missedCard, source, gameLogic);
-                        System.out.println("Volt nem talált lap!");
+                    if (!(card instanceof MissedCard)) {
+                        bothAreMissed = false;
+                        break;
                     }
                 }
-                return;
+                if (bothAreMissed) {
+                    for (Card card : cards) {
+                        if (card instanceof MissedCard missedCard) {
+                            missedAction(missedCard, source, gameLogic);
+                            System.out.println("Volt nem talált lap!");
+                        }
+                    }
+                    return;
+                }
             }
         }
         System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
@@ -213,7 +239,6 @@ public class BaseModel {
     }
 
     public boolean beerAction(){
-        //TODO 2 játékosnál nincs sörheal;
         System.out.println("HP BEVOR: " +health);
         health++;
         System.out.println("HP AFTER: " +health);
@@ -228,16 +253,24 @@ public class BaseModel {
 
 
     public void indiansAction(BaseModel source, GameLogic gameLogic){
-        while(true){
-            Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
-            if(card instanceof BangCard bangCard){
-                discardCard(bangCard);
-                handCards.remove(bangCard);
-                System.out.println("Rálőttél az indiánokra!");
-                return;
+        if(isBot){
+            for(Card card : this.getHandCards()){
+                if(card instanceof BangCard bangCard){
+                    removeCard(bangCard);
+                    return;
+                }
             }
-            if(card == null){
-                break;
+        }else{
+            while(true){
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                if(card instanceof BangCard bangCard){
+                    removeCard(bangCard);
+                    System.out.println("Rálőttél az indiánokra!");
+                    return;
+                }
+                if(card == null){
+                    break;
+                }
             }
         }
         receiveDamage(1, source, gameLogic);
@@ -248,17 +281,26 @@ public class BaseModel {
     }
 
     public void duelAction(BaseModel target, GameLogic gameLogic){
-        while(true){
-            Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
-            if(card instanceof BangCard bangCard){
-                discardCard(bangCard);
-                handCards.remove(bangCard);
-                System.out.println("Rálőttél az ellenre!");
-                target.duelAction(this, gameLogic);
-                return;
+        if(isBot){
+            for(Card card : this.getHandCards()){
+                if(card instanceof BangCard bangCard){
+                    removeCard(bangCard);
+                    return;
+                }
             }
-            if(card == null){
-                break;
+        }else {
+            while (true) {
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                if (card instanceof BangCard bangCard) {
+                    discardCard(bangCard);
+                    handCards.remove(bangCard);
+                    System.out.println("Rálőttél az ellenre!");
+                    target.duelAction(this, gameLogic);
+                    return;
+                }
+                if (card == null) {
+                    break;
+                }
             }
         }
         receiveDamage(1, target, gameLogic);
@@ -266,21 +308,40 @@ public class BaseModel {
 
     public Card generalStoreAction(List<Card> cards, GameLogic gameLogic){
         Card card = null;
-        while(card == null){
-            card = gameLogic.chooseCard(cards, name, "Choose a card!");
+        if(isBot){
+            Map<CardType, Card> firstCardOfType = new HashMap<>();
+            for(Card gStoreCard : cards){
+                firstCardOfType.putIfAbsent(gStoreCard.getType(), gStoreCard);
+            }
+            for(CardType prefferedType : getPreferredOrder()){
+                card = firstCardOfType.get(prefferedType);
+                if(card != null){
+                    addHand(card);
+                    return card;
+                }
+            }
+        }else {
+            while (card == null) {
+                card = gameLogic.chooseCard(cards, name, "Choose a card!");
+            }
+            addHand(card);
         }
-        addHand(card);
         return card;
     }
 
     public void catBalouAction(BaseModel target, GameLogic gameLogic){
-        List<Card> cards = new ArrayList<>();
-        for(int i = 0; i < target.getHandCards().size(); i++){
-            String cardName = "Hand card " + (i + 1);
-            cards.add(new HandCard(cardName, "",i));
+        int index = 0;
+        if(isBot){
+            index = new Random().nextInt(target.getHandCards().size());
+        }else {
+            List<Card> cards = new ArrayList<>();
+            for (int i = 0; i < target.getHandCards().size(); i++) {
+                String cardName = "Hand card " + (i + 1);
+                cards.add(new HandCard(cardName, "", i));
+            }
+            cards.addAll(target.tableCards);
+            index = gameLogic.chooseFromHand(cards, name, "Choose a card to discard from " + target.getName());
         }
-        cards.addAll(target.tableCards);
-        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to discard from " + target.getName());
         if(index < target.getHandCards().size()){
             discardCard(target.getHandCards().get(index));
             target.getHandCards().remove(index);
@@ -301,18 +362,23 @@ public class BaseModel {
     }
 
     public void panicAction(BaseModel target, GameLogic gameLogic){
-        List<Card> cards = new ArrayList<>();
-        for(int i = 0; i < target.getHandCards().size(); i++){
-            String cardName = "Hand card " + (i + 1);
-            cards.add(new HandCard(cardName, "",i));
+        int index = 0;
+        if(isBot){
+            index = new Random().nextInt(target.getHandCards().size() + target.getTableCards().size());
+        }else {
+            List<Card> cards = new ArrayList<>();
+            for (int i = 0; i < target.getHandCards().size(); i++) {
+                String cardName = "Hand card " + (i + 1);
+                cards.add(new HandCard(cardName, "", i));
+            }
+            cards.addAll(target.tableCards);
+            index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
         }
-        cards.addAll(target.tableCards);
-        int index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
-        if(index < target.getHandCards().size()){
+        if (index < target.getHandCards().size()) {
             handCards.add(target.getHandCards().get(index));
             target.getHandCards().remove(index);
-            if(target instanceof SuzyLafayette){
-                if(target.getHandCards().isEmpty()){
+            if (target instanceof SuzyLafayette) {
+                if (target.getHandCards().isEmpty()) {
                     target.drawCard();
                 }
             }
@@ -386,18 +452,31 @@ public class BaseModel {
 
     public void receiveDamage(int damage, BaseModel source, GameLogic gameLogic){
         this.health = health - damage;
-        if(health <= 0){
-            while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
-                if(card instanceof BeerCard beerCard){
-                    playSingleTargetCard(beerCard, gameLogic);
+        if(health <= 0 && gameLogic.getPlayers().size() > 2){
+            if(this.isBot){
+                for (Card card : getHandCards()) {
+                    if (card instanceof BeerCard beerCard) {
+                        playSingleTargetCard(beerCard, gameLogic);
+                    }
+                    if (health > 0) {
+                        System.out.println("Visszahoztad magad az életbe!");
+                        return;
+                    }
                 }
-                if(health > 0){
-                    System.out.println("Visszahoztad magad az életbe!");
-                    return;
-                }
-                if(card == null){
-                    break;
+            }
+            else {
+                while (true) {
+                    Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
+                    if (card instanceof BeerCard beerCard) {
+                        playSingleTargetCard(beerCard, gameLogic);
+                    }
+                    if (health > 0) {
+                        System.out.println("Visszahoztad magad az életbe!");
+                        return;
+                    }
+                    if (card == null) {
+                        break;
+                    }
                 }
             }
             if(role.getType() == RoleType.OUTLAW){
@@ -406,15 +485,15 @@ public class BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.role.getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
-            gameInstance.removePlayer(this);
-            gameLogic.aPlayerRemoved();
             for(BaseModel baseModel : gameInstance.getPlayers()){
-                if(baseModel instanceof VultureSam vultureSam){
+                if(baseModel instanceof VultureSam vultureSam && baseModel.equals(this)){
                     vultureSam.collectCard(handCards);
+                    gameLogic.aPlayerRemoved(this);
                     return;
                 }
             }
             discardCardsUponDeath();
+            gameLogic.aPlayerRemoved(this);
         }
     }
 
@@ -627,5 +706,15 @@ public class BaseModel {
         }
     }
 
+    public boolean getIsBot(){
+        return this.isBot;
+    }
+
+    public List<CardType> getPreferredOrder(){
+        return List.of(CardType.SCOPE, CardType.WINCHESTER, CardType.BARREL, CardType.MUSTANG, CardType.CARABINE,
+                CardType.WELLS_FARGO, CardType.STAGECOACH, CardType.PANIC, CardType.GENERAL_STORE, CardType.INDIANS,
+                CardType.GATLING, CardType.JAIL, CardType.REMINGTON, CardType.BEER, CardType.CAT_BALOU, CardType.DUEL,
+                CardType.DYNAMITE, CardType.BANG, CardType.MISSED, CardType.SCHOFIELD, CardType.VOLCANIC, CardType.SALOON);
+    }
 }
 

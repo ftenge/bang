@@ -8,8 +8,8 @@ import utilities.Role;
 
 public class SidKetchum extends BaseModel {
     protected int discarded = 0;
-    public SidKetchum(Role role) {
-        super(new Character("Sid Ketchum", 4), role);
+    public SidKetchum(Role role, boolean isBot) {
+        super(new Character("Sid Ketchum", 4), role, isBot);
     }
     //Két lapot eldobva visszanyer egy életet.
 

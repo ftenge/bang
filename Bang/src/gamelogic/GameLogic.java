@@ -7,16 +7,16 @@ import cards.bluecards.DynamiteCard;
 import cards.browncards.MissedCard;
 import gameinstance.GameInstance;
 import ui.BangGameUI;
+import ui.GameOverDialog;
 import utilities.BaseModel;
+import utilities.Bot;
 import utilities.RoleType;
 import utilities.characters.CalamityJanet;
 
-import java.awt.font.GlyphMetrics;
 import java.util.List;
 
 public class GameLogic {
     private GameInstance gameInstance;
-    private List<BaseModel> players;
     private BangGameUI ui;
     private int currentPlayerIndex;
 
@@ -24,14 +24,13 @@ public class GameLogic {
     public GameLogic(BangGameUI ui) {
         this.ui = ui;
         this.gameInstance = GameInstance.getInstance();
-        this.players = gameInstance.getPlayers();
         this.currentPlayerIndex = 0;
     }
 
     //elkezdődik a játék valamennyi játékossal
     //minden játékos megejti a játék megkezdése előtti húzást, majd jön az első kör
-    public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles) {
-        gameInstance.initializePlayers(numberOfPlayers, characterNames, roles);   //custom indítás
+    public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles, List<String> bots) {
+        gameInstance.initializePlayers(numberOfPlayers, characterNames, roles, bots);   //custom indítás
         logUIMessage("Game started!");
         System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
@@ -68,8 +67,12 @@ public class GameLogic {
                 return;
             }
         }
-        currentPlayer.roundStart(this);
-        ui.updateUI();
+        if(currentPlayer.getIsBot()){
+            Bot.takeTurn(currentPlayer, this);
+        }else{
+            currentPlayer.roundStart(this);
+            ui.updateUI();
+        }
 
 
 
@@ -81,6 +84,7 @@ public class GameLogic {
         BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
         currentPlayer.endTurnDiscard(this);
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayers().size();
+        gameInstance.setCurrentPlayerIndex(currentPlayerIndex);
         nextTurn();
     }
 
@@ -134,11 +138,11 @@ public class GameLogic {
     }
 
     //megnézi, hogy nyert-e valaki
-    public boolean isGameOver() {
+    public String getGameOver() {
         boolean isSheriffAlive = false;
         boolean areAnyOutLawsAlive = false;
         boolean isRenegadeAlive = false;
-        for(BaseModel player : players){
+        for(BaseModel player : getPlayers()){
             if(player.getRole().getType() == RoleType.SHERIFF){
                 isSheriffAlive = true;
             }
@@ -149,21 +153,21 @@ public class GameLogic {
                 isRenegadeAlive = true;
             }
         }
+        System.out.println("isSheriffAlive " + isSheriffAlive);
+        System.out.println("areAnyOutLawsAlive " + areAnyOutLawsAlive);
+        System.out.println("isRenegadeAlive " + isRenegadeAlive);
         if(!isSheriffAlive){
             if(areAnyOutLawsAlive){
-                ui.logMessage("Outlaws have won!");
-                return true;
+                return "Outlaws have won!";
             }
-            ui.logMessage("The Renegade has won!");
-            return true;
+            return "The Renegade has won!";
         }
         else{
             if(!areAnyOutLawsAlive && !isRenegadeAlive){
-                ui.logMessage("Sheriff has won!");
-                return true;
+                return "Sheriff has won!";
             }
         }
-        return false;
+        return "";
     }
 
     //visszaadja a jelenlegi játékost
@@ -171,12 +175,33 @@ public class GameLogic {
         return getPlayers().get(currentPlayerIndex);
     }
 
-    //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
-    public void aPlayerRemoved(){
-        if(currentPlayerIndex == getPlayers().size()){
-            currentPlayerIndex--;
+    public BaseModel getHumanPlayer(){
+        for(BaseModel player : getPlayers()){
+            if(!player.getIsBot()){
+                return player;
+            }
         }
-        isGameOver();
+        return null;
+    }
+
+    //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
+    public void aPlayerRemoved(BaseModel baseModel){
+        System.out.println("A player removed");
+        for(int i = 0; i < getPlayers().size(); i++){
+            if(getPlayers().get(i) == baseModel){
+                if(currentPlayerIndex >= i){
+                    currentPlayerIndex--;
+                    gameInstance.setCurrentPlayerIndex(currentPlayerIndex);
+                }
+            }
+        }
+        gameInstance.removePlayer(baseModel);
+        String gameOverMessage = getGameOver();
+        System.out.println("GameOver? " + gameOverMessage);
+        if(!gameOverMessage.isEmpty()) {
+            GameOverDialog dialog = new GameOverDialog(ui, gameOverMessage);
+            dialog.setVisible(true);
+        }
     }
 
     //visszaadja a még játékban lévő játékosokat
@@ -190,5 +215,9 @@ public class GameLogic {
 
     public GameInstance getGameInstance(){
         return GameInstance.getInstance();
+    }
+
+    public void UIUpdateUI(){
+        ui.updateUI();
     }
 }

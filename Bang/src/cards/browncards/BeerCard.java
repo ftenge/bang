@@ -15,9 +15,11 @@ public class BeerCard extends SingleTargetCard {
     //meghívjuk az origin beerAction-jét és annak a visszatérési értékével térünk vissza
     @Override
     public boolean use(BaseModel origin, GameLogic gameLogic) {
-        if(origin.getHealth() < origin.getMaxHP()){
-            origin.removeCard(this);
-            return origin.beerAction();
+        if(gameLogic.getPlayers().size() > 2) {
+            if (origin.getHealth() < origin.getMaxHP()) {
+                origin.removeCard(this);
+                return origin.beerAction();
+            }
         }
         return false;
     }

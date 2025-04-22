@@ -1,4 +1,3 @@
-// BangGameUI.java
 package ui;
 
 import cards.Card;
@@ -8,7 +7,6 @@ import utilities.BaseModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -90,8 +88,6 @@ public class BangGameUI extends JFrame {
         add(logPanel, BorderLayout.EAST);
 
         setVisible(true);
-        //gameLogic.startGame();
-        //updateUI();
     }
 
     private CardLabel createCardLabel(Card card, boolean isFaceUp, List<CardLabel> cardLabelList) {
@@ -112,7 +108,7 @@ public class BangGameUI extends JFrame {
         targetPlayerSelector.removeAllItems();
         playerCardLabels.clear();
 
-        BaseModel currentPlayer = gameLogic.getCurrentPlayer();
+        BaseModel currentPlayer = gameLogic.getHumanPlayer();
 
         for (Card card : currentPlayer.getHandCards()) {
             CardLabel label = createCardLabel(card, true, playerCardLabels);
@@ -297,7 +293,7 @@ public class BangGameUI extends JFrame {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
 
-        return selected.size() == 2 ? selected : null;
+        return selected;
     }
 
 

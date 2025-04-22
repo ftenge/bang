@@ -11,8 +11,8 @@ import utilities.Character;
 import utilities.Role;
 
 public class SuzyLafayette extends BaseModel {
-    public SuzyLafayette(Role role) {
-        super(new Character("Suzy Lafayette", 4), role);
+    public SuzyLafayette(Role role, boolean isBot) {
+        super(new Character("Suzy Lafayette", 4), role, isBot);
     }
     //Ha nem marad egy lapja sem, akkor húzhat egyet a pakliból. if hands.empty() -> deck.draw()
     //TODO buggol a húzás üres kéznél
