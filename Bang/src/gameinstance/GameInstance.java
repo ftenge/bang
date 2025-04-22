@@ -80,20 +80,13 @@ public class GameInstance {
                 role = roles.getLast();
                 roles.removeLast();
             }else {
-                switch (roleName) {
-                    case "Sheriff":
-                        role = new Role(RoleType.SHERIFF);
-                        break;
-                    case "Outlaw":
-                        role = new Role(RoleType.OUTLAW);
-                        break;
-                    case "Deputy":
-                        role = new Role(RoleType.DEPUTY);
-                        break;
-                    case "Renegade":
-                        role = new Role(RoleType.RENEGADE);
-                        break;
-                }
+                role = switch (roleName) {
+                    case "Sheriff" -> new Role(RoleType.SHERIFF);
+                    case "Outlaw" -> new Role(RoleType.OUTLAW);
+                    case "Deputy" -> new Role(RoleType.DEPUTY);
+                    case "Renegade" -> new Role(RoleType.RENEGADE);
+                    default -> role;
+                };
             }
             System.out.println(role.getType());
 

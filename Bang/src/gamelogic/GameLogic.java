@@ -185,7 +185,7 @@ public class GameLogic {
 
     //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
     public void aPlayerRemoved(){
-        System.out.println("A playerremoved");
+        System.out.println("A player removed");
         if(currentPlayerIndex == getPlayers().size()){
             currentPlayerIndex--;
         }
