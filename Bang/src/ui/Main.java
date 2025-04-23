@@ -1,4 +1,3 @@
-//TODO innen indítani a futást
 package ui;
 
 

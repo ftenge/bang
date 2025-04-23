@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class GameOverDialog extends JDialog {
     public GameOverDialog(JFrame parent, String message) {
-        super(parent, "Játék vége", true);
+        super(parent, "Game Over", true);
         setLayout(new BorderLayout());
         setSize(300, 150);
         setLocationRelativeTo(parent);
@@ -15,8 +15,8 @@ public class GameOverDialog extends JDialog {
         add(messageLabel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton newGameButton = new JButton("Új játék");
-        JButton exitButton = new JButton("Kilépés");
+        JButton newGameButton = new JButton("New Game");
+        JButton exitButton = new JButton("Exit");
 
         buttonPanel.add(newGameButton);
         buttonPanel.add(exitButton);

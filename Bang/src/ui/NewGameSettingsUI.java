@@ -8,7 +8,7 @@ import java.awt.*;
 public class NewGameSettingsUI extends JFrame {
 
     public NewGameSettingsUI() {
-        setTitle("Játék beállítások");
+        setTitle("Game settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
         setLocationRelativeTo(null);
@@ -34,7 +34,7 @@ public class NewGameSettingsUI extends JFrame {
         });
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Játékosok száma:"));
+        panel.add(new JLabel("Number of players"));
         panel.add(playerNumberComboBox);
         panel.add(startButton);
 

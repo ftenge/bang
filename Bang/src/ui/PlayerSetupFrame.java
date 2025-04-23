@@ -21,7 +21,7 @@ public class PlayerSetupFrame extends JFrame {
         this.numberOfPlayers = numberOfPlayers;
         this.gameInstance = GameInstance.getInstance();
 
-        setTitle("Játékosok beállítása");
+        setTitle("Players settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(600, 500);
         setLocationRelativeTo(null);
@@ -32,7 +32,7 @@ public class PlayerSetupFrame extends JFrame {
         for (int i = 0; i < numberOfPlayers; i++) {
             JPanel playerPanel = new JPanel();
 
-            playerPanel.add(new JLabel("Játékos " + (i + 1)));
+            playerPanel.add(new JLabel("Player " + (i + 1)));
 
             JComboBox<String> botBox = new JComboBox<>(getBotOptions());
             if (i == 0) botBox.setSelectedItem("False");
@@ -46,9 +46,9 @@ public class PlayerSetupFrame extends JFrame {
 
             playerPanel.add(new JLabel("Bot:"));
             playerPanel.add(botBox);
-            playerPanel.add(new JLabel("Karakter:"));
+            playerPanel.add(new JLabel("Character:"));
             playerPanel.add(characterBox);
-            playerPanel.add(new JLabel("Szerep:"));
+            playerPanel.add(new JLabel("Role:"));
             playerPanel.add(roleBox);
 
             mainPanel.add(playerPanel);
@@ -62,7 +62,7 @@ public class PlayerSetupFrame extends JFrame {
         errorPanel.setLayout(new BoxLayout(errorPanel, BoxLayout.Y_AXIS));
         errorPanel.setBackground(Color.WHITE);
 
-        startButton = new JButton("Játék indítása");
+        startButton = new JButton("Start Game");
         startButton.addActionListener(e -> {
             if (validateInputs()) {
                 List<String> selectedBots = new ArrayList<>();
@@ -131,7 +131,7 @@ public class PlayerSetupFrame extends JFrame {
             }
 
             if (characters.contains(character) && !Objects.equals(character, "Random")) {
-                JLabel errorLabel = new JLabel("Nem választható ki ugyanaz a karakter kétszer: " + character);
+                JLabel errorLabel = new JLabel("Each character should be selected only once at most: " + character);
                 errorLabel.setForeground(Color.RED);
                 errorPanel.add(errorLabel);
                 characterBox.setBackground(Color.PINK);
@@ -144,7 +144,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (humanCount != 1) {
-            JLabel errorLabel = new JLabel("Pontosan egy emberi játékos kell! (Most: " + humanCount + ")");
+            JLabel errorLabel = new JLabel("There should be only 1 human player! (Right now: " + humanCount + ")");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             for (JComboBox<String> botBox : botSelector) {
@@ -154,7 +154,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (!rolesCount.containsKey("Random") && rolesCount.getOrDefault("Sheriff", 0) != 1) {
-            JLabel errorLabel = new JLabel("Pontosan 1 Sheriff szükséges!");
+            JLabel errorLabel = new JLabel("There should be only 1 Sheriff!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             for (JComboBox<String> roleBox : roleSelectors) {
@@ -168,7 +168,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Outlaw", 0) > numberOfRoles[0]) {
-            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[0] + " Outlaw lehet!");
+            JLabel errorLabel = new JLabel("There should be " + numberOfRoles[0] + " Outlaws at most!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Outlaw");
@@ -176,7 +176,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Renegade", 0) > numberOfRoles[1]) {
-            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[1] + " Renegade lehet!");
+            JLabel errorLabel = new JLabel("There should be  " + numberOfRoles[1] + " Renegade at most!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Renegade");
@@ -184,7 +184,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Deputy", 0) > numberOfRoles[2]) {
-            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[2] + " Deputy lehet!");
+            JLabel errorLabel = new JLabel("There should be  " + numberOfRoles[2] + " Deputies at most!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Deputy");
