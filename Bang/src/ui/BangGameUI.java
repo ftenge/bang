@@ -78,9 +78,9 @@ public class BangGameUI extends JFrame {
         nextTurnButton = new JButton("Next Turn");
         nextTurnButton.addActionListener(e -> {
             int answer = showTwoOptionDialog(
-                    "Következő kör",
-                    "Biztosan át szeretnéd adni a kört?",
-                    "Igen", "Nem"
+                    "Next turn",
+                    "Are you sure to proceed the next round?",
+                    "Yes", "No"
             );
             if (answer == 0) {
                 nextTurn();
@@ -215,7 +215,7 @@ public class BangGameUI extends JFrame {
     public int selectTargetFromList(List<BaseModel> baseModels, String name, String title) {
         String[] targetNames = baseModels.stream().map(BaseModel::getName).toArray(String[]::new);
         int answer = JOptionPane.showOptionDialog(this, name, title, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, targetNames, targetNames[0]);
-        logMessage("A választás: " + answer);
+        //logMessage("A választás: " + answer);
         return answer;
     }
 
@@ -258,7 +258,7 @@ public class BangGameUI extends JFrame {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
 
-        logMessage("A választás: " + result[0]);
+        //logMessage("A választás: " + result[0]);
         return result[0];
     }
 
@@ -294,7 +294,7 @@ public class BangGameUI extends JFrame {
             if (selected.size() == 2) {
                 dialog.dispose();
             } else {
-                JOptionPane.showMessageDialog(dialog, "Pontosan két kártyát kell kiválasztani.");
+                JOptionPane.showMessageDialog(dialog, "Choose exactly two cards!");
             }
         });
 

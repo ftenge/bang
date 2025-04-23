@@ -116,7 +116,7 @@ public class Bot {
                     if(!possibleTargets.isEmpty()) {
                         cardsYetToPlay.add(card);
                         alreadyHasBang = true;
-                        System.out.println("Added bang");
+                        System.out.println("Added a bang");
                     }else{
                         continue;
                     }
@@ -226,6 +226,7 @@ public class Bot {
             target = players.get(new Random().nextInt(players.size()));
             System.out.println("Catbalou target: " + target.getName());
         }while (bot == target);
+        gameLogic.logUIMessage("Playing Cat Balou on this target: " + target.getName());
         bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
     }
 
