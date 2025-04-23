@@ -11,4 +11,13 @@ public class Role {
     public RoleType getType(){
         return type;
     }
+
+    public String toString(){
+        return switch (this.type){
+            case RoleType.SHERIFF -> "Sheriff";
+            case RoleType.OUTLAW -> "Outlaw";
+            case RoleType.RENEGADE -> "Renegade";
+            case RoleType.DEPUTY -> "Deputy";
+        };
+    }
 }

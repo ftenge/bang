@@ -56,8 +56,8 @@ public class BangGameUI extends JFrame {
 
         discardPileLabel = new JLabel("Discard Pile: ");
         hpLabel = new JLabel("Your HP: ");
-        roleLabel = new JLabel("Your Role: " + gameLogic.getHumanPlayer().getRole().toString());
-        characterLabel = new JLabel("Your Character: " + gameLogic.getHumanPlayer().getName());
+        roleLabel = new JLabel("Your Role: ");
+        characterLabel = new JLabel("Your Character: ");
 
         JPanel infoPanel = new JPanel(new GridLayout(4,1));
         infoPanel.add(discardPileLabel);
@@ -154,6 +154,8 @@ public class BangGameUI extends JFrame {
 
         discardPileLabel.setText("Discard Pile: " + gameInstance.getDeck().seeLastDiscardedCard());
         hpLabel.setText("Your HP: " + currentPlayer.getHealth() + "/" + currentPlayer.getMaxHP());
+        roleLabel.setText("Your Role: " + gameLogic.getHumanPlayer().getRole().toString());
+        characterLabel.setText("Your Character: " + gameLogic.getHumanPlayer().getName());
 
         revalidate();
         repaint();
