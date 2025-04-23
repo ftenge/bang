@@ -146,7 +146,7 @@ public class BaseModel {
                 Card card = new Bot().discardExcessCards(this, gameLogic);
                 removeCard(card);
             }else {
-                Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\nHandsize: " + handCards.size() + "\nHealth: " + health, name + "Discard card end turn.");
+                Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\n Handsize: " + handCards.size() + "\n Health: " + health, name + "Discard card end turn.");
                 removeCard(card);
             }
         }
