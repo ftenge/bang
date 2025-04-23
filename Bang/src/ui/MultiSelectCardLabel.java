@@ -29,7 +29,7 @@ public class MultiSelectCardLabel extends CardLabel {
                         setSelected(true);
                         selected.add(getCard());
                     } else {
-                        JOptionPane.showMessageDialog(dialog, "Maximum két kártyát választhatsz ki.");
+                        JOptionPane.showMessageDialog(dialog, "Choose two cards at most!");
                     }
                 }
             }

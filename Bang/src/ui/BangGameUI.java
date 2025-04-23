@@ -18,7 +18,7 @@ public class BangGameUI extends JFrame {
     private JPanel playerPanel, tablePanel, opponentsPanel, logPanel;
     private JTextArea logTextArea;
     private JLabel discardPileLabel;
-    private JLabel hpLabel;
+    private JLabel hpLabel, roleLabel, characterLabel;
     private JPanel infoPanel;
     private JButton playCardButton, discardCardButton, nextTurnButton;
     private JComboBox<BaseModel> targetPlayerSelector;
@@ -56,10 +56,14 @@ public class BangGameUI extends JFrame {
 
         discardPileLabel = new JLabel("Discard Pile: ");
         hpLabel = new JLabel("Your HP: ");
+        roleLabel = new JLabel("Your Role: ");
+        characterLabel = new JLabel("Your Character: ");
 
-        JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.add(discardPileLabel, BorderLayout.NORTH);
-        infoPanel.add(hpLabel, BorderLayout.SOUTH);
+        JPanel infoPanel = new JPanel(new GridLayout(4,1));
+        infoPanel.add(discardPileLabel);
+        infoPanel.add(hpLabel);
+        infoPanel.add(roleLabel);
+        infoPanel.add(characterLabel);
 
         logPanel.add(infoPanel, BorderLayout.NORTH);
 
@@ -74,9 +78,9 @@ public class BangGameUI extends JFrame {
         nextTurnButton = new JButton("Next Turn");
         nextTurnButton.addActionListener(e -> {
             int answer = showTwoOptionDialog(
-                    "Következő kör",
-                    "Biztosan át szeretnéd adni a kört?",
-                    "Igen", "Nem"
+                    "Next turn",
+                    "Are you sure to proceed the next round?",
+                    "Yes", "No"
             );
             if (answer == 0) {
                 nextTurn();
@@ -150,6 +154,8 @@ public class BangGameUI extends JFrame {
 
         discardPileLabel.setText("Discard Pile: " + gameInstance.getDeck().seeLastDiscardedCard());
         hpLabel.setText("Your HP: " + currentPlayer.getHealth() + "/" + currentPlayer.getMaxHP());
+        roleLabel.setText("Your Role: " + gameLogic.getHumanPlayer().getRole().toString());
+        characterLabel.setText("Your Character: " + gameLogic.getHumanPlayer().getName());
 
         revalidate();
         repaint();
@@ -211,7 +217,7 @@ public class BangGameUI extends JFrame {
     public int selectTargetFromList(List<BaseModel> baseModels, String name, String title) {
         String[] targetNames = baseModels.stream().map(BaseModel::getName).toArray(String[]::new);
         int answer = JOptionPane.showOptionDialog(this, name, title, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, targetNames, targetNames[0]);
-        logMessage("A választás: " + answer);
+        //logMessage("A választás: " + answer);
         return answer;
     }
 
@@ -254,7 +260,7 @@ public class BangGameUI extends JFrame {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
 
-        logMessage("A választás: " + result[0]);
+        //logMessage("A választás: " + result[0]);
         return result[0];
     }
 
@@ -290,7 +296,7 @@ public class BangGameUI extends JFrame {
             if (selected.size() == 2) {
                 dialog.dispose();
             } else {
-                JOptionPane.showMessageDialog(dialog, "Pontosan két kártyát kell kiválasztani.");
+                JOptionPane.showMessageDialog(dialog, "Choose exactly two cards!");
             }
         });
 
@@ -322,9 +328,12 @@ public class BangGameUI extends JFrame {
 
         BaseModel currentPlayer = gameLogic.getCurrentPlayer();
         BaseModel target = (BaseModel) targetPlayerSelector.getSelectedItem();
-        gameLogic.cardAction(selectedCard, currentPlayer, target);
 
-        logMessage("🃏 Played card: " + selectedCard.getName());
+        if(gameLogic.cardAction(selectedCard, currentPlayer, target)) {
+            logMessage("🃏 Played card: " + selectedCard.getName());
+        }else{
+            logMessage("Can't play this card: " + selectedCard.getName());
+        }
         updateUI();
     }
 

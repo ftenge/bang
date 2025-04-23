@@ -22,21 +22,23 @@ public class SuzyLafayette extends BaseModel {
     }
 
     @Override
-    public void playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
-        card.use(this, gameLogic);
+    public boolean playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
+        boolean ret = card.use(this, gameLogic);
         if(isHandEmpty()){
             gameLogic.logUIMessage("Üres a kéz!");
             drawCard();
         }
+        return ret;
     }
 
     @Override
-    public void playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
-        card.use(this, target, gameLogic);
+    public boolean playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
+        boolean ret = card.use(this, target, gameLogic);
         if(isHandEmpty()){
             gameLogic.logUIMessage("Üres a kéz!");
             drawCard();
         }
+        return ret;
     }
 
     @Override

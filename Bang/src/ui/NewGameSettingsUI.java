@@ -8,9 +8,10 @@ import java.awt.*;
 public class NewGameSettingsUI extends JFrame {
 
     public NewGameSettingsUI() {
-        setTitle("Játék beállítások");
+        setTitle("Game settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
+        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -34,7 +35,7 @@ public class NewGameSettingsUI extends JFrame {
         });
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Játékosok száma:"));
+        panel.add(new JLabel("Number of players"));
         panel.add(playerNumberComboBox);
         panel.add(startButton);
 
