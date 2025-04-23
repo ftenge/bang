@@ -101,6 +101,16 @@ public class PlayerSetupFrame extends JFrame {
         Map<String, Integer> rolesCount = new HashMap<>();
         int humanCount = 0;
         boolean valid = true;
+        int[] numberOfRoles = switch (numberOfPlayers) {
+            case 2 -> new int[]{1, 0, 0};
+            case 3 -> new int[]{1, 1, 0};
+            case 4 -> new int[]{2, 1, 0};
+            case 5 -> new int[]{2, 1, 1};
+            case 6 -> new int[]{3, 1, 1};
+            case 7 -> new int[]{3, 1, 2};
+            default -> new int[]{0, 0, 0};
+        };
+
 
         for (int i = 0; i < numberOfPlayers; i++) {
             JComboBox<String> botBox = botSelector.get(i);
@@ -157,24 +167,24 @@ public class PlayerSetupFrame extends JFrame {
             valid = false;
         }
 
-        if (rolesCount.getOrDefault("Outlaw", 0) > 3) {
-            JLabel errorLabel = new JLabel("Legfeljebb 3 Outlaw lehet!");
+        if (rolesCount.getOrDefault("Outlaw", 0) > numberOfRoles[0]) {
+            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[0] + " Outlaw lehet!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Outlaw");
             valid = false;
         }
 
-        if (rolesCount.getOrDefault("Renegade", 0) > 1) {
-            JLabel errorLabel = new JLabel("Legfeljebb 1 Renegade lehet!");
+        if (rolesCount.getOrDefault("Renegade", 0) > numberOfRoles[1]) {
+            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[1] + " Renegade lehet!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Renegade");
             valid = false;
         }
 
-        if (rolesCount.getOrDefault("Deputy", 0) > 2) {
-            JLabel errorLabel = new JLabel("Legfeljebb 2 Deputy lehet!");
+        if (rolesCount.getOrDefault("Deputy", 0) > numberOfRoles[2]) {
+            JLabel errorLabel = new JLabel("Legfeljebb " + numberOfRoles[2] + " Deputy lehet!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Deputy");
