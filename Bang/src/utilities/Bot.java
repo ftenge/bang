@@ -15,76 +15,48 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-//public void startTurn() {
-//    BaseModel currentPlayer = players.get(currentPlayerIndex);
-//
-//    if (currentPlayer.isDead()) {
-//        nextTurn(); // automatikusan továbblépünk, ha halott
-//        return;
-//    }
-//
-//    System.out.println("Kör indul: " + currentPlayer.getName());
-//
-//    if (currentPlayer.isBot()) {
-//        System.out.println("BOT jön: " + currentPlayer.getName());
-//        Bot bot = new Bot();
-//        bot.takeTurn(currentPlayer, this);
-//        endTurn();
-//    } else {
-//        // Emberi játékos köre indul – UI eseményekre várunk
-//        currentPlayer.drawCards(2);
-//        // UI segítségével lehetőséget adunk játékosnak a kártyák kijátszására
-//    }
-//}
-//
-//public void endTurn() {
-//    BaseModel currentPlayer = players.get(currentPlayerIndex);
-//    currentPlayer.discardExcessCards();
-//
-//    // Továbblépés a következő élő játékosra
-//    do {
-//        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-//    } while (players.get(currentPlayerIndex).isDead());
-//
-//    startTurn(); // következő játékos köre indul
-//}
-//
-//// Egyéb logikák, például támadás, győzelemellenőrzés stb.
-//}
 
 public class Bot {
+    private static final int SLEEP_CONSTANT = 1000;
+
     public static void takeTurn(BaseModel bot, GameLogic gameLogic) {
         if (!bot.isAlive()) return;
 
         // 1. Húzás
         gameLogic.logUIMessage("Bot round start draw");
+
+        sleepForSleepConstant();
         bot.roundStart(gameLogic);
+        gameLogic.UIUpdateUI();
 
         // 2. Automatikus felszerelés
         gameLogic.logUIMessage("Bot auto equip");
         autoEquip(bot, gameLogic);
+        gameLogic.UIUpdateUI();
+
 
         // 3. Hasznosítható akciók sorrendje
         gameLogic.logUIMessage("Bot get cards to play");
+        sleepForSleepConstant();
         List<Card> cardsYetToPlay = setYetToPlay(bot);
 
 
-//        while(!cardsYetToPlay.isEmpty()){
         for(Card card : cardsYetToPlay){
-            gameLogic.logUIMessage("Playing card: " + card);
+            sleepForSleepConstant();
+            //gameLogic.logUIMessage("Playing card: " + card);
             useThisCard(card, bot, gameLogic);
             gameLogic.UIUpdateUI();
         }
-//            gameLogic.logUIMessage("Setting cards to play");
-//            cardsYetToPlay = setYetToPlay(bot);
-//        }
-        gameLogic.logUIMessage("Bot finished turn");
+
+        sleepForSleepConstant();
+        gameLogic.logUIMessage( bot.getName() + " (bot) finished their turn");
         gameLogic.endTurn();
     }
 
     private static void autoEquip(BaseModel bot, GameLogic gameLogic) {
         List<Card> hand = new ArrayList<>(bot.getHandCards());
         for (Card card : hand) {
+            sleepForSleepConstant();
             if (card instanceof BarrelCard && !bot.hasBarrel()) {
                 gameLogic.logUIMessage("Playing this blue card: " + card);
                 bot.playSingleTargetCard((BarrelCard) card, gameLogic);
@@ -231,11 +203,11 @@ public class Bot {
                 }
             }
         }
-        int weaponrange = bot.hasWeapon() ? bot.getWeapon().getRange() : 1;
-        if(weaponrange < 5){
+        int weaponRange = bot.hasWeapon() ? bot.getWeapon().getRange() : 1;
+        if(weaponRange < 5){
             for(BaseModel target : possibleTargets){
                 if(target.hasWeapon()){
-                    if(target.getWeapon().getRange() > weaponrange){
+                    if(target.getWeapon().getRange() > weaponRange){
                         bot.playDualTargetCard((DualTargetCard) card, target, gameLogic);
                         return;
                     }
@@ -339,6 +311,7 @@ public class Bot {
 
     public Card discardExcessCards(BaseModel bot, GameLogic gameLogic) {
         for(Card card : bot.getHandCards()){
+            sleepForSleepConstant();
             if(card.getType() == CardType.BARREL && bot.hasBarrel()){
                 gameLogic.logUIMessage("Discrding: " + card);
                 return card;
@@ -356,5 +329,13 @@ public class Bot {
         }
         gameLogic.logUIMessage("Discrding: " + bot.getHandCards().getFirst());
         return bot.getHandCards().getFirst();
+    }
+
+    private static void sleepForSleepConstant(){
+        try {
+            Thread.sleep(SLEEP_CONSTANT);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

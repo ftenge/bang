@@ -16,6 +16,7 @@ import utilities.characters.CalamityJanet;
 import java.util.List;
 
 public class GameLogic {
+    private static final int SLEEP_CONSTANT = 1000;
     private GameInstance gameInstance;
     private BangGameUI ui;
     private int currentPlayerIndex;
@@ -53,27 +54,39 @@ public class GameLogic {
             return;
         }
         if(currentPlayer.hasDynamite()){
+            logUIMessage(currentPlayer.getName() + " is drawing for dynamite...");
+            sleepForSleepConstant();
             DynamiteCard dynamiteCard = currentPlayer.dynamiteAction(currentPlayer, this);
+
             if(dynamiteCard != null){
+                logUIMessage("The dynamite goes around!");
                 getPlayers().get((currentPlayerIndex + 1) % getPlayers().size()).addDynamite(dynamiteCard);
-            }else if (!currentPlayer.isAlive()) {
+            }else{
+                logUIMessage("The dynamite has exploded!");
+                if (!currentPlayer.isAlive()) {
+                    logUIMessage(currentPlayer.getName() + " died becuse of the dinamite explosion.");
                     endTurn();
                     return;
+                }
             }
         }
         if(currentPlayer.inJail()){
+            logUIMessage(currentPlayer.getName() + " is drawing to get out of jail...");
+            sleepForSleepConstant();
             if(!currentPlayer.jailAction(this)){
+                logUIMessage(currentPlayer.getName() + " is staying in the jail for one more round.");
                 endTurn();
                 return;
             }
+            logUIMessage(currentPlayer.getName() + " has got out of the jail.");
         }
+        UIUpdateUI();
         if(currentPlayer.getIsBot()){
             Bot.takeTurn(currentPlayer, this);
         }else{
             currentPlayer.roundStart(this);
-            ui.updateUI();
         }
-
+        UIUpdateUI();
 
 
        // endTurn();
@@ -219,5 +232,13 @@ public class GameLogic {
 
     public void UIUpdateUI(){
         ui.updateUI();
+    }
+
+    private static void sleepForSleepConstant(){
+        try {
+            Thread.sleep(SLEEP_CONSTANT);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
