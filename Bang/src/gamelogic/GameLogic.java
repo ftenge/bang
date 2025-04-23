@@ -74,7 +74,7 @@ public class GameLogic {
             logUIMessage(currentPlayer.getName() + " is drawing to get out of jail...");
             sleepForSleepConstant();
             if(!currentPlayer.jailAction(this)){
-                logUIMessage(currentPlayer.getName() + " is staying in the jail for one more round.");
+                logUIMessage(currentPlayer.getName() + " is staying in the jail for this round.");
                 endTurn();
                 return;
             }
@@ -98,20 +98,22 @@ public class GameLogic {
         currentPlayer.endTurnDiscard(this);
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayers().size();
         gameInstance.setCurrentPlayerIndex(currentPlayerIndex);
+        UIUpdateUI();
         nextTurn();
     }
 
     //megnézi, hogy az adott kártyának kell-e targetot adni és a megfelelő függvényt adja át
-    public void cardAction(Card selectedCard, BaseModel baseModel, BaseModel target){
+    public boolean cardAction(Card selectedCard, BaseModel baseModel, BaseModel target){
         if (selectedCard instanceof SingleTargetCard singleTargetCard) {
-            baseModel.playSingleTargetCard(singleTargetCard, this);
+            return baseModel.playSingleTargetCard(singleTargetCard, this);
         } else if (selectedCard instanceof DualTargetCard dualTargetCard) {
             if (target != null) {
                 if((baseModel instanceof CalamityJanet) || !(selectedCard instanceof MissedCard)){
-                    baseModel.playDualTargetCard(dualTargetCard, target, this);
+                    return baseModel.playDualTargetCard(dualTargetCard, target, this);
                 }
             }
         }
+        return false;
     }
 
     //meghívja azt a függvényt, amivel a játékos el tudja dobni a kártyát

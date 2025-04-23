@@ -25,12 +25,12 @@ public class Bot {
         // 1. Húzás
         gameLogic.logUIMessage("Bot round start draw");
 
-        sleepForSleepConstant();
         bot.roundStart(gameLogic);
         gameLogic.UIUpdateUI();
 
         // 2. Automatikus felszerelés
         gameLogic.logUIMessage("Bot auto equip");
+        sleepForSleepConstant();
         autoEquip(bot, gameLogic);
         gameLogic.UIUpdateUI();
 
@@ -56,7 +56,6 @@ public class Bot {
     private static void autoEquip(BaseModel bot, GameLogic gameLogic) {
         List<Card> hand = new ArrayList<>(bot.getHandCards());
         for (Card card : hand) {
-            sleepForSleepConstant();
             if (card instanceof BarrelCard && !bot.hasBarrel()) {
                 gameLogic.logUIMessage("Playing this blue card: " + card);
                 bot.playSingleTargetCard((BarrelCard) card, gameLogic);

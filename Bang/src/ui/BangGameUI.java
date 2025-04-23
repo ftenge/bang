@@ -328,9 +328,12 @@ public class BangGameUI extends JFrame {
 
         BaseModel currentPlayer = gameLogic.getCurrentPlayer();
         BaseModel target = (BaseModel) targetPlayerSelector.getSelectedItem();
-        gameLogic.cardAction(selectedCard, currentPlayer, target);
 
-        logMessage("🃏 Played card: " + selectedCard.getName());
+        if(gameLogic.cardAction(selectedCard, currentPlayer, target)) {
+            logMessage("🃏 Played card: " + selectedCard.getName());
+        }else{
+            logMessage("Can't play this card: " + selectedCard.getName());
+        }
         updateUI();
     }
 
