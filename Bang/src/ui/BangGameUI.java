@@ -18,7 +18,7 @@ public class BangGameUI extends JFrame {
     private JPanel playerPanel, tablePanel, opponentsPanel, logPanel;
     private JTextArea logTextArea;
     private JLabel discardPileLabel;
-    private JLabel hpLabel;
+    private JLabel hpLabel, roleLabel, characterLabel;
     private JPanel infoPanel;
     private JButton playCardButton, discardCardButton, nextTurnButton;
     private JComboBox<BaseModel> targetPlayerSelector;
@@ -56,10 +56,14 @@ public class BangGameUI extends JFrame {
 
         discardPileLabel = new JLabel("Discard Pile: ");
         hpLabel = new JLabel("Your HP: ");
+        roleLabel = new JLabel("Your Role: " + gameLogic.getHumanPlayer().getRole().toString());
+        characterLabel = new JLabel("Your Character: " + gameLogic.getHumanPlayer().getName());
 
-        JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.add(discardPileLabel, BorderLayout.NORTH);
-        infoPanel.add(hpLabel, BorderLayout.SOUTH);
+        JPanel infoPanel = new JPanel(new GridLayout(4,1));
+        infoPanel.add(discardPileLabel);
+        infoPanel.add(hpLabel);
+        infoPanel.add(roleLabel);
+        infoPanel.add(characterLabel);
 
         logPanel.add(infoPanel, BorderLayout.NORTH);
 
