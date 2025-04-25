@@ -110,12 +110,12 @@ public class BaseModel {
         handCards.add(card);
     }
 
-    public void playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
-        card.use(this, gameLogic);
+    public boolean playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
+        return card.use(this, gameLogic);
     }
 
-    public void playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
-        card.use(this, target, gameLogic);
+    public boolean playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
+        return card.use(this, target, gameLogic);
     }
 
     public void discardCard(Card card) {
@@ -149,6 +149,7 @@ public class BaseModel {
                 Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\n Handsize: " + handCards.size() + "\n Health: " + health, name + "Discard card end turn.");
                 removeCard(card);
             }
+            gameLogic.UIUpdateUI();
         }
     }
 
