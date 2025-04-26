@@ -486,7 +486,7 @@ public class BaseModel {
             if(role.getType() == RoleType.OUTLAW){
                 source.killedAnOutlaw();
             }
-            if(role.getType() == RoleType.DEPUTY && source.role.getType() == RoleType.SHERIFF){
+            if(role.getType() == RoleType.DEPUTY && source.getRole().getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
             for(BaseModel baseModel : gameInstance.getPlayers()){

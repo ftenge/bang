@@ -28,6 +28,7 @@ public class BangCard extends DualTargetCard {
                 origin.setBangedThisRound(true);
                 if (origin instanceof SlabTheKiller) {
                     target.slabTheKillerBangangAction(origin, gameLogic);
+                    origin.removeCard(this);
                     return true;
                 }
                 target.bangAction(origin, gameLogic);

@@ -7,6 +7,7 @@ import gamelogic.GameLogic;
 import utilities.BaseModel;
 import utilities.Character;
 import utilities.Role;
+import utilities.RoleType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +25,48 @@ public class ElGringo extends BaseModel {
         this.health = getHealth() - damage;
         drawFromSomeonesHand(source, gameLogic);
         if(health <= 0){
-            while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
-                if(card instanceof BeerCard beerCard){
-                    playSingleTargetCard(beerCard, gameLogic);
+            if(gameLogic.getPlayers().size() > 2) {
+                if (this.isBot) {
+                    for (Card card : getHandCards()) {
+                        if (card instanceof BeerCard beerCard) {
+                            playSingleTargetCard(beerCard, gameLogic);
+                        }
+                        if (health > 0) {
+                            System.out.println("Visszahoztad magad az életbe!");
+                            return;
+                        }
+                    }
+                } else {
+                    while (true) {
+                        Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
+                        if (card instanceof BeerCard beerCard) {
+                            playSingleTargetCard(beerCard, gameLogic);
+                        }
+                        if (health > 0) {
+                            System.out.println("Visszahoztad magad az életbe!");
+                            return;
+                        }
+                        if (card == null) {
+                            break;
+                        }
+                    }
                 }
-                if(health > 0){
-                    System.out.println("Visszahoztad magad az életbe!");
-                    return;
-                }
-                if(card == null){
+            }
+            if(role.getType() == RoleType.OUTLAW){
+                source.killedAnOutlaw();
+            }
+            if(role.getType() == RoleType.DEPUTY && source.getRole().getType() == RoleType.SHERIFF){
+                source.sheriffKilledDeputy();
+            }
+            for(BaseModel baseModel : gameInstance.getPlayers()){
+                if(baseModel instanceof VultureSam vultureSam && baseModel.equals(this)){
+                    vultureSam.collectCard(handCards);
+                    gameLogic.aPlayerRemoved(this);
                     return;
                 }
             }
+            discardCardsUponDeath();
+            gameLogic.aPlayerRemoved(this);
         }
     }
 
