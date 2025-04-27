@@ -53,19 +53,31 @@ public class SuzyLafayette extends BaseModel {
 
     @Override
     public void indiansAction(BaseModel source, GameLogic gameLogic){
-        while(true){
-            Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
-            if(card instanceof BangCard bangCard){
-                discardCard(bangCard);
-                handCards.remove(bangCard);
-                System.out.println("Rálőttél az indiánokra!");
-                if(isHandEmpty()){
-                    drawCard();
+        if(isBot){
+            for(Card card : this.getHandCards()){
+                if(card instanceof BangCard bangCard){
+                    removeCard(bangCard);
+                    if (isHandEmpty()) {
+                        drawCard();
+                    }
+                    return;
                 }
-                return;
             }
-            if(card == null){
-                break;
+        }else {
+            while (true) {
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                if (card instanceof BangCard bangCard) {
+                    discardCard(bangCard);
+                    handCards.remove(bangCard);
+                    System.out.println("Rálőttél az indiánokra!");
+                    if (isHandEmpty()) {
+                        drawCard();
+                    }
+                    return;
+                }
+                if (card == null) {
+                    break;
+                }
             }
         }
         receiveDamage(1, source, gameLogic);
