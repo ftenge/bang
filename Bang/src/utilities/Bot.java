@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 public class Bot {
-    private static final int SLEEP_CONSTANT = 1000;
+    private static final int SLEEP_CONSTANT = 500;
 
     public static void takeTurn(BaseModel bot, GameLogic gameLogic) {
         if (!bot.isAlive()) return;

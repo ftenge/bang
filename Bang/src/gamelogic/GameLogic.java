@@ -16,7 +16,7 @@ import utilities.characters.CalamityJanet;
 import java.util.List;
 
 public class GameLogic {
-    private static final int SLEEP_CONSTANT = 1000;
+    private static final int SLEEP_CONSTANT = 500;
     private GameInstance gameInstance;
     private BangGameUI ui;
     private int currentPlayerIndex;
