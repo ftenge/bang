@@ -58,6 +58,8 @@ public class ElGringo extends BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.getRole().getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
+            gameLogic.logUIMessage(this.name + " has died!");
+            gameLogic.logUIMessage(this.name + " was a " + this.getRole().toString());
             for(BaseModel baseModel : gameInstance.getPlayers()){
                 if(baseModel instanceof VultureSam vultureSam && baseModel.equals(this)){
                     vultureSam.collectCard(handCards);
