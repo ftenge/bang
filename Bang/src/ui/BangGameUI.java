@@ -139,7 +139,7 @@ public class BangGameUI extends JFrame {
         for (BaseModel player : gameLogic.getPlayers()) {
             if (!player.equals(currentPlayer)) {
                 JPanel singleOpponentPanel = new JPanel();
-                singleOpponentPanel.setBorder(BorderFactory.createTitledBorder(player.getName() + " (HP: " + player.getHealth() + "/" + player.getMaxHP() + ")"));
+                singleOpponentPanel.setBorder(BorderFactory.createTitledBorder(player.getName() + " (HP: " + player.getHealth() + "/" + player.getMaxHP() + ")" + "(Sheriff)"));
 
                 singleOpponentPanel.add(new HiddenCardLabel(player.getHandCards().size()));
 
