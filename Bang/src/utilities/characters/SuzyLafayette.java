@@ -85,20 +85,30 @@ public class SuzyLafayette extends BaseModel {
 
     @Override
     public void duelAction(BaseModel target, GameLogic gameLogic){
-        while(true){
-            Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
-            if(card instanceof BangCard bangCard){
-                discardCard(bangCard);
-                handCards.remove(bangCard);
-                System.out.println("Rálőttél az ellenre!");
-                if(isHandEmpty()){
-                    drawCard();
+        if(isBot){
+            for(Card card : this.getHandCards()){
+                if(card instanceof BangCard bangCard){
+                    removeCard(bangCard);
+                    target.duelAction(this, gameLogic);
+                    return;
                 }
-                target.duelAction(this, gameLogic);
-                return;
             }
-            if(card == null){
-                break;
+        }else {
+            while (true) {
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                if (card instanceof BangCard bangCard) {
+                    discardCard(bangCard);
+                    handCards.remove(bangCard);
+                    System.out.println("Rálőttél az ellenre!");
+                    if (isHandEmpty()) {
+                        drawCard();
+                    }
+                    target.duelAction(this, gameLogic);
+                    return;
+                }
+                if (card == null) {
+                    break;
+                }
             }
         }
         receiveDamage(1, target, gameLogic);
