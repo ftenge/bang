@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class BangGameUI extends JFrame {
     private GameInstance gameInstance;
     private GameLogic gameLogic;
-    private JPanel playerPanel, tablePanel, opponentsPanel, logPanel;
+    private JPanel playerPanel, tablePanel, opponentsPanel, logPanel, buttonPanel;
     private JTextArea logTextArea;
     private JLabel discardPileLabel;
     private JLabel hpLabel, roleLabel, characterLabel;
@@ -37,11 +37,13 @@ public class BangGameUI extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         playerPanel = new JPanel();
-        tablePanel = new JPanel();
+        tablePanel = new JPanel(new BorderLayout());
         opponentsPanel = new JPanel();
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         logPanel = new JPanel(new BorderLayout());
 
         tablePanel.setBackground(new Color(34, 139, 34));
+        buttonPanel.setBackground(new Color(34, 139, 34));
         playerPanel.setBackground(new Color(210, 180, 140));
         opponentsPanel.setBackground(new Color(210, 180, 140));
 
@@ -116,6 +118,7 @@ public class BangGameUI extends JFrame {
     public void updateUI() {
         playerPanel.removeAll();
         tablePanel.removeAll();
+        buttonPanel.removeAll();
         opponentsPanel.removeAll();
         targetPlayerSelector.removeAllItems();
         playerCardLabels.clear();
@@ -130,7 +133,7 @@ public class BangGameUI extends JFrame {
 
         for (Card card : currentPlayer.getTableCards()) {
             JButton tableCard = createCardButton(card, true);
-            tablePanel.add(tableCard);
+            buttonPanel.add(tableCard);
         }
 
         for (BaseModel player : gameLogic.getPlayers()) {
@@ -152,6 +155,7 @@ public class BangGameUI extends JFrame {
             }
         }
 
+        tablePanel.add(buttonPanel,BorderLayout.SOUTH);
         discardPileLabel.setText("Discard Pile: " + gameInstance.getDeck().seeLastDiscardedCard());
         hpLabel.setText("Your HP: " + currentPlayer.getHealth() + "/" + currentPlayer.getMaxHP());
         roleLabel.setText("Your Role: " + gameLogic.getHumanPlayer().getRole().toString());
