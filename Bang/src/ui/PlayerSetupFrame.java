@@ -24,7 +24,7 @@ public class PlayerSetupFrame extends JFrame {
         setTitle("Players settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(600, 500);
-        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -213,6 +213,7 @@ public class PlayerSetupFrame extends JFrame {
 
     private String[] getCharacterOptions() {
         String[] characters = gameInstance.getAllCharacterNames();
+        System.out.println(characters[0]);
         String[] charactersWithRandom = new String[characters.length + 1];
         charactersWithRandom[0] = "Random";
         System.arraycopy(characters, 0, charactersWithRandom, 1, characters.length);

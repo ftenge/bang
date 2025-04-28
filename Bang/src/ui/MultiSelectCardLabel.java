@@ -28,7 +28,7 @@ public class MultiSelectCardLabel extends CardLabel {
                         setSelected(true);
                         selected.add(getCard());
                     } else {
-                        JOptionPane.showMessageDialog(dialog, "Choose two model.cards at most!");
+                        JOptionPane.showMessageDialog(dialog, "Choose two cards at most!");
                     }
                 }
             }

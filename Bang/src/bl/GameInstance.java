@@ -137,7 +137,7 @@ public class GameInstance {
 
     public Class<? extends BaseModel> getCharacterFromCharacterName(String characterName){
         for(Class<? extends BaseModel> character : getAllCharacterClasses()){
-            if(character.getName().substring(21).equals(characterName)){
+            if(character.getName().substring(27).equals(characterName)){
                 return character;
             }
         }
@@ -145,17 +145,6 @@ public class GameInstance {
         return BaseModel.class;
     }
 
-    public void setPlayers(List<BaseModel> selectedPlayers) {
-        this.players = new ArrayList<>(selectedPlayers);
-        int sheriffIndex = 0;
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getRole().getType() == RoleType.SHERIFF) {
-                sheriffIndex = i;
-                break;
-            }
-        }
-        reorderSheriffFirst(sheriffIndex);
-    }
 
     //létrehoz egy listát az összes characterClassal
     public List<Class<? extends BaseModel>> getAllCharacterClasses() {
@@ -184,7 +173,7 @@ public class GameInstance {
         String[] characterNames = new String[characters.size()];
         //characterNames[0] = "Random";
         for(int i = 0; i < characters.size(); i++){
-            characterNames[i] = characters.get(i).getName().substring(21);
+            characterNames[i] = characters.get(i).getName().substring(27);
         }
         return characterNames;
     }

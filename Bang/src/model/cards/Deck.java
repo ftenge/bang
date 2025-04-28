@@ -34,28 +34,28 @@ public class Deck {
         }
         Collections.shuffle(suitValue);
 
-        generateCardSuitValue(BangCard.class, 25, suitValue, suits, "src/assets/model.cards/bang.png");
-        generateCardSuitValue(MissedCard.class, 12, suitValue, suits, "src/assets/model.cards/missed.png");
-        generateCardSuitValue(BeerCard.class, 6, suitValue, suits, "src/assets/model.cards/beer.png");
-        generateCardSuitValue(PanicCard.class, 4, suitValue, suits, "src/assets/model.cards/panic.png");
-        generateCardSuitValue(CatBalouCard.class, 4, suitValue, suits, "src/assets/model.cards/catbalou.png");
-        generateCardSuitValue(DuelCard.class, 3, suitValue, suits, "src/assets/model.cards/duel.png");
-        generateCardSuitValue(StagecoachCard.class, 2, suitValue, suits, "src/assets/model.cards/stagecoach.png");
-        generateCardSuitValue(GeneralStore.class, 2, suitValue, suits, "src/assets/model.cards/generalstore.png");
-        generateCardSuitValue(IndiansCard.class, 2, suitValue, suits, "src/assets/model.cards/indians.png");
-        generateCardSuitValue(WellsFargoCard.class, 1, suitValue, suits, "src/assets/model.cards/wellsfargo.png");
-        generateCardSuitValue(GatlingCard.class, 1, suitValue, suits, "src/assets/model.cards/gatling.png");
-        generateCardSuitValue(SaloonCard.class, 1, suitValue, suits, "src/assets/model.cards/saloon.png");
-        generateCardSuitValue(SchofieldWeapon.class, 3, suitValue, suits, "src/assets/model.cards/schofield.png");
-        generateCardSuitValue(VolcanicWeapon.class, 2, suitValue, suits, "src/assets/model.cards/volcanic.png");
-        generateCardSuitValue(RemingtonWeapon.class, 1, suitValue, suits, "src/assets/model.cards/remington.png");
-        generateCardSuitValue(CarabineWeapon.class, 1, suitValue, suits, "src/assets/model.cards/carabine.png");
-        generateCardSuitValue(WinchesterWeapon.class, 1, suitValue, suits, "src/assets/model.cards/winchester.png");
-        generateCardSuitValue(JailCard.class, 3, suitValue, suits, "src/assets/model.cards/jail.png");
-        generateCardSuitValue(BarrelCard.class, 2, suitValue, suits, "src/assets/model.cards/barrel.png");
-        generateCardSuitValue(MustangCard.class, 2, suitValue, suits, "src/assets/model.cards/mustang.png");
-        generateCardSuitValue(ScopeCard.class, 1, suitValue, suits, "src/assets/model.cards/scope.png");
-        generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits, "src/assets/model.cards/dynamite.png");
+        generateCardSuitValue(BangCard.class, 25, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(MissedCard.class, 12, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(BeerCard.class, 6, suitValue, suits, "src/assets/cards/beer.png");
+        generateCardSuitValue(PanicCard.class, 4, suitValue, suits, "src/assets/cards/panic.png");
+        generateCardSuitValue(CatBalouCard.class, 4, suitValue, suits, "src/assets/cards/catbalou.png");
+        generateCardSuitValue(DuelCard.class, 3, suitValue, suits, "src/assets/cards/duel.png");
+        generateCardSuitValue(StagecoachCard.class, 2, suitValue, suits, "src/assets/cards/stagecoach.png");
+        generateCardSuitValue(GeneralStore.class, 2, suitValue, suits, "src/assets/cards/generalstore.png");
+        generateCardSuitValue(IndiansCard.class, 2, suitValue, suits, "src/assets/cards/indians.png");
+        generateCardSuitValue(WellsFargoCard.class, 1, suitValue, suits, "src/assets/cards/wellsfargo.png");
+        generateCardSuitValue(GatlingCard.class, 1, suitValue, suits, "src/assets/cards/gatling.png");
+        generateCardSuitValue(SaloonCard.class, 1, suitValue, suits, "src/assets/cards/saloon.png");
+        generateCardSuitValue(SchofieldWeapon.class, 3, suitValue, suits, "src/assets/cards/schofield.png");
+        generateCardSuitValue(VolcanicWeapon.class, 2, suitValue, suits, "src/assets/cards/volcanic.png");
+        generateCardSuitValue(RemingtonWeapon.class, 1, suitValue, suits, "src/assets/cards/remington.png");
+        generateCardSuitValue(CarabineWeapon.class, 1, suitValue, suits, "src/assets/cards/carabine.png");
+        generateCardSuitValue(WinchesterWeapon.class, 1, suitValue, suits, "src/assets/cards/winchester.png");
+        generateCardSuitValue(JailCard.class, 3, suitValue, suits, "src/assets/cards/jail.png");
+        generateCardSuitValue(BarrelCard.class, 2, suitValue, suits, "src/assets/cards/barrel.png");
+        generateCardSuitValue(MustangCard.class, 2, suitValue, suits, "src/assets/cards/mustang.png");
+        generateCardSuitValue(ScopeCard.class, 1, suitValue, suits, "src/assets/cards/scope.png");
+        generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits, "src/assets/cards/dynamite.png");
 
         Collections.shuffle(cards);
     }

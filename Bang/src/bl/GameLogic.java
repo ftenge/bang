@@ -154,15 +154,16 @@ public class GameLogic {
         boolean isSheriffAlive = false;
         boolean areAnyOutLawsAlive = false;
         boolean isRenegadeAlive = false;
+        boolean areAnyDeputiesAlive = false;
         for(BaseModel player : getPlayers()){
             if(player.getRole().getType() == RoleType.SHERIFF){
                 isSheriffAlive = true;
-            }
-            if(player.getRole().getType() == RoleType.OUTLAW){
+            }else if(player.getRole().getType() == RoleType.OUTLAW){
                 areAnyOutLawsAlive = true;
-            }
-            if(player.getRole().getType() == RoleType.RENEGADE){
+            }else if(player.getRole().getType() == RoleType.RENEGADE){
                 isRenegadeAlive = true;
+            }else if(player.getRole().getType() == RoleType.DEPUTY){
+                areAnyDeputiesAlive = true;
             }
         }
         System.out.println("isSheriffAlive " + isSheriffAlive);
@@ -172,7 +173,9 @@ public class GameLogic {
             if(areAnyOutLawsAlive){
                 return "Outlaws have won!";
             }
-            return "The Renegade has won!";
+            if(!areAnyDeputiesAlive) {
+                return "The Renegade has won!";
+            }
         }
         else{
             if(!areAnyOutLawsAlive && !isRenegadeAlive){
@@ -207,6 +210,7 @@ public class GameLogic {
                 }
             }
         }
+        UIUpdateUI();
         gameInstance.removePlayer(baseModel);
         String gameOverMessage = getGameOver();
         System.out.println("GameOver? " + gameOverMessage);
