@@ -1,9 +1,8 @@
 package ui;
 
-import cards.Card;
+import model.cards.Card;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -29,7 +28,7 @@ public class MultiSelectCardLabel extends CardLabel {
                         setSelected(true);
                         selected.add(getCard());
                     } else {
-                        JOptionPane.showMessageDialog(dialog, "Choose two cards at most!");
+                        JOptionPane.showMessageDialog(dialog, "Choose two model.cards at most!");
                     }
                 }
             }

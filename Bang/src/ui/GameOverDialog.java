@@ -8,7 +8,7 @@ public class GameOverDialog extends JDialog {
         super(parent, "Game Over", true);
         setLayout(new BorderLayout());
         setSize(300, 150);
-        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(parent);
 
         JLabel messageLabel = new JLabel(message, SwingConstants.CENTER);

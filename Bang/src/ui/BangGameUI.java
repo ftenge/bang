@@ -1,9 +1,9 @@
 package ui;
 
-import cards.Card;
-import gameinstance.GameInstance;
-import gamelogic.GameLogic;
-import utilities.BaseModel;
+import model.cards.Card;
+import bl.GameInstance;
+import bl.GameLogic;
+import model.utilities.BaseModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +29,7 @@ public class BangGameUI extends JFrame {
         this.gameLogic = new GameLogic(this);
         this.gameInstance = GameInstance.getInstance();
         setTitle("Bang! Game");
-        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLayout(new BorderLayout());
@@ -106,11 +106,11 @@ public class BangGameUI extends JFrame {
 
     private CardLabel createCardLabel(Card card, boolean isFaceUp, List<CardLabel> cardLabelList) {
         if (isFaceUp && card != null) {
-            ImageIcon normal =ImageUtils.loadImage(card.getImagePath(), 80, 120);
-            ImageIcon hover = ImageUtils.loadImage(card.getImagePath(), 100, 150);
+            //ImageIcon normal =ImageUtils.loadImage(card.getImagePath(), 80, 120);
+            //ImageIcon hover = ImageUtils.loadImage(card.getImagePath(), 100, 150);
             return new CardLabel(card, cardLabelList, true);
         } else {
-            ImageIcon back = ImageUtils.loadImage("src/assets/cards/cover.png", 80, 120);
+            //ImageIcon back = ImageUtils.loadImage("src/assets/model.cards/cover.png", 80, 120);
             return new CardLabel(null, cardLabelList, true);
         }
     }
@@ -173,7 +173,7 @@ public class BangGameUI extends JFrame {
             button = new JButton(new ImageIcon(scaledImage));
             button.setToolTipText(card.getName());
         } else {
-            ImageIcon icon = new ImageIcon("src/assets/cards/cover.png");
+            ImageIcon icon = new ImageIcon("src/assets/model.cards/cover.png");
             Image scaledImage = icon.getImage().getScaledInstance(80, 120, Image.SCALE_SMOOTH);
             button = new JButton(new ImageIcon(scaledImage));
         }
@@ -300,7 +300,7 @@ public class BangGameUI extends JFrame {
             if (selected.size() == 2) {
                 dialog.dispose();
             } else {
-                JOptionPane.showMessageDialog(dialog, "Choose exactly two cards!");
+                JOptionPane.showMessageDialog(dialog, "Choose exactly two model.cards!");
             }
         });
 

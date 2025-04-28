@@ -8,7 +8,7 @@ public class HiddenCardLabel extends JLabel {
 
     public HiddenCardLabel(int cardCount) {
         this.cardCount = cardCount;
-        ImageIcon backIcon = ImageUtils.loadImage("src/assets/cards/cover.png", 80, 120);
+        ImageIcon backIcon = ImageUtils.loadImage("src/assets/model.cards/cover.png", 80, 120);
         setIcon(backIcon);
         setLayout(new BorderLayout());
 

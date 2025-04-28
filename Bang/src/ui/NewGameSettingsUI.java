@@ -1,7 +1,5 @@
 package ui;
 
-import gamelogic.GameLogic;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +9,7 @@ public class NewGameSettingsUI extends JFrame {
         setTitle("Game settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
-        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

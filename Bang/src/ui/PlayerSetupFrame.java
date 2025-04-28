@@ -1,7 +1,7 @@
 package ui;
 
-import gameinstance.GameInstance;
-import gamelogic.GameLogic;
+import bl.GameInstance;
+import bl.GameLogic;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ public class PlayerSetupFrame extends JFrame {
         setTitle("Players settings");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(600, 500);
-        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

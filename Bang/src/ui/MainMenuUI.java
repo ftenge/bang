@@ -8,7 +8,7 @@ public class MainMenuUI extends JFrame {
     public MainMenuUI() {
         setTitle("Bang! - Main menu");
         setSize(400, 300);
-        setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
+        setIconImage(ImageUtils.loadImage("src/assets/model.cards/bangicon.png", 32, 32).getImage());
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
