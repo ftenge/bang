@@ -19,6 +19,8 @@ public class BangCard extends DualTargetCard {
     //ha másik karakter az origin, akkor a target sima bangactionjét hívjuk meg és igazzal térünk vissza
     @Override
     public boolean use(BaseModel origin, BaseModel target, GameLogic gameLogic) {
+        System.out.println("Origin: " + origin.getName());
+        System.out.println("Target:" + target.getName());
         int range = 1 + origin.getFieldView();
         if(origin.hasWeapon()){
             range += origin.getWeapon().getRange();

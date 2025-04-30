@@ -116,7 +116,9 @@ public class GameInstance {
             }
             players.add(player);
         }
+        System.out.println(players);
         reorderSheriffFirst(sheriffIndex);
+        System.out.println(players);
     }
 
     public List<Role> getRandomRole(List<Role> remainingRoles){

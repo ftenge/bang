@@ -30,11 +30,10 @@ public class CalamityJanet extends BaseModel {
         if(isBot){
             for(Card card : this.getHandCards()){
                 if(card instanceof MissedCard missedCard){
-                    missedAction(missedCard, source, gameLogic);
+                    removeCard(missedCard);
                     return;
                 }else if(card instanceof BangCard bangCard){
-                    handCards.remove(bangCard);
-                    discardCard(bangCard);
+                    removeCard(bangCard);
                     return;
                 }
             }
@@ -160,6 +159,7 @@ public class CalamityJanet extends BaseModel {
             for(Card card : this.getHandCards()){
                 if(card instanceof BangCard || card instanceof MissedCard){
                     removeCard(card);
+                    duelAction(target, gameLogic);
                     return;
                 }
             }
@@ -167,14 +167,12 @@ public class CalamityJanet extends BaseModel {
             while(true){
                 Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang!/Missed! card or pass!");
                 if(card instanceof BangCard bangCard){
-                    discardCard(bangCard);
-                    handCards.remove(bangCard);
+                    removeCard(bangCard);
                     target.duelAction(this, gameLogic);
                     System.out.println("Rálőttél az ellenre!");
                     return;
                 }else if(card instanceof MissedCard missedCard){
-                    discardCard(missedCard);
-                    handCards.remove(missedCard);
+                    removeCard(missedCard);
                     target.duelAction(this, gameLogic);
                     System.out.println("Rálőttél az ellenre!");
                     return;

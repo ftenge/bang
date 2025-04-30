@@ -2,6 +2,8 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GameOverDialog extends JDialog {
     public GameOverDialog(JFrame parent, String message) {
@@ -33,6 +35,14 @@ public class GameOverDialog extends JDialog {
         exitButton.addActionListener(e -> {
             dispose();
             System.exit(0);
+        });
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
         });
     }
 }

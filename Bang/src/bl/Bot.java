@@ -35,7 +35,7 @@ public class Bot {
 
 
         // 3. Hasznosítható akciók sorrendje
-        gameLogic.logUIMessage("Bot get model.cards to play");
+        gameLogic.logUIMessage("Bot get cards to play");
         sleepForSleepConstant();
         List<Card> cardsYetToPlay = setYetToPlay(bot);
 
@@ -81,6 +81,19 @@ public class Bot {
         List<Card> cardsYetToPlay = new ArrayList<>();
         boolean alreadyHasBang = false;
         int beerInPocket = 0;
+        List<BaseModel> players = bot.getGameInstance().getInstance().getPlayers();
+        int thisPlayerIndex = players.indexOf(bot);
+        List<BaseModel> possibleTargets = new ArrayList<>();
+        int weaponRange = 1;
+        if(bot.hasWeapon()){
+            weaponRange = bot.getWeapon().getRange();
+        }
+        for(int i = 0; i < players.size(); i++){
+            if(bot.getVision().get(i) <= (weaponRange + bot.getFieldView()) && thisPlayerIndex != i){
+                System.out.println("Adding this target: " + players.get(i).getName());
+                possibleTargets.add(players.get(i));
+            }
+        }
         for(Card card : hand){
             if(card instanceof BarrelCard || card instanceof MustangCard || card instanceof Weapon ||  card instanceof ScopeCard  || card instanceof DynamiteCard){
                 System.out.println("Skipping this card: " + card);
@@ -97,38 +110,24 @@ public class Bot {
                 }
                 continue;
             }
-            if(card instanceof BangCard){
-                if(bot.getRapid() || !alreadyHasBang){
-                    List<BaseModel> players = bot.getGameInstance().getInstance().getPlayers();
-                    int thisPlayerIndex = players.indexOf(bot);
-                    List<BaseModel> possibleTargets = new ArrayList<>();
-                    int weaponRange = 1;
-                    if(bot.hasWeapon()){
-                        weaponRange = bot.getWeapon().getRange();
-                    }
-                    for(int i = 0; i < players.size(); i++){
-                        if(bot.getVision().get(i) <= (weaponRange + bot.getFieldView()) && thisPlayerIndex != i){
-                            possibleTargets.add(players.get(i));
+            if(!possibleTargets.isEmpty()) {
+                if(card instanceof BangCard){
+                    if(bot.getRapid() || !alreadyHasBang){
+                            cardsYetToPlay.add(card);
+                            alreadyHasBang = true;
+                            System.out.println("Added a bang");
                         }
-                    }
-                    if(!possibleTargets.isEmpty()) {
-                        cardsYetToPlay.add(card);
-                        alreadyHasBang = true;
-                        System.out.println("Added a bang");
-                    }else{
+                    continue;
+                }else if(bot instanceof CalamityJanet){
+                    if(card instanceof MissedCard){
+                        if(bot.getRapid() || !alreadyHasBang){
+                                cardsYetToPlay.add(card);
+                                alreadyHasBang = true;
+                                System.out.println("Added a Missedcard (calamity)");
+                            }
                         continue;
                     }
                 }
-                continue;
-            }
-            if(card instanceof MissedCard){
-                if(bot instanceof CalamityJanet){
-                    if(bot.getRapid() || !alreadyHasBang){
-                        cardsYetToPlay.add(card);
-                        alreadyHasBang = true;
-                    }
-                }
-                continue;
             }
             System.out.println("Added this card to play: " + card);
             cardsYetToPlay.add(card);

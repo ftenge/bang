@@ -279,7 +279,12 @@ public class BaseModel {
     }
 
     public void gatlingAction(BaseModel source, GameLogic gameLogic){
-        bangAction(source, gameLogic);
+        if(bangedThisRound){
+            bangAction(source, gameLogic);
+        }else{
+            bangAction(source, gameLogic);
+            setBangedThisRound(false);
+        }
     }
 
     public void duelAction(BaseModel target, GameLogic gameLogic){
