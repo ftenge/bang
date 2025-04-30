@@ -80,7 +80,7 @@ public class GameInstance {
                 role = roles.getLast();
                 roles.removeLast();
                 if(role.getType() == RoleType.SHERIFF){
-                    sheriffIndex = count;
+                    sheriffIndex = i;
                 }
             }else {
                 role = switch (roleName) {
@@ -91,7 +91,7 @@ public class GameInstance {
                     default -> role;
                 };
                 if(roleName.equals("Sheriff")){
-                    sheriffIndex = count;
+                    sheriffIndex = i;
                 }
             }
             System.out.println(role.getType());

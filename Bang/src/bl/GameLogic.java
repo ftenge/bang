@@ -45,6 +45,7 @@ public class GameLogic {
     //ha börtönben van, akkor arra húz, ha kiszabadul, akkor jöhet a köre
     public void nextTurn() {
         BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
+        System.out.println(getPlayers());
         logUIMessage("It's " + currentPlayer.getName() + "'s turn!");
 
         if (!currentPlayer.isAlive()) {
