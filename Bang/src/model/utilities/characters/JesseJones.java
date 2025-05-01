@@ -55,7 +55,7 @@ public class JesseJones extends BaseModel {
                 return;
             }
 
-            int decision = gameLogic.chooseOption(name, "Do you want to draw the first card from someone?", "Draw normally", "Panic from someone");
+            int decision = gameLogic.chooseOption(name, "Szeretnéd az első lapot mástól elhúzni?", "Normális húzás", "Lopás valakitől");
             if (decision == 0) {
                 for (int i = 0; i < 2; i++) {
                     drawCard();
@@ -64,7 +64,7 @@ public class JesseJones extends BaseModel {
             }
             int targetIndex = 0;
             if (playersWithHandCards.size() != 1) {
-                targetIndex = gameLogic.chooseTarget(playersWithHandCards, name, "Select a player to steal from!");
+                targetIndex = gameLogic.chooseTarget(playersWithHandCards, name, "Válassz egy célpontot akitől lopsz!");
             }
 
 
@@ -76,7 +76,7 @@ public class JesseJones extends BaseModel {
                 cards.add(new HandCard(cardName, "", i));
             }
 
-            int index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
+            int index = gameLogic.chooseFromHand(cards, name, "Válassz egy kártyát tőle: " + target.getName());
 
             handCards.add(target.getHandCards().get(index));
             target.getHandCards().remove(index);

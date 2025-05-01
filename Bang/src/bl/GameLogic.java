@@ -30,8 +30,8 @@ public class GameLogic {
     //minden játékos megejti a játék megkezdése előtti húzást, majd jön az első kör
     public void startGame(int numberOfPlayers, List<String> characterNames, List<String> roles, List<String> bots) {
         gameInstance.initializePlayers(numberOfPlayers, characterNames, roles, bots);   //custom indítás
-        logUIMessage("Game started!");
-        System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
+        logUIMessage("A játék elkezdődött!");
+        //System.out.println(gameInstance.getDeck().isDiscardPileEmpty());
 
         for (BaseModel player : getPlayers()) {
             player.gameStartDraw();
@@ -45,39 +45,39 @@ public class GameLogic {
     //ha börtönben van, akkor arra húz, ha kiszabadul, akkor jöhet a köre
     public void nextTurn() {
         BaseModel currentPlayer = getPlayers().get(currentPlayerIndex);
-        System.out.println(getPlayers());
-        logUIMessage("It's " + currentPlayer.getName() + "'s turn!");
+        //System.out.println(getPlayers());
+        logUIMessage(currentPlayer.getName() + " köre következik!");
 
         if (!currentPlayer.isAlive()) {
             endTurn();
             return;
         }
         if(currentPlayer.hasDynamite()){
-            logUIMessage(currentPlayer.getName() + " is drawing for dynamite...");
+            logUIMessage(currentPlayer.getName() + " húz a dinamitra...");
             sleepForSleepConstant();
             DynamiteCard dynamiteCard = currentPlayer.dynamiteAction(currentPlayer, this);
 
             if(dynamiteCard != null){
-                logUIMessage("The dynamite goes around!");
+                logUIMessage("A dinamit tovább vándorol!");
                 getPlayers().get((currentPlayerIndex + 1) % getPlayers().size()).addDynamite(dynamiteCard);
             }else{
-                logUIMessage("The dynamite has exploded!");
+                logUIMessage("A dinamit felrobban!");
                 if (!currentPlayer.isAlive()) {
-                    logUIMessage(currentPlayer.getName() + " died becuse of the dinamite explosion.");
+                    logUIMessage(currentPlayer.getName() + " belehalt a dinamit robbanásba.");
                     endTurn();
                     return;
                 }
             }
         }
         if(currentPlayer.inJail()){
-            logUIMessage(currentPlayer.getName() + " is drawing to get out of jail...");
+            logUIMessage(currentPlayer.getName() + " húz, hogy kikerüljön a börtönből...");
             sleepForSleepConstant();
             if(!currentPlayer.jailAction(this)){
-                logUIMessage(currentPlayer.getName() + " is staying in the jail for this round.");
+                logUIMessage(currentPlayer.getName() + " a börtönben marad ebben a körben.");
                 endTurn();
                 return;
             }
-            logUIMessage(currentPlayer.getName() + " has got out of the jail.");
+            logUIMessage(currentPlayer.getName() + " kijutott a börtönből.");
         }
         UIUpdateUI();
         if(currentPlayer.getIsBot()){
@@ -167,20 +167,20 @@ public class GameLogic {
                 areAnyDeputiesAlive = true;
             }
         }
-        System.out.println("isSheriffAlive " + isSheriffAlive);
-        System.out.println("areAnyOutLawsAlive " + areAnyOutLawsAlive);
-        System.out.println("isRenegadeAlive " + isRenegadeAlive);
+        //System.out.println("isSheriffAlive " + isSheriffAlive);
+        //System.out.println("areAnyOutLawsAlive " + areAnyOutLawsAlive);
+        //System.out.println("isRenegadeAlive " + isRenegadeAlive);
         if(!isSheriffAlive){
             if(areAnyOutLawsAlive){
-                return "Outlaws have won!";
+                return "A banditák nyertek!";
             }
             if(!areAnyDeputiesAlive) {
-                return "The Renegade has won!";
+                return "A renegát nyert!";
             }
         }
         else{
             if(!areAnyOutLawsAlive && !isRenegadeAlive){
-                return "Sheriff has won!";
+                return "A Sheriffék nyert!";
             }
         }
         return "";
@@ -202,7 +202,7 @@ public class GameLogic {
 
     //ha az aktuális index akkora, mint az élő játékosok száma, akkor csökkenti eggyel
     public void aPlayerRemoved(BaseModel baseModel){
-        System.out.println("A player removed");
+        //System.out.println("A player removed");
         for(int i = 0; i < getPlayers().size(); i++){
             if(getPlayers().get(i) == baseModel){
                 if(currentPlayerIndex >= i){
@@ -214,7 +214,7 @@ public class GameLogic {
         UIUpdateUI();
         gameInstance.removePlayer(baseModel);
         String gameOverMessage = getGameOver();
-        System.out.println("GameOver? " + gameOverMessage);
+        //System.out.println("GameOver? " + gameOverMessage);
         if(!gameOverMessage.isEmpty()) {
             GameOverDialog dialog = new GameOverDialog(ui, gameOverMessage);
             dialog.setVisible(true);

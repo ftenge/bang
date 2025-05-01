@@ -53,7 +53,7 @@ public class GameInstance {
             try {
                 BaseModel player = characterClass.getDeclaredConstructor(Role.class).newInstance(assignedRole);
                 players.add(player);
-                System.out.println("Assigned " + player.getName() + " as " + assignedRole.getType());
+                //System.out.println("Assigned " + player.getName() + " as " + assignedRole.getType());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -73,7 +73,7 @@ public class GameInstance {
             String roleName = roleNames.get(i);
             Role role = new Role(RoleType.SHERIFF);
 
-            System.out.println(roleName);
+            //System.out.println(roleName);
 
             if (roleName.equals("Random")) {
                 roles = getRandomRole(roles);
@@ -94,7 +94,7 @@ public class GameInstance {
                     sheriffIndex = i;
                 }
             }
-            System.out.println(role.getType());
+            //System.out.println(role.getType());
 
             if (characterName.equals("Random")) {
                 allCharacterNames = getRandomCharacter(allCharacterNames);
@@ -102,11 +102,11 @@ public class GameInstance {
                 allCharacterNames.removeLast();
             }
             Class<? extends BaseModel> characterClass = getCharacterFromCharacterName(characterName);
-            System.out.println("Felismerőszöveg: " + characterClass);
+            //System.out.println("Felismerőszöveg: " + characterClass);
 
             BaseModel player = null;
             try {
-                if(bots.get(i).equals("True")){
+                if(bots.get(i).equals("Igaz")){
                     player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, true);
                 }else{
                     player = characterClass.getDeclaredConstructor(Role.class, boolean.class).newInstance(role, false);
@@ -116,9 +116,9 @@ public class GameInstance {
             }
             players.add(player);
         }
-        System.out.println(players);
+        //System.out.println(players);
         reorderSheriffFirst(sheriffIndex);
-        System.out.println(players);
+        //System.out.println(players);
     }
 
     public List<Role> getRandomRole(List<Role> remainingRoles){
@@ -143,7 +143,7 @@ public class GameInstance {
                 return character;
             }
         }
-        System.out.println("Itt a hiba, charactername: " + characterName);
+        //System.out.println("Itt a hiba, charactername: " + characterName);
         return BaseModel.class;
     }
 

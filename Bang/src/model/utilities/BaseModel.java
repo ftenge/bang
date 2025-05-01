@@ -82,7 +82,7 @@ public class BaseModel {
     public void drawCard() {
         Card card = gameInstance.getDeck().draw();
         handCards.add(card);
-        System.out.println("Sikeres húzás, a kártya: " + card);
+        //System.out.println("Sikeres húzás, a kártya: " + card);
     }
 
     public Card drawRetCard(GameLogic gameLogic){
@@ -120,7 +120,7 @@ public class BaseModel {
     }
 
     public void discardCard(Card card) {
-        System.out.println("Sikeres eldobás, a kártya: " + card);
+        //System.out.println("Sikeres eldobás, a kártya: " + card);
         gameInstance.getDeck().discard(card);
     }
 
@@ -147,7 +147,7 @@ public class BaseModel {
                 Card card = new Bot().discardExcessCards(this, gameLogic);
                 removeCard(card);
             }else {
-                Card card = gameLogic.chooseCard(getHandCards(), "You can't have more card in your hand than your hp at the end of your turn!\n Handsize: " + handCards.size() + "\n Health: " + health, name + "Discard card end turn.");
+                Card card = gameLogic.chooseCard(getHandCards(), "Nem lehet több kártya a kezedben, mint ahány életerőd van!\n Jelenlegi kézméret: " + handCards.size() + "\n Életerő: " + health, name + "Körvégi kártyaeldobás.");
                 removeCard(card);
             }
             gameLogic.UIUpdateUI();
@@ -157,7 +157,7 @@ public class BaseModel {
     public void bangAction(BaseModel source, GameLogic gameLogic){
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -170,10 +170,10 @@ public class BaseModel {
             }
         }else {
             while (true) {
-                Card card = gameLogic.chooseCard(getHandCards(), getName(), "Choose a Missed! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), getName(), "Válassz egy Nem talált! kártyát vagy passzolj!");
                 if (card instanceof MissedCard missedCard) {
                     missedAction(missedCard, source, gameLogic);
-                    System.out.println("Volt nem talált lap!");
+                    //System.out.println("Volt nem talált lap!");
                     return;
                 }
                 if (card == null) {
@@ -181,15 +181,15 @@ public class BaseModel {
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
     public void slabTheKillerBangangAction(BaseModel source, GameLogic gameLogic){
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -203,14 +203,14 @@ public class BaseModel {
             if(missedCards.size() >= 2){
                 missedAction(missedCards.get(0), source, gameLogic);
                 missedAction(missedCards.get(1), source, gameLogic);
-                System.out.println("Volt nem talált lap!");
+                //System.out.println("Volt nem talált lap!");
                 return;
             }
         }else {
             while (true) {
                 boolean bothAreMissed = true;
                 List<Card> cards = new ArrayList<>();
-                cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed model.cards to dodge Bang!");
+                cards = gameLogic.selectTwoCards(getHandCards(), name, "Válassz kettő Nem talált! kártyát vagy passzolj!");
                 if (cards.isEmpty()) {
                     break;
                 }
@@ -224,16 +224,16 @@ public class BaseModel {
                     for (Card card : cards) {
                         if (card instanceof MissedCard missedCard) {
                             missedAction(missedCard, source, gameLogic);
-                            System.out.println("Volt nem talált lap!");
+                            //System.out.println("Volt nem talált lap!");
                         }
                     }
                     return;
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
     public void missedAction(MissedCard missedCard, BaseModel target, GameLogic gameLogic){
@@ -241,9 +241,9 @@ public class BaseModel {
     }
 
     public boolean beerAction(){
-        System.out.println("HP BEVOR: " +health);
+        //System.out.println("HP BEVOR: " +health);
         health++;
-        System.out.println("HP AFTER: " +health);
+        //System.out.println("HP AFTER: " +health);
         return true;
     }
 
@@ -264,10 +264,10 @@ public class BaseModel {
             }
         }else{
             while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang! kártyát vagy passzolj!");
                 if(card instanceof BangCard bangCard){
                     removeCard(bangCard);
-                    System.out.println("Rálőttél az indiánokra!");
+                    //System.out.println("Rálőttél az indiánokra!");
                     return;
                 }
                 if(card == null){
@@ -298,11 +298,11 @@ public class BaseModel {
             }
         }else {
             while (true) {
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang! kártyát vagy passzolj!");
                 if (card instanceof BangCard bangCard) {
                     discardCard(bangCard);
                     handCards.remove(bangCard);
-                    System.out.println("Rálőttél az ellenre!");
+                    //System.out.println("Rálőttél az ellenre!");
                     target.duelAction(this, gameLogic);
                     return;
                 }
@@ -330,7 +330,7 @@ public class BaseModel {
             }
         }else {
             while (card == null) {
-                card = gameLogic.chooseCard(cards, name, "Choose a card!");
+                card = gameLogic.chooseCard(cards, name, "Válassz egy kártyát!");
             }
             addHand(card);
         }
@@ -344,11 +344,11 @@ public class BaseModel {
         }else {
             List<Card> cards = new ArrayList<>();
             for (int i = 0; i < target.getHandCards().size(); i++) {
-                String cardName = "Hand card " + (i + 1);
+                String cardName = "Kézi kártya " + (i + 1);
                 cards.add(new HandCard(cardName, "", i));
             }
             cards.addAll(target.tableCards);
-            index = gameLogic.chooseFromHand(cards, name, "Choose a card to discard from " + target.getName());
+            index = gameLogic.chooseFromHand(cards, name, "Válassz egy kártyát, amit eldobatsz. Célpont: " + target.getName());
         }
         if(index < target.getHandCards().size()){
             discardCard(target.getHandCards().get(index));
@@ -380,7 +380,7 @@ public class BaseModel {
                 cards.add(new HandCard(cardName, "", i));
             }
             cards.addAll(target.tableCards);
-            index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
+            index = gameLogic.chooseFromHand(cards, name, "Válassz egy kártyát tőle: " + target.getName());
         }
         if (index < target.getHandCards().size()) {
             handCards.add(target.getHandCards().get(index));
@@ -420,7 +420,7 @@ public class BaseModel {
     public boolean barrelAction(GameLogic gameLogic){
         Card card = drawRetCard(gameLogic);
         discardCard(card);
-        System.out.println(card.getSuit());
+        //System.out.println(card.getSuit());
         if(card.getSuit().equals("Hearts")){
             return true;
         }
@@ -430,7 +430,7 @@ public class BaseModel {
     public boolean jailAction(GameLogic gameLogic){
         Card card = drawRetCard(gameLogic);
         discardCard(card);
-        System.out.println(card.getSuit());
+        //System.out.println(card.getSuit());
         discardCard(jail);
         removeJail();
         return card.getSuit().equals("Hearts");
@@ -439,11 +439,11 @@ public class BaseModel {
     public DynamiteCard dynamiteAction(BaseModel source, GameLogic gameLogic){
         Card card = drawRetCard(gameLogic);
         discardCard(card);
-        System.out.println(card.getSuit());
+        //System.out.println(card.getSuit());
         DynamiteCard dynamiteCard = dynamite;
         removeDynamite();
         if(card.getSuit().equals("Spades") && card.getValue() >= 2 && card.getValue() <= 9){
-            System.out.println("Berobbant a dinamit");
+            //System.out.println("Berobbant a dinamit");
             receiveDamage(3, source, gameLogic);
             discardCard(dynamiteCard);
             return null;
@@ -469,18 +469,18 @@ public class BaseModel {
                             playSingleTargetCard(beerCard, gameLogic);
                         }
                         if (health > 0) {
-                            System.out.println("Visszahoztad magad az életbe!");
+                            //System.out.println("Visszahoztad magad az életbe!");
                             return;
                         }
                     }
                 } else {
                     while (true) {
-                        Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
+                        Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Sört vagy passzolj!");
                         if (card instanceof BeerCard beerCard) {
                             playSingleTargetCard(beerCard, gameLogic);
                         }
                         if (health > 0) {
-                            System.out.println("Visszahoztad magad az életbe!");
+                            //System.out.println("Visszahoztad magad az életbe!");
                             return;
                         }
                         if (card == null) {
@@ -495,8 +495,8 @@ public class BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.getRole().getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
-            gameLogic.logUIMessage(this.name + " has died!");
-            gameLogic.logUIMessage(this.name + " was a " + this.getRole().toString());
+            gameLogic.logUIMessage(this.name + " kiesett!");
+            gameLogic.logUIMessage(this.name + " egy " + this.getRole().toString() + " volt");
             for(BaseModel baseModel : gameInstance.getPlayers()){
                 if(baseModel instanceof VultureSam vultureSam && !baseModel.equals(this)){
                     vultureSam.collectCard(handCards);

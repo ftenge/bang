@@ -14,7 +14,6 @@ public class SuzyLafayette extends BaseModel {
         super(new Character("Suzy Lafayette", 4), role, isBot);
     }
     //Ha nem marad egy lapja sem, akkor húzhat egyet a pakliból. if hands.empty() -> deck.draw()
-    //TODO buggol a húzás üres kéznél
 
     public boolean isHandEmpty(){
         return handCards.isEmpty();
@@ -24,7 +23,6 @@ public class SuzyLafayette extends BaseModel {
     public boolean playSingleTargetCard(SingleTargetCard card, GameLogic gameLogic) {
         boolean ret = card.use(this, gameLogic);
         if(isHandEmpty()){
-            gameLogic.logUIMessage("Üres a kéz!");
             drawCard();
         }
         return ret;
@@ -34,7 +32,6 @@ public class SuzyLafayette extends BaseModel {
     public boolean playDualTargetCard(DualTargetCard card, BaseModel target, GameLogic gameLogic) {
         boolean ret = card.use(this, target, gameLogic);
         if(isHandEmpty()){
-            gameLogic.logUIMessage("Üres a kéz!");
             drawCard();
         }
         return ret;
@@ -45,7 +42,7 @@ public class SuzyLafayette extends BaseModel {
         discardCard(card);
         handCards.remove(card);
         if(isHandEmpty()){
-            System.out.println("Üres a kéz a removeCard után!");
+            //System.out.println("Üres a kéz a removeCard után!");
             drawCard();
         }
     }
@@ -64,11 +61,11 @@ public class SuzyLafayette extends BaseModel {
             }
         }else {
             while (true) {
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang! kártyát vagy passzolj!");
                 if (card instanceof BangCard bangCard) {
                     discardCard(bangCard);
                     handCards.remove(bangCard);
-                    System.out.println("Rálőttél az indiánokra!");
+                    //System.out.println("Rálőttél az indiánokra!");
                     if (isHandEmpty()) {
                         drawCard();
                     }
@@ -94,11 +91,11 @@ public class SuzyLafayette extends BaseModel {
             }
         }else {
             while (true) {
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang! kártyát vagy passzolj!");
                 if (card instanceof BangCard bangCard) {
                     discardCard(bangCard);
                     handCards.remove(bangCard);
-                    System.out.println("Rálőttél az ellenre!");
+                    //System.out.println("Rálőttél az ellenre!");
                     if (isHandEmpty()) {
                         drawCard();
                     }

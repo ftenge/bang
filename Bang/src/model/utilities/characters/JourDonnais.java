@@ -20,12 +20,12 @@ public class JourDonnais extends BaseModel {
     @Override
     public void bangAction(BaseModel source, GameLogic gameLogic){
         if(barrelAction(gameLogic)){
-            System.out.println("A beépített hordó levédte!");
+            //System.out.println("A beépített hordó levédte!");
             return;
         }
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -39,15 +39,15 @@ public class JourDonnais extends BaseModel {
             if(missedCards.size() >= 2){
                 missedAction(missedCards.get(0), source, gameLogic);
                 missedAction(missedCards.get(1), source, gameLogic);
-                System.out.println("Volt nem talált lap!");
+                //System.out.println("Volt nem talált lap!");
                 return;
             }
         }else {
             while (true) {
-                Card card = gameLogic.chooseCard(getHandCards(), getName(), "Choose a Missed! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), getName(), "Válassz egy Nem talált! kártyát vagy passzolj!");
                 if (card instanceof MissedCard missedCard) {
                     missedAction(missedCard, source, gameLogic);
-                    System.out.println("Volt nem talált lap!");
+                    //System.out.println("Volt nem talált lap!");
                     return;
                 }
                 if (card == null) {
@@ -55,19 +55,19 @@ public class JourDonnais extends BaseModel {
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
     public void slabTheKillerBangangAction(BaseModel source, GameLogic gameLogic){
         if(barrelAction(gameLogic)){
-            System.out.println("A beépített hordó levédte!");
+            //System.out.println("A beépített hordó levédte!");
             return;
         }
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -81,14 +81,14 @@ public class JourDonnais extends BaseModel {
             if(missedCards.size() >= 2){
                 missedAction(missedCards.get(0), source, gameLogic);
                 missedAction(missedCards.get(1), source, gameLogic);
-                System.out.println("Volt nem talált lap!");
+                //System.out.println("Volt nem talált lap!");
                 return;
             }
         }else {
             while (true) {
                 boolean bothAreMissed = true;
                 List<Card> cards = new ArrayList<>();
-                cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed model.cards to dodge Bang!");
+                cards = gameLogic.selectTwoCards(getHandCards(), name, "Válassz kettő Nem talált! kártyát vagy passzolj!");
                 if (cards.isEmpty()) {
                     break;
                 }
@@ -102,16 +102,16 @@ public class JourDonnais extends BaseModel {
                     for (Card card : cards) {
                         if (card instanceof MissedCard missedCard) {
                             missedAction(missedCard, source, gameLogic);
-                            System.out.println("Volt nem talált lap!");
+                            //System.out.println("Volt nem talált lap!");
                         }
                     }
                     return;
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
 

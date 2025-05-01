@@ -23,7 +23,7 @@ public class CalamityJanet extends BaseModel {
     public void bangAction(BaseModel source, GameLogic gameLogic){
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -39,16 +39,16 @@ public class CalamityJanet extends BaseModel {
             }
         }else {
             while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), getName(),"Choose a Bang!/Missed! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), getName(),"Válassz egy Bang!/Nem talált! kártyát vagy passzolj!");
                 if(card instanceof MissedCard missedCard){
                     handCards.remove(missedCard);
                     discardCard(missedCard);
-                    System.out.println("Volt nem talált lap!");
+                    //System.out.println("Volt nem talált lap!");
                     return;
                 }else if(card instanceof BangCard bangCard){
                     handCards.remove(bangCard);
                     discardCard(bangCard);
-                    System.out.println("Volt nem talált lap!");
+                    //System.out.println("Volt nem talált lap!");
                     return;
                 }
                 if(card == null){
@@ -56,16 +56,16 @@ public class CalamityJanet extends BaseModel {
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
     @Override
     public void slabTheKillerBangangAction(BaseModel source, GameLogic gameLogic){
         if(hasBarrel()){
             if(barrelAction(gameLogic)){
-                System.out.println("A hordó levédte!");
+                //System.out.println("A hordó levédte!");
                 return;
             }
         }
@@ -83,14 +83,14 @@ public class CalamityJanet extends BaseModel {
                 discardCard(missedCards.get(0));
                 handCards.remove(missedCards.get(1));
                 discardCard(missedCards.get(1));
-                System.out.println("Volt nem talált lap!");
+                //System.out.println("Volt nem talált lap!");
                 return;
             }
         }else {
             while(true){
                 boolean bothAreMissed = true;
                 List<Card> cards = new ArrayList<>();
-                cards = gameLogic.selectTwoCards(getHandCards(), name, "Select 2 Missed/Bang! model.cards to dodge Bang!");
+                cards = gameLogic.selectTwoCards(getHandCards(), name, "Válassz kettő Bang!/Nem talált! kártyát vagy passzolj!");
                 cards.removeLast();
                 if(cards == null){
                     break;
@@ -106,20 +106,20 @@ public class CalamityJanet extends BaseModel {
                         if (card instanceof MissedCard missedCard) {
                             handCards.remove(missedCard);
                             discardCard(missedCard);
-                            System.out.println("Volt nem talált lap!");
+                            //System.out.println("Volt nem talált lap!");
                         }if (card instanceof BangCard bangCard) {
                             handCards.remove(bangCard);
                             discardCard(bangCard);
-                            System.out.println("Volt nem talált lap!");
+                            //System.out.println("Volt nem talált lap!");
                         }
                     }
                     return;
                 }
             }
         }
-        System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
+        //System.out.println("Betalált a bang :/, aktuális hp: " + getHealth());
         receiveDamage(1, source, gameLogic);
-        System.out.println("ReceiveDMG utáni hp: " + getHealth());
+        //System.out.println("ReceiveDMG utáni hp: " + getHealth());
     }
 
     @Override
@@ -133,16 +133,16 @@ public class CalamityJanet extends BaseModel {
             }
         }else{
             while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang!/Missed! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang!/Nem talált! kártyát vagy passzolj!");
                 if(card instanceof BangCard bangCard){
                     discardCard(bangCard);
                     handCards.remove(bangCard);
-                    System.out.println("Rálőttél az indiánokra!");
+                    //System.out.println("Rálőttél az indiánokra!");
                     return;
                 }else if(card instanceof MissedCard missedCard){
                     discardCard(missedCard);
                     handCards.remove(missedCard);
-                    System.out.println("Rálőttél az indiánokra!");
+                    //System.out.println("Rálőttél az indiánokra!");
                     return;
                 }
                 if(card == null){
@@ -165,16 +165,16 @@ public class CalamityJanet extends BaseModel {
             }
         }else {
             while(true){
-                Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Bang!/Missed! card or pass!");
+                Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Bang!/Nem talált! kártyát vagy passzolj!");
                 if(card instanceof BangCard bangCard){
                     removeCard(bangCard);
                     target.duelAction(this, gameLogic);
-                    System.out.println("Rálőttél az ellenre!");
+                    //System.out.println("Rálőttél az ellenre!");
                     return;
                 }else if(card instanceof MissedCard missedCard){
                     removeCard(missedCard);
                     target.duelAction(this, gameLogic);
-                    System.out.println("Rálőttél az ellenre!");
+                    //System.out.println("Rálőttél az ellenre!");
                     return;
                 }
                 if(card == null){

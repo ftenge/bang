@@ -57,7 +57,7 @@ public class PedroRamirez extends BaseModel {
                 }
             }else {
 
-                int decision = gameLogic.chooseOption(name, "Choose to draw normally or draw the first card from the discard pile!", "Draw normally", gameInstance.getDeck().lastDiscardedName());
+                int decision = gameLogic.chooseOption(name, "Válassz, hogy normálisan húzol vagy az első kártyát a dobópakli tetejéről húzod!", "Normális húzás", gameInstance.getDeck().lastDiscardedName());
                 if (decision == 1) {
                     Card card = gameInstance.getDeck().getLastDiscard();
                     handCards.add(card);

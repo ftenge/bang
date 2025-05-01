@@ -6,7 +6,7 @@ import java.awt.*;
 public class NewGameSettingsUI extends JFrame {
 
     public NewGameSettingsUI() {
-        setTitle("Game settings");
+        setTitle("Játék beállítások");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
         setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
@@ -17,7 +17,7 @@ public class NewGameSettingsUI extends JFrame {
         Integer[] playerOptions = {2, 3, 4, 5, 6, 7};
         JComboBox<Integer> playerNumberComboBox = new JComboBox<>(playerOptions);
 
-        JButton startButton = new JButton("Start Game");
+        JButton startButton = new JButton("Játék indítása");
 
         startButton.addActionListener(e -> {
             int numberOfPlayers = (Integer) playerNumberComboBox.getSelectedItem();
@@ -33,7 +33,7 @@ public class NewGameSettingsUI extends JFrame {
         });
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Number of players"));
+        panel.add(new JLabel("Játékosok száma"));
         panel.add(playerNumberComboBox);
         panel.add(startButton);
 

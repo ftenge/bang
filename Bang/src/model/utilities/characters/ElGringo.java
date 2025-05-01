@@ -32,18 +32,18 @@ public class ElGringo extends BaseModel {
                             playSingleTargetCard(beerCard, gameLogic);
                         }
                         if (health > 0) {
-                            System.out.println("Visszahoztad magad az életbe!");
+                            //System.out.println("Visszahoztad magad az életbe!");
                             return;
                         }
                     }
                 } else {
                     while (true) {
-                        Card card = gameLogic.chooseCard(getHandCards(), name, "Choose a Beer card or pass!");
+                        Card card = gameLogic.chooseCard(getHandCards(), name, "Válassz egy Sört vagy passzolj!");
                         if (card instanceof BeerCard beerCard) {
                             playSingleTargetCard(beerCard, gameLogic);
                         }
                         if (health > 0) {
-                            System.out.println("Visszahoztad magad az életbe!");
+                            //System.out.println("Visszahoztad magad az életbe!");
                             return;
                         }
                         if (card == null) {
@@ -58,8 +58,8 @@ public class ElGringo extends BaseModel {
             if(role.getType() == RoleType.DEPUTY && source.getRole().getType() == RoleType.SHERIFF){
                 source.sheriffKilledDeputy();
             }
-            gameLogic.logUIMessage(this.name + " has died!");
-            gameLogic.logUIMessage(this.name + " was a " + this.getRole().toString());
+            gameLogic.logUIMessage(this.name + " kiesett!");
+            gameLogic.logUIMessage(this.name + " egy " + this.getRole().toString() + " volt");
             for(BaseModel baseModel : gameInstance.getPlayers()){
                 if(baseModel instanceof VultureSam vultureSam && baseModel.equals(this)){
                     vultureSam.collectCard(handCards);
@@ -83,7 +83,7 @@ public class ElGringo extends BaseModel {
                 cards.add(new HandCard(cardName, "", i));
             }
 
-            index = gameLogic.chooseFromHand(cards, name, "Choose a card to steal from " + target.getName());
+            index = gameLogic.chooseFromHand(cards, name, "Válassz egy kártyát tőle: " + target.getName());
         }
         handCards.add(target.getHandCards().get(index));
         target.getHandCards().remove(index);

@@ -76,7 +76,7 @@ public class KitCarlson extends BaseModel {
             }
         }else {
 
-            chosenCards = gameLogic.selectTwoCards(cards, name, "Choose 2 model.cards and put back the rest!");
+            chosenCards = gameLogic.selectTwoCards(cards, name, "Válassz kettő kártyát és a maradékot tedd vissza!");
             if (chosenCards.isEmpty()) {
                 handCards.add(cards.get(0));
                 handCards.add(cards.get(1));

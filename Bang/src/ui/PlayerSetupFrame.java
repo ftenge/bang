@@ -21,7 +21,7 @@ public class PlayerSetupFrame extends JFrame {
         this.numberOfPlayers = numberOfPlayers;
         this.gameInstance = GameInstance.getInstance();
 
-        setTitle("Players settings");
+        setTitle("Játékosok beállítása");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(600, 500);
         setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
@@ -33,10 +33,10 @@ public class PlayerSetupFrame extends JFrame {
         for (int i = 0; i < numberOfPlayers; i++) {
             JPanel playerPanel = new JPanel();
 
-            playerPanel.add(new JLabel("Player " + (i + 1)));
+            playerPanel.add(new JLabel("Játékos " + (i + 1)));
 
             JComboBox<String> botBox = new JComboBox<>(getBotOptions());
-            if (i == 0) botBox.setSelectedItem("False");
+            if (i == 0) botBox.setSelectedItem("Hamis");
 
             JComboBox<String> characterBox = new JComboBox<>(getCharacterOptions());
             JComboBox<String> roleBox = new JComboBox<>(getRoleOptions());
@@ -47,9 +47,9 @@ public class PlayerSetupFrame extends JFrame {
 
             playerPanel.add(new JLabel("Bot:"));
             playerPanel.add(botBox);
-            playerPanel.add(new JLabel("Character:"));
+            playerPanel.add(new JLabel("Karakter:"));
             playerPanel.add(characterBox);
-            playerPanel.add(new JLabel("Role:"));
+            playerPanel.add(new JLabel("Szerep:"));
             playerPanel.add(roleBox);
 
             mainPanel.add(playerPanel);
@@ -63,7 +63,7 @@ public class PlayerSetupFrame extends JFrame {
         errorPanel.setLayout(new BoxLayout(errorPanel, BoxLayout.Y_AXIS));
         errorPanel.setBackground(Color.WHITE);
 
-        startButton = new JButton("Start Game");
+        startButton = new JButton("Játék indítása");
         startButton.addActionListener(e -> {
             if (validateInputs()) {
                 List<String> selectedBots = new ArrayList<>();
@@ -74,7 +74,7 @@ public class PlayerSetupFrame extends JFrame {
                     selectedBots.add((String) botSelector.get(i).getSelectedItem());
                     selectedCharacters.add((String) characterSelectors.get(i).getSelectedItem());
                     selectedRoles.add((String) roleSelectors.get(i).getSelectedItem());
-                    System.out.println( "választó: "+ (String) roleSelectors.get(i).getSelectedItem());
+                    //System.out.println( "választó: "+ (String) roleSelectors.get(i).getSelectedItem());
                 }
 
                 BangGameUI gameUI = new BangGameUI();
@@ -127,12 +127,12 @@ public class PlayerSetupFrame extends JFrame {
             characterBox.setBackground(Color.WHITE);
             roleBox.setBackground(Color.WHITE);
 
-            if ("False".equals(bot)) {
+            if ("Hamis".equals(bot)) {
                 humanCount++;
             }
 
             if (characters.contains(character) && !Objects.equals(character, "Random")) {
-                JLabel errorLabel = new JLabel("Each character should be selected only once at most: " + character);
+                JLabel errorLabel = new JLabel("Egy karakter csak egyszer választható: " + character);
                 errorLabel.setForeground(Color.RED);
                 errorPanel.add(errorLabel);
                 characterBox.setBackground(Color.PINK);
@@ -145,7 +145,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (humanCount != 1) {
-            JLabel errorLabel = new JLabel("There should be only 1 human player! (Right now: " + humanCount + ")");
+            JLabel errorLabel = new JLabel("Csak egy emberi játékos lehet! (Jelenleg: " + humanCount + ")");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             for (JComboBox<String> botBox : botSelector) {
@@ -155,7 +155,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (!rolesCount.containsKey("Random") && rolesCount.getOrDefault("Sheriff", 0) != 1) {
-            JLabel errorLabel = new JLabel("There should be only 1 Sheriff!");
+            JLabel errorLabel = new JLabel("Csak 1 Sheriff lehet!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             for (JComboBox<String> roleBox : roleSelectors) {
@@ -169,7 +169,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Outlaw", 0) > numberOfRoles[0]) {
-            JLabel errorLabel = new JLabel("There should be " + numberOfRoles[0] + " Outlaws at most!");
+            JLabel errorLabel = new JLabel("Csak " + numberOfRoles[0] + " Bandita lehet maximum!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Outlaw");
@@ -177,7 +177,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Renegade", 0) > numberOfRoles[1]) {
-            JLabel errorLabel = new JLabel("There should be  " + numberOfRoles[1] + " Renegade at most!");
+            JLabel errorLabel = new JLabel("Csak  " + numberOfRoles[1] + " Renegát lehet maximum!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Renegade");
@@ -185,7 +185,7 @@ public class PlayerSetupFrame extends JFrame {
         }
 
         if (rolesCount.getOrDefault("Deputy", 0) > numberOfRoles[2]) {
-            JLabel errorLabel = new JLabel("There should be  " + numberOfRoles[2] + " Deputies at most!");
+            JLabel errorLabel = new JLabel("Csak  " + numberOfRoles[2] + " Sheriff-helyettes lehet maximum!");
             errorLabel.setForeground(Color.RED);
             errorPanel.add(errorLabel);
             highlightRole("Deputy");
@@ -208,12 +208,12 @@ public class PlayerSetupFrame extends JFrame {
     }
 
     private String[] getBotOptions() {
-        return new String[]{"True", "False"};
+        return new String[]{"Igaz", "Hamis"};
     }
 
     private String[] getCharacterOptions() {
         String[] characters = gameInstance.getAllCharacterNames();
-        System.out.println(characters[0]);
+        //System.out.println(characters[0]);
         String[] charactersWithRandom = new String[characters.length + 1];
         charactersWithRandom[0] = "Random";
         System.arraycopy(characters, 0, charactersWithRandom, 1, characters.length);

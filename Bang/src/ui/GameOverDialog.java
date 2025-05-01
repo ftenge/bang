@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 
 public class GameOverDialog extends JDialog {
     public GameOverDialog(JFrame parent, String message) {
-        super(parent, "Game Over", true);
+        super(parent, "Játék vége", true);
         setLayout(new BorderLayout());
         setSize(300, 150);
         setIconImage(ImageUtils.loadImage("src/assets/cards/bangicon.png", 32, 32).getImage());
@@ -18,8 +18,8 @@ public class GameOverDialog extends JDialog {
         add(messageLabel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton newGameButton = new JButton("New Game");
-        JButton exitButton = new JButton("Exit");
+        JButton newGameButton = new JButton("Új játék");
+        JButton exitButton = new JButton("Kilépés");
 
         buttonPanel.add(newGameButton);
         buttonPanel.add(exitButton);
