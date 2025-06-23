@@ -20,7 +20,7 @@ public class Deck {
     //létrehozzuk a paklit úgy, hogy minden kártya kapjon egy random színt és számot.
     //minden körben újakat kapnak, minden szín/érték kombó legalább egyszer benne van a pakliban
 
-    private void initializeDeck(){
+    private void initializeDecka(){
         List<String> suits = new ArrayList<>();
         suits.add("Hearts");
         suits.add("Diamonds");
@@ -60,6 +60,114 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
+    private void initializeDeck(){
+        List<String> suits = new ArrayList<>();
+        suits.add("Hearts");
+        suits.add("Diamonds");
+        suits.add("Spades");
+        suits.add("Clovers");
+        //Collections.shuffle(suits);
+
+        List<Integer> suitValue = new ArrayList<>();
+        for(int i = 1; i <= 80; i++){
+            suitValue.add(i);
+        }
+        Collections.shuffle(suitValue);
+
+
+        generateCardSuitValue(BarrelCard.class, 1, suitValue, suits, "src/assets/cards/barrel.png");
+        generateCardSuitValue(MustangCard.class, 1, suitValue, suits, "src/assets/cards/mustang.png");
+        generateCardSuitValue(ScopeCard.class, 1, suitValue, suits, "src/assets/cards/scope.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(MissedCard.class, 1, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(MissedCard.class, 1, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(RemingtonWeapon.class, 1, suitValue, suits, "src/assets/cards/remington.png");
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+
+        generateCardSuitValue(WellsFargoCard.class, 1, suitValue, suits, "src/assets/cards/wellsfargo.png");
+        generateCardSuitValue(PanicCard.class, 1, suitValue, suits, "src/assets/cards/panic.png");
+
+
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(GatlingCard.class, 1, suitValue, suits, "src/assets/cards/gatling.png");
+
+        suitValue.set(0,0);
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        suitValue.set(0,0);
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        suitValue.set(0,1);
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        suitValue.set(0,1);
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+
+
+        generateCardSuitValue(IndiansCard.class, 1, suitValue, suits, "src/assets/cards/indians.png");
+        generateCardSuitValue(DynamiteCard.class, 1, suitValue, suits, "src/assets/cards/dynamite.png");
+
+
+        generateCardSuitValue(MissedCard.class, 1, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(GeneralStore.class, 1, suitValue, suits, "src/assets/cards/generalstore.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+
+        generateCardSuitValue(CarabineWeapon.class, 1, suitValue, suits, "src/assets/cards/carabine.png");
+        generateCardSuitValue(WinchesterWeapon.class, 1, suitValue, suits, "src/assets/cards/winchester.png");
+
+        generateCardSuitValue(SchofieldWeapon.class, 1, suitValue, suits, "src/assets/cards/schofield.png");
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+
+        suitValue.set(0,0);
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+        suitValue.set(0,0);
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+
+        generateCardSuitValue(DuelCard.class, 1, suitValue, suits, "src/assets/cards/duel.png");
+        generateCardSuitValue(JailCard.class, 1, suitValue, suits, "src/assets/cards/jail.png");
+
+        suitValue.set(0,1);
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+
+        suitValue.set(0,0);
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+        generateCardSuitValue(BeerCard.class, 1, suitValue, suits, "src/assets/cards/beer.png");
+
+        generateCardSuitValue(StagecoachCard.class, 1, suitValue, suits, "src/assets/cards/stagecoach.png");
+        generateCardSuitValue(StagecoachCard.class, 1, suitValue, suits, "src/assets/cards/stagecoach.png");
+
+        generateCardSuitValue(CatBalouCard.class, 1, suitValue, suits, "src/assets/cards/catbalou.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(SaloonCard.class, 1, suitValue, suits, "src/assets/cards/saloon.png");
+
+        suitValue.set(0,6);
+        generateCardSuitValue(MissedCard.class, 1, suitValue, suits, "src/assets/cards/missed.png");
+
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(BangCard.class, 1, suitValue, suits, "src/assets/cards/bang.png");
+
+
+
+
+        generateCardSuitValue(BangCard.class, 7, suitValue, suits, "src/assets/cards/bang.png");
+        generateCardSuitValue(MissedCard.class, 9, suitValue, suits, "src/assets/cards/missed.png");
+        generateCardSuitValue(PanicCard.class, 3, suitValue, suits, "src/assets/cards/panic.png");
+        generateCardSuitValue(CatBalouCard.class, 3, suitValue, suits, "src/assets/cards/catbalou.png");
+        generateCardSuitValue(DuelCard.class, 2, suitValue, suits, "src/assets/cards/duel.png");
+        generateCardSuitValue(GeneralStore.class, 1, suitValue, suits, "src/assets/cards/generalstore.png");
+        generateCardSuitValue(IndiansCard.class, 1, suitValue, suits, "src/assets/cards/indians.png");
+        generateCardSuitValue(SchofieldWeapon.class, 2, suitValue, suits, "src/assets/cards/schofield.png");
+        generateCardSuitValue(VolcanicWeapon.class, 2, suitValue, suits, "src/assets/cards/volcanic.png");
+        generateCardSuitValue(JailCard.class, 2, suitValue, suits, "src/assets/cards/jail.png");
+        generateCardSuitValue(BarrelCard.class, 1, suitValue, suits, "src/assets/cards/barrel.png");
+        generateCardSuitValue(MustangCard.class, 1, suitValue, suits, "src/assets/cards/mustang.png");
+
+        Collections.reverse(cards);
+    }
+
     //létrehozzuk a különböző kártyaosztályokat a getDeclaredConstructorral, a suitValue első értéke alapján meghatározzuk
     //a kártya színét és értékét, majd kivesszük
     private <T extends Card> void generateCardSuitValue(Class<T> cardType, int count, List<Integer> suitValue, List<String> suits, String imagePath) {
@@ -79,6 +187,7 @@ public class Deck {
     //húzunk egy kártyát, ha üres a pakli újrakeverjük, majd visszaadjuk a legfelső elemet
     public Card draw() {
         if (cards.isEmpty()) reshuffleDiscards();
+        System.out.println(cards.getLast().toString());
         return cards.pop();
     }
 
@@ -91,6 +200,7 @@ public class Deck {
     //és hozzáadjuk a sima paklihoz, a legutolsó eldobott lapot otthagyjuk,
     //mert néhány karakter tud interaktálni a dobópakli tetején lévő lappal
     public void reshuffleDiscards() {
+        System.out.println("reshuffleDiscards");
         Card card = discardPile.pop();
         Collections.shuffle(discardPile);
         cards.addAll(discardPile);
@@ -106,7 +216,7 @@ public class Deck {
     //megadja a dobópkali tetején lévő kártya nevét, ha van
     public String seeLastDiscardedCard(){
         if(discardPile.isEmpty()){
-            return "Discard pile is empty!";
+            return "A dobópakli üres!";
         }
         return discardPile.lastElement().toString();
     }
